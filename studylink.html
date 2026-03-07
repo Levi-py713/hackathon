@@ -582,8 +582,29 @@ function calLogin() {
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span> Authenticating…';
   // TODO: real backend call goes here → get courses → pre-fill S.classes
-  setTimeout(() => showScreen('profilesetup'), 1600);
-}
+fetch('user_classes.json')
+  .then(r => r.json())
+  .then(data => {
+    // Pre-fill S.classes with the scraped course codes
+    // Only add ones that exist in your CATALOG
+    const catalogCodes = CATALOG.map(c => c.code);
+    S.classes = (data.classes || []).filter(code => catalogCodes.includes(code));
+    
+    // If some scraped classes aren't in the catalog, add them anyway
+    const extras = (data.classes || []).filter(code => !catalogCodes.includes(code));
+    extras.forEach(code => {
+      CATALOG.push({ code, title: "Imported from bCourses" });
+      S.classes.push(code);
+    });
+
+    showScreen('profilesetup');
+    renderSetupChips();   // ← ADD THIS LINE
+  })
+  .catch(() => {
+    // If no JSON file found, proceed without pre-filling
+    showScreen('profilesetup');
+    renderSetupChips();   // ← ADD THIS LINE
+  });}
 
 // ═══════════════════════════════════════════
 //  SETUP — CLASS SEARCH
