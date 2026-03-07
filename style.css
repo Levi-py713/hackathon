@@ -3,22 +3,47 @@ body {
 }
 header {
     color: #f2f2f7;
-    height: 10vh;
+    height: 4vh;
     display: flex;
     justify-content: left;
     align-items: end;
     font-size: 30px;
     font-family: ui-serif, "New York", "Georgia Pro", Georgia, "Times New Roman", serif;
 }
-.container{
-    height: 100vh;
-    width: 100vw;
+.side{
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    grid-template-rows: auto 1fr;
+    height: 90vh;
+    width: 15vh;
+    margin-top: 3vh;
     background-color: blue;
+}
+
+.sidebar {
+    grid-column: 1 / -1;
+    background-color: black;
+    color: white;
+    width: 15vh;
+    height: 85vh;
+    overflow-y: auto;
+    top: 20vh;
+}
+.class_title {
+    grid-column: 1 / -1;
+    background-color: green;
+    color: white;
+    height: 5vh;
+    width: 15vh
+}
+
+.content {
+    flex: 1;
+    overflow-y:auto;
 }
 .main_text {
     position: relative;
-    top: 10vh;
-    height: 70vh;
+    height: 100vh;
     width: 50vh;
     background-color: black;
     color: #f2f2f7;
