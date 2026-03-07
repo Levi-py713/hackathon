@@ -581,30 +581,49 @@ function calLogin() {
   err.style.display = 'none';
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span> Authenticating…';
-  // TODO: real backend call goes here → get courses → pre-fill S.classes
-fetch('user_classes.json')
-  .then(r => r.json())
-  .then(data => {
-    // Pre-fill S.classes with the scraped course codes
-    // Only add ones that exist in your CATALOG
-    const catalogCodes = CATALOG.map(c => c.code);
-    S.classes = (data.classes || []).filter(code => catalogCodes.includes(code));
-    
-    // If some scraped classes aren't in the catalog, add them anyway
-    const extras = (data.classes || []).filter(code => !catalogCodes.includes(code));
-    extras.forEach(code => {
-      CATALOG.push({ code, title: "Imported from bCourses" });
-      S.classes.push(code);
+  // Call local Flask scraper server
+  btn.innerHTML = '<span class="spinner"></span> Opening bCourses login…';
+  fetch('http://localhost:5000/scrape', { method: 'POST' })
+    .then(r => r.json())
+    .then(data => {
+      if (data.error) throw new Error(data.error);
+      const catalogCodes = CATALOG.map(c => c.code);
+      S.classes = (data.classes || []).filter(code => catalogCodes.includes(code));
+      const extras = (data.classes || []).filter(code => !catalogCodes.includes(code));
+      extras.forEach(code => {
+        CATALOG.push({ code, title: "Imported from bCourses" });
+        S.classes.push(code);
+      });
+      btn.disabled = false;
+      btn.innerHTML = 'Sign In →';
+      showScreen('profilesetup');
+      renderSetupChips();
+    })
+    .catch(() => {
+      // Flask server not running — fall back to static JSON
+      fetch('user_classes.json')
+        .then(r => r.json())
+        .then(data => {
+          const catalogCodes = CATALOG.map(c => c.code);
+          S.classes = (data.classes || []).filter(code => catalogCodes.includes(code));
+          const extras = (data.classes || []).filter(code => !catalogCodes.includes(code));
+          extras.forEach(code => {
+            CATALOG.push({ code, title: "Imported from bCourses" });
+            S.classes.push(code);
+          });
+          btn.disabled = false;
+          btn.innerHTML = 'Sign In →';
+          showScreen('profilesetup');
+          renderSetupChips();
+        })
+        .catch(() => {
+          btn.disabled = false;
+          btn.innerHTML = 'Sign In →';
+          showScreen('profilesetup');
+          renderSetupChips();
+        });
     });
-
-    showScreen('profilesetup');
-    renderSetupChips();   // ← ADD THIS LINE
-  })
-  .catch(() => {
-    // If no JSON file found, proceed without pre-filling
-    showScreen('profilesetup');
-    renderSetupChips();   // ← ADD THIS LINE
-  });}
+}
 
 // ═══════════════════════════════════════════
 //  SETUP — CLASS SEARCH
