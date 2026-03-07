@@ -225,6 +225,15 @@ html, body {
   position: relative;
   overflow: hidden;
   min-width: 0;
+  width: 0;
+  visibility: hidden;
+  transition: visibility 0s 0.7s;
+}
+
+.layout.open .panel-login {
+  width: auto;
+  visibility: visible;
+  transition: visibility 0s 0s;
 }
 
 .panel-login::before {
