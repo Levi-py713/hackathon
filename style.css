@@ -1,0 +1,25 @@
+body { 
+    background-color: #1c1c1e; 
+}
+header {
+    color: #f2f2f7;
+    height: 10vh;
+    display: flex;
+    justify-content: left;
+    align-items: end;
+    font-size: 30px;
+    font-family: var(--sf);
+}
+.container{
+    height: 100vh;
+    width: 100vw;
+    background-color: blue;
+}
+.main_text {
+    position: relative;
+    top: 10vh;
+    height: 70vh;
+    width: 50vh;
+    background-color: white;
+    color: #f2f2f7;
+}
