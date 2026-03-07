@@ -585,7 +585,7 @@ function calLogin() {
   btn.innerHTML = '<span class="spinner"></span> Authenticating…';
   // Call local Flask scraper server
   btn.innerHTML = '<span class="spinner"></span> Opening bCourses login…';
-  fetch('http://localhost:5000/scrape', { method: 'POST' })
+  fetch('http://127.0.0.1:5001/scrape', { method: 'POST' })
     .then(r => r.json())
     .then(data => {
       if (data.error) throw new Error(data.error);

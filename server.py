@@ -17,9 +17,11 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 
 app = Flask(__name__, static_folder=os.path.dirname(os.path.abspath(__file__)), static_url_path='')
-CORS(app)  # allow the website to call this server
+CORS(app, origins=["http://127.0.0.1:5001", "http://localhost:5000"])  # allow the website to call this server
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -49,7 +51,7 @@ def is_academic(raw_name, normalized):
 def scrape():
     try:
         print("\n[StudyLink] Starting bCourses scrape...")
-        driver = webdriver.Chrome()
+        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 
         # Open bCourses — user logs in manually
         driver.get('https://bcourses.berkeley.edu')
@@ -102,6 +104,6 @@ def index():
 if __name__ == '__main__':
     print("=" * 50)
     print("StudyLink server running.")
-    print("Open http://localhost:5000 in your browser.")
+    print("Open http://localhost:5001 in your browser.")
     print("=" * 50)
-    app.run(port=5000, debug=False)
+    app.run(host='0.0.0.0', port=5001, debug=False)
