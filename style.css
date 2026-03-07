@@ -8,7 +8,7 @@ header {
     justify-content: left;
     align-items: end;
     font-size: 30px;
-    font-family: var(--sf);
+    font-family: ui-serif, "New York", "Georgia Pro", Georgia, "Times New Roman", serif;
 }
 .container{
     height: 100vh;
@@ -20,6 +20,6 @@ header {
     top: 10vh;
     height: 70vh;
     width: 50vh;
-    background-color: white;
+    background-color: black;
     color: #f2f2f7;
 }
