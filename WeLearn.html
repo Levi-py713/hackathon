@@ -700,7 +700,7 @@
 <body>
 
 <!-- ========== LOGIN PAGE ========== -->
-<div id="login-page">
+<div id="login-page" class='hidden'>
   <div class="login-bg"></div>
   <div class="login-grid"></div>
   <div class="login-card">
@@ -1265,6 +1265,8 @@ document.addEventListener("click", () => {
 // INIT NOTIFICATIONS
 // =====================================================================
 renderNotifications();
+currentUser = { name: "Student", email: "student@university.edu", initials: "ST" };
+showApp();
 </script>
 </body>
 </html>
