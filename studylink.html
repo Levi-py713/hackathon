@@ -343,7 +343,9 @@ input, textarea { font-family: 'DM Sans', sans-serif; }
           <div class="toggle-knob"></div>
         </div>
       </div>
+      <a href="WeLearn.html">
       <button class="btn-enter" id="btn-enter" onclick="enterDash()">Enter StudyLink →</button>
+      </a>
     </div>
   </div>
 </section>
@@ -581,8 +583,48 @@ function calLogin() {
   err.style.display = 'none';
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span> Authenticating…';
-  // TODO: real backend call goes here → get courses → pre-fill S.classes
-  setTimeout(() => showScreen('profilesetup'), 1600);
+  // Call local Flask scraper server
+  btn.innerHTML = '<span class="spinner"></span> Opening bCourses login…';
+  fetch('http://localhost:5000/scrape', { method: 'POST' })
+    .then(r => r.json())
+    .then(data => {
+      if (data.error) throw new Error(data.error);
+      const catalogCodes = CATALOG.map(c => c.code);
+      S.classes = (data.classes || []).filter(code => catalogCodes.includes(code));
+      const extras = (data.classes || []).filter(code => !catalogCodes.includes(code));
+      extras.forEach(code => {
+        CATALOG.push({ code, title: "Imported from bCourses" });
+        S.classes.push(code);
+      });
+      btn.disabled = false;
+      btn.innerHTML = 'Sign In →';
+      showScreen('profilesetup');
+      renderSetupChips();
+    })
+    .catch(() => {
+      // Flask server not running — fall back to static JSON
+      fetch('user_classes.json')
+        .then(r => r.json())
+        .then(data => {
+          const catalogCodes = CATALOG.map(c => c.code);
+          S.classes = (data.classes || []).filter(code => catalogCodes.includes(code));
+          const extras = (data.classes || []).filter(code => !catalogCodes.includes(code));
+          extras.forEach(code => {
+            CATALOG.push({ code, title: "Imported from bCourses" });
+            S.classes.push(code);
+          });
+          btn.disabled = false;
+          btn.innerHTML = 'Sign In →';
+          showScreen('profilesetup');
+          renderSetupChips();
+        })
+        .catch(() => {
+          btn.disabled = false;
+          btn.innerHTML = 'Sign In →';
+          showScreen('profilesetup');
+          renderSetupChips();
+        });
+    });
 }
 
 // ═══════════════════════════════════════════

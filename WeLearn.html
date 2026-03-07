@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>WeLearn</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0D0F14;
+    --surface: #13161E;
+    --surface2: #1A1E28;
+    --surface3: #20253300;
+    --border: rgba(255,255,255,0.07);
+    --accent: #5B8EFF;
+    --accent2: #FF6B6B;
+    --text: #E8EAF0;
+    --text2: #7B82A0;
+    --success: #4FCF8E;
+    --warn: #F7C94F;
+    --font-display: 'Syne', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+  }
+
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 1.5;
+    overflow: hidden;
+  }
+
+  /* ===== UTILITIES ===== */
+  .hidden { display: none !important; }
+  .flex { display: flex; }
+  .flex-col { display: flex; flex-direction: column; }
+  .items-center { align-items: center; }
+  .justify-between { justify-content: space-between; }
+  .gap-8 { gap: 8px; }
+  .gap-12 { gap: 12px; }
+  .gap-16 { gap: 16px; }
+  .flex-1 { flex: 1; }
+  .relative { position: relative; }
+
+  /* ===== SCROLLBAR ===== */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes modalIn {
+    from { opacity: 0; transform: scale(0.94) translateY(12px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  @keyframes fadeOverlay {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== LOGIN PAGE ===== */
+  #login-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .login-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 65% 40%, rgba(91,142,255,0.13) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 20% 80%, rgba(79,207,142,0.08) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .login-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.023) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.023) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+  }
+  .login-card {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 52px 44px;
+    width: 420px;
+    max-width: 95vw;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.55), 0 0 0 1px rgba(91,142,255,0.07);
+    animation: slideUp 0.55s cubic-bezier(0.16,1,0.3,1) both;
+  }
+  .login-logo {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+  }
+  .login-logo span { color: var(--accent); }
+  .login-tagline {
+    font-size: 13px;
+    color: var(--text2);
+    margin-bottom: 32px;
+    font-weight: 300;
+  }
+  .login-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(91,142,255,0.09);
+    border: 1px solid rgba(91,142,255,0.18);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 11px;
+    color: var(--accent);
+    margin-bottom: 28px;
+    font-weight: 500;
+  }
+  .login-badge-dot {
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  .form-label {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--text2);
+    margin-bottom: 7px;
+  }
+  .form-input {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 15px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    margin-bottom: 18px;
+  }
+  .form-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(91,142,255,0.12);
+  }
+  .form-input::placeholder { color: var(--text2); }
+  .login-divider {
+    display: flex; align-items: center; gap: 12px;
+    margin: 18px 0;
+  }
+  .login-divider-line { flex: 1; height: 1px; background: var(--border); }
+  .login-divider-text { font-size: 11px; color: var(--text2); white-space: nowrap; }
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 13px 22px;
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+  .btn-primary:hover { opacity: 0.85; transform: translateY(-1px); }
+  .btn-primary:active { transform: translateY(0); }
+  .btn-primary.full { width: 100%; }
+  .btn-ghost {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text2);
+    border-radius: 10px;
+    padding: 11px 18px;
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-ghost:hover { border-color: var(--text2); color: var(--text); }
+  .login-error {
+    background: rgba(255,107,107,0.1);
+    border: 1px solid rgba(255,107,107,0.2);
+    color: var(--accent2);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 12px;
+    margin-bottom: 14px;
+    display: none;
+  }
+
+  /* ===== APP SHELL ===== */
+  #app-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* ===== TOPBAR ===== */
+  .topbar {
+    height: 62px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 0 22px;
+    gap: 14px;
+    position: relative;
+    z-index: 100;
+    flex-shrink: 0;
+  }
+  .topbar-logo {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    user-select: none;
+  }
+  .topbar-logo span { color: var(--accent); }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(79,207,142,0.09);
+    border: 1px solid rgba(79,207,142,0.18);
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 11px;
+    color: var(--success);
+    font-weight: 600;
+  }
+  .chip-dot { width: 5px; height: 5px; background: var(--success); border-radius: 50%; }
+  .topbar-spacer { flex: 1; }
+  .icon-btn {
+    width: 38px; height: 38px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    font-size: 17px;
+    transition: border-color 0.2s;
+    position: relative;
+    user-select: none;
+    flex-shrink: 0;
+  }
+  .icon-btn:hover { border-color: rgba(91,142,255,0.4); }
+  .notif-dot {
+    position: absolute;
+    top: 7px; right: 7px;
+    width: 8px; height: 8px;
+    background: var(--accent2);
+    border-radius: 50%;
+    border: 2px solid var(--surface);
+  }
+  .avatar-btn {
+    width: 38px; height: 38px;
+    background: linear-gradient(135deg, var(--accent) 0%, #7B6EFF 100%);
+    border: none;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    position: relative;
+    user-select: none;
+    flex-shrink: 0;
+  }
+
+  /* ===== DROPDOWN ===== */
+  .dropdown {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.55);
+    animation: fadeIn 0.15s ease both;
+    z-index: 300;
+    min-width: 200px;
+  }
+  .dropdown-header {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .dropdown-name { font-family: var(--font-display); font-weight: 700; font-size: 14px; }
+  .dropdown-email { font-size: 11px; color: var(--text2); margin-top: 2px; }
+  .dropdown-item {
+    width: 100%; padding: 11px 16px;
+    font-size: 13px; cursor: pointer;
+    display: flex; align-items: center; gap: 10px;
+    transition: background 0.15s;
+    color: var(--text);
+    background: none; border: none;
+    font-family: var(--font-body);
+    text-align: left;
+  }
+  .dropdown-item:hover { background: var(--surface2); }
+  .dropdown-item.danger { color: var(--accent2); }
+
+  /* ===== NOTIFICATION PANEL ===== */
+  .notif-panel {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    width: 310px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.55);
+    animation: fadeIn 0.15s ease both;
+    z-index: 300;
+    overflow: hidden;
+  }
+  .notif-header {
+    padding: 14px 16px 12px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .notif-header-title { font-family: var(--font-display); font-weight: 700; font-size: 14px; }
+  .notif-toggle-row {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 11px; color: var(--text2);
+  }
+  .toggle-track {
+    width: 32px; height: 18px;
+    background: var(--surface2);
+    border-radius: 9px;
+    position: relative;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    transition: background 0.2s, border-color 0.2s;
+    flex-shrink: 0;
+  }
+  .toggle-track.on { background: var(--accent); border-color: var(--accent); }
+  .toggle-knob {
+    position: absolute;
+    top: 2px; left: 2px;
+    width: 12px; height: 12px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform 0.2s;
+    pointer-events: none;
+  }
+  .toggle-track.on .toggle-knob { transform: translateX(14px); }
+  .notif-list { max-height: 260px; overflow-y: auto; }
+  .notif-item {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    line-height: 1.55;
+  }
+  .notif-item:last-child { border-bottom: none; }
+  .notif-course { color: var(--accent); font-weight: 600; }
+  .notif-meta { color: var(--text2); font-size: 10px; margin-top: 2px; }
+  .notif-empty { padding: 28px 16px; text-align: center; color: var(--text2); font-size: 13px; }
+
+  /* ===== LAYOUT ===== */
+  .content-area {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* ===== SIDEBAR ===== */
+  .sidebar {
+    width: 234px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    padding: 18px 10px;
+    gap: 2px;
+    overflow-y: auto;
+    flex-shrink: 0;
+  }
+  .sidebar-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text2);
+    padding: 6px 8px 8px;
+  }
+  .course-item {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 10px 9px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.15s;
+    background: none; border: none;
+    width: 100%; text-align: left;
+    color: var(--text);
+    font-family: var(--font-body);
+  }
+  .course-item:hover { background: var(--surface2); }
+  .course-item.active { background: rgba(91,142,255,0.11); }
+  .course-dot {
+    width: 10px; height: 10px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+  .course-info { flex: 1; min-width: 0; }
+  .course-code {
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+  }
+  .course-name {
+    font-size: 11px;
+    color: var(--text2);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .course-count {
+    font-size: 11px; color: var(--text2);
+    background: var(--surface2);
+    border-radius: 20px;
+    padding: 2px 7px;
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+
+  /* ===== MAIN PANEL ===== */
+  .main-panel {
+    flex: 1;
+    overflow-y: auto;
+    padding: 28px 30px;
+    background: var(--bg);
+  }
+  .welcome-banner {
+    background: linear-gradient(135deg, rgba(91,142,255,0.1), rgba(79,207,142,0.05));
+    border: 1px solid rgba(91,142,255,0.14);
+    border-radius: 16px;
+    padding: 22px 26px;
+    margin-bottom: 26px;
+    display: flex; align-items: center; gap: 18px;
+  }
+  .welcome-text { flex: 1; }
+  .welcome-hi {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 800;
+  }
+  .welcome-sub { font-size: 13px; color: var(--text2); margin-top: 3px; }
+  .welcome-emoji { font-size: 38px; }
+
+  .panel-header { margin-bottom: 24px; }
+  .panel-title-row {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 4px;
+  }
+  .panel-color-dot { width: 14px; height: 14px; border-radius: 4px; flex-shrink: 0; }
+  .panel-title {
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -0.4px;
+  }
+  .panel-subtitle { font-size: 12px; color: var(--text2); margin-bottom: 16px; }
+  .panel-actions { display: flex; gap: 10px; }
+
+  /* ===== CARDS GRID ===== */
+  .requests-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 14px;
+  }
+  .request-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 18px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    animation: cardIn 0.35s cubic-bezier(0.16,1,0.3,1) both;
+  }
+  .request-card:hover {
+    border-color: rgba(91,142,255,0.28);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+  }
+  .card-accent-bar {
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  }
+  .card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .card-avatar {
+    width: 40px; height: 40px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .card-creator { font-weight: 600; font-size: 14px; }
+  .card-time { font-size: 11px; color: var(--text2); margin-top: 1px; }
+  .expired-tag {
+    display: inline-block;
+    background: rgba(255,107,107,0.1);
+    color: var(--accent2);
+    border: 1px solid rgba(255,107,107,0.18);
+    border-radius: 20px;
+    padding: 2px 8px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+  .card-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .card-detail {
+    background: var(--surface2);
+    border-radius: 8px;
+    padding: 8px 10px;
+  }
+  .card-detail.full-width { grid-column: 1 / -1; }
+  .card-detail-label {
+    font-size: 9px;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+  .card-detail-val { font-size: 13px; font-weight: 500; }
+
+  .slots-wrap { margin-bottom: 4px; }
+  .slots-bar {
+    background: var(--surface2);
+    border-radius: 4px;
+    height: 6px;
+    overflow: hidden;
+    margin-bottom: 5px;
+  }
+  .slots-fill { height: 100%; border-radius: 4px; transition: width 0.4s ease; }
+  .slots-label { font-size: 11px; color: var(--text2); display: flex; justify-content: space-between; }
+
+  .expiry-wrap { margin-top: 10px; }
+  .expiry-bar {
+    background: var(--surface2);
+    border-radius: 4px;
+    height: 4px;
+    overflow: hidden;
+    margin-bottom: 4px;
+  }
+  .expiry-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--success), var(--warn));
+    transition: width 1s linear;
+  }
+  .expiry-label { font-size: 10px; color: var(--text2); text-align: right; }
+
+  .join-btn {
+    width: 100%; margin-top: 12px;
+    padding: 10px;
+    background: rgba(91,142,255,0.09);
+    color: var(--accent);
+    border: 1px solid rgba(91,142,255,0.18);
+    border-radius: 8px;
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .join-btn:hover:not(:disabled) { background: rgba(91,142,255,0.18); }
+  .join-btn:disabled { opacity: 0.38; cursor: not-allowed; }
+
+  .empty-state {
+    text-align: center; padding: 70px 40px; color: var(--text2);
+  }
+  .empty-icon { font-size: 44px; margin-bottom: 14px; opacity: 0.45; }
+  .empty-title {
+    font-family: var(--font-display);
+    font-size: 18px; font-weight: 700;
+    color: var(--text); margin-bottom: 8px;
+  }
+
+  /* ===== MODAL ===== */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.72);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 500;
+    animation: fadeOverlay 0.2s ease both;
+  }
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 30px;
+    width: 470px;
+    max-width: 95vw;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.65);
+    animation: modalIn 0.25s cubic-bezier(0.16,1,0.3,1) both;
+  }
+  .modal-title {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 22px;
+  }
+  .form-row { margin-bottom: 16px; }
+  .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+  .form-hint {
+    background: rgba(91,142,255,0.07);
+    border: 1px solid rgba(91,142,255,0.12);
+    border-radius: 8px;
+    padding: 10px 13px;
+    font-size: 12px;
+    color: var(--text2);
+    margin-bottom: 8px;
+  }
+  .form-hint strong { color: var(--text); }
+  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 22px; }
+
+  /* ===== SETTINGS MODAL ===== */
+  .profile-header {
+    display: flex; align-items: center; gap: 16px; margin-bottom: 22px;
+  }
+  .profile-avatar-lg {
+    width: 62px; height: 62px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, var(--accent), #7B6EFF);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display);
+    font-size: 22px; font-weight: 800;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .profile-name { font-family: var(--font-display); font-weight: 800; font-size: 18px; }
+  .profile-email { font-size: 12px; color: var(--text2); margin-top: 2px; }
+  .settings-field {
+    background: var(--surface2);
+    border-radius: 10px;
+    padding: 13px 14px;
+    margin-bottom: 10px;
+  }
+  .settings-field-label {
+    font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--text2); font-weight: 700; margin-bottom: 4px;
+  }
+  .settings-field-val { font-size: 14px; font-weight: 500; }
+</style>
+</head>
+<body>
+
+<!-- ========== LOGIN PAGE ========== -->
+<div id="login-page" class='hidden'>
+  <div class="login-bg"></div>
+  <div class="login-grid"></div>
+  <div class="login-card">
+    <div class="login-logo">We<span>Learn</span></div>
+    <div class="login-tagline">Your #1 destination for peer learning</div>
+    <div class="login-badge">
+      <div class="login-badge-dot"></div>
+      Sign in with your institution
+    </div>
+    <div class="login-error" id="login-error">Please enter your email and password.</div>
+    <label class="form-label">University Email</label>
+    <input class="form-input" id="login-email" type="email" placeholder="you@university.edu" />
+    <label class="form-label">Password</label>
+    <input class="form-input" id="login-password" type="password" placeholder="••••••••••" style="margin-bottom:0"/>
+    <div class="login-divider">
+      <div class="login-divider-line"></div>
+      <span class="login-divider-text">SSO enabled</span>
+      <div class="login-divider-line"></div>
+    </div>
+    <button class="btn-primary full" id="login-btn">Sign In →</button>
+  </div>
+</div>
+
+<!-- ========== APP PAGE ========== -->
+<div id="app-page" class="hidden">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-logo">We<span>Learn</span></div>
+    <div class="chip"><div class="chip-dot"></div>Spring 2026</div>
+    <div class="topbar-spacer"></div>
+
+    <!-- Notification Bell -->
+    <div class="relative" id="notif-wrap">
+      <div class="icon-btn" id="notif-btn">🔔<div class="notif-dot" id="notif-dot"></div></div>
+      <div class="notif-panel hidden" id="notif-panel">
+        <div class="notif-header">
+          <div class="notif-header-title">Notifications</div>
+          <div class="notif-toggle-row">
+            <span id="notif-toggle-label">On</span>
+            <div class="toggle-track on" id="notif-toggle">
+              <div class="toggle-knob"></div>
+            </div>
+          </div>
+        </div>
+        <div class="notif-list" id="notif-list"></div>
+      </div>
+    </div>
+
+    <!-- Avatar / Profile -->
+    <div class="relative" id="profile-wrap">
+      <div class="avatar-btn" id="avatar-btn"><span id="avatar-initials">?</span></div>
+      <div class="dropdown hidden" id="profile-dropdown">
+        <div class="dropdown-header">
+          <div class="dropdown-name" id="dd-name">–</div>
+          <div class="dropdown-email" id="dd-email">–</div>
+        </div>
+        <button class="dropdown-item" id="dd-settings">⚙️ Settings</button>
+        <button class="dropdown-item danger" id="dd-logout">🚪 Log Out</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="content-area">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-label">My Courses</div>
+      <!-- course items injected by JS -->
+    </div>
+
+    <!-- MAIN -->
+    <div class="main-panel" id="main-panel">
+      <!-- Welcome banner -->
+      <div class="welcome-banner">
+        <div class="welcome-text">
+          <div class="welcome-hi" id="welcome-hi">Welcome back 👋</div>
+          <div class="welcome-sub">Find or create a study group for your courses below</div>
+        </div>
+        <div class="welcome-emoji">📚</div>
+      </div>
+
+      <!-- Course section -->
+      <div id="course-section"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ========== CREATE MODAL ========== -->
+<div class="modal-overlay hidden" id="create-modal">
+  <div class="modal">
+    <div class="modal-title">Create Study Session</div>
+    <div class="form-row-2">
+      <div>
+        <label class="form-label">Max People</label>
+        <input class="form-input" id="c-slots" type="number" min="2" max="20" value="4" style="margin-bottom:0"/>
+      </div>
+      <div>
+        <label class="form-label">Duration (max 30 min)</label>
+        <input class="form-input" id="c-duration" type="number" min="5" max="30" value="20" style="margin-bottom:0"/>
+      </div>
+    </div>
+    <div class="form-row-2">
+      <div>
+        <label class="form-label">Date</label>
+        <input class="form-input" id="c-date" type="date" style="margin-bottom:0"/>
+      </div>
+      <div>
+        <label class="form-label">Time</label>
+        <input class="form-input" id="c-time" type="time" style="margin-bottom:0"/>
+      </div>
+    </div>
+    <div class="form-row">
+      <label class="form-label">Location</label>
+      <input class="form-input" id="c-location" type="text" placeholder="e.g. Library Room 204" style="margin-bottom:0"/>
+    </div>
+    <div class="form-hint" id="c-hint">⏱ Request will expire after <strong id="c-hint-dur">20</strong> minutes.</div>
+    <div class="modal-actions">
+      <button class="btn-ghost" id="create-cancel">Cancel</button>
+      <button class="btn-primary" id="create-submit">Post Request →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SETTINGS MODAL ========== -->
+<div class="modal-overlay hidden" id="settings-modal">
+  <div class="modal">
+    <div class="modal-title">Profile Settings</div>
+    <div class="profile-header">
+      <div class="profile-avatar-lg" id="settings-avatar">?</div>
+      <div>
+        <div class="profile-name" id="settings-name">–</div>
+        <div class="profile-email" id="settings-email">–</div>
+      </div>
+    </div>
+    <div class="settings-field">
+      <div class="settings-field-label">Institution</div>
+      <div class="settings-field-val">State University</div>
+    </div>
+    <div class="settings-field">
+      <div class="settings-field-label">Enrolled Courses</div>
+      <div class="settings-field-val">5 courses this semester</div>
+    </div>
+    <div class="settings-field">
+      <div class="settings-field-label">Account Type</div>
+      <div class="settings-field-val">Student (SSO)</div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-primary" id="settings-close">Done</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// =====================================================================
+// DATA
+// =====================================================================
+const COURSES = [
+  { id: 1, code: "CS 301",   name: "Data Structures & Algorithms", color: "#4F8EF7" },
+  { id: 2, code: "MATH 241", name: "Multivariable Calculus",        color: "#F76B4F" },
+  { id: 3, code: "PHYS 210", name: "Electromagnetism",              color: "#4FCF8E" },
+  { id: 4, code: "ENGL 201", name: "Technical Writing",             color: "#CF4FBF" },
+  { id: 5, code: "ECON 102", name: "Macroeconomics",                color: "#F7C94F" },
+];
+
+const REQUESTS = {
+  1: [
+    { id: 1, creator:"Jordan M.", avatar:"JM", slots:4, filled:2, date:"2026-03-09", time:"14:00", location:"Library Room 204",       duration:25, createdAt: Date.now() - 5*60000,  expiresMs: 25*60000 },
+    { id: 2, creator:"Priya S.",  avatar:"PS", slots:3, filled:1, date:"2026-03-08", time:"10:00", location:"Student Union Floor 3",  duration:20, createdAt: Date.now() - 12*60000, expiresMs: 20*60000 },
+  ],
+  2: [
+    { id: 3, creator:"Alex T.",  avatar:"AT", slots:5, filled:3, date:"2026-03-08", time:"16:00", location:"Math Building 110",       duration:30, createdAt: Date.now() - 2*60000,  expiresMs: 30*60000 },
+  ],
+  3: [],
+  4: [
+    { id: 4, creator:"Sam W.", avatar:"SW", slots:4, filled:4, date:"2026-03-10", time:"13:00", location:"Humanities Hall 5B",        duration:15, createdAt: Date.now() - 8*60000,  expiresMs: 15*60000 },
+  ],
+  5: [],
+};
+
+// =====================================================================
+// STATE
+// =====================================================================
+let currentUser    = null;
+let selectedCourse = COURSES[0];
+let notifEnabled   = true;
+let notifications  = [
+  { id:1, course:"CS 301",   text:"Jordan M. created a new study session", time:"5 min ago" },
+  { id:2, course:"MATH 241", text:"Alex T. posted a request for Calculus", time:"12 min ago" },
+];
+
+// =====================================================================
+// HELPERS
+// =====================================================================
+function getTimeLeft(req) {
+  return Math.max(0, req.expiresMs - (Date.now() - req.createdAt));
+}
+function fmtTimeLeft(ms) {
+  const s = Math.floor(ms / 1000);
+  return `${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`;
+}
+function fmtDate(d) {
+  return new Date(d+"T00:00").toLocaleDateString("en-US",{month:"short",day:"numeric"});
+}
+function initials(name) {
+  return name.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
+}
+function activeRequests(courseId) {
+  return (REQUESTS[courseId]||[]).filter(r => getTimeLeft(r) > 0);
+}
+
+// =====================================================================
+// LOGIN
+// =====================================================================
+document.getElementById("login-btn").addEventListener("click", doLogin);
+document.getElementById("login-password").addEventListener("keydown", e => { if(e.key==="Enter") doLogin(); });
+document.getElementById("login-email").addEventListener("keydown", e => { if(e.key==="Enter") doLogin(); });
+
+function doLogin() {
+  const email    = document.getElementById("login-email").value.trim();
+  const password = document.getElementById("login-password").value;
+  const errEl    = document.getElementById("login-error");
+
+  if (!email || !password) {
+    errEl.style.display = "block";
+    errEl.textContent = "Please enter your email and password.";
+    return;
+  }
+  if (!email.includes("@") || !email.includes(".")) {
+    errEl.style.display = "block";
+    errEl.textContent = "Please enter a valid university email.";
+    return;
+  }
+  errEl.style.display = "none";
+
+  const btn = document.getElementById("login-btn");
+  btn.textContent = "Signing in…";
+  btn.disabled = true;
+
+  setTimeout(() => {
+    const raw  = email.split("@")[0];
+    const name = raw.charAt(0).toUpperCase() + raw.slice(1);
+    currentUser = { name, email, initials: initials(name) };
+    showApp();
+  }, 1000);
+}
+
+function showApp() {
+  document.getElementById("login-page").classList.add("hidden");
+  const app = document.getElementById("app-page");
+  app.classList.remove("hidden");
+
+  // populate topbar
+  document.getElementById("avatar-initials").textContent = currentUser.initials;
+  document.getElementById("dd-name").textContent         = currentUser.name;
+  document.getElementById("dd-email").textContent        = currentUser.email;
+  document.getElementById("settings-avatar").textContent = currentUser.initials;
+  document.getElementById("settings-name").textContent   = currentUser.name;
+  document.getElementById("settings-email").textContent  = currentUser.email;
+  document.getElementById("welcome-hi").textContent      = `Welcome back, ${currentUser.name.split(" ")[0]} 👋`;
+
+  buildSidebar();
+  renderCourse();
+  startTimer();
+}
+
+// =====================================================================
+// SIDEBAR
+// =====================================================================
+function buildSidebar() {
+  const sb = document.getElementById("sidebar");
+  // remove old course items
+  sb.querySelectorAll(".course-item").forEach(el => el.remove());
+
+  COURSES.forEach(course => {
+    const btn = document.createElement("button");
+    btn.className = "course-item" + (course.id === selectedCourse.id ? " active" : "");
+    btn.dataset.id = course.id;
+    btn.innerHTML = `
+      <div class="course-dot" style="background:${course.color}"></div>
+      <div class="course-info">
+        <div class="course-code">${course.code}</div>
+        <div class="course-name">${course.name}</div>
+      </div>
+      <div class="course-count" id="count-${course.id}">${activeRequests(course.id).length}</div>`;
+    btn.addEventListener("click", () => {
+      selectedCourse = course;
+      sb.querySelectorAll(".course-item").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      renderCourse();
+    });
+    sb.appendChild(btn);
+  });
+}
+
+function updateCounts() {
+  COURSES.forEach(c => {
+    const el = document.getElementById("count-"+c.id);
+    if (el) el.textContent = activeRequests(c.id).length;
+  });
+}
+
+// =====================================================================
+// COURSE SECTION
+// =====================================================================
+function renderCourse() {
+  const sec = document.getElementById("course-section");
+  const reqs = activeRequests(selectedCourse.id);
+
+  let cards = "";
+  if (reqs.length === 0) {
+    cards = `<div class="empty-state">
+      <div class="empty-icon">🔍</div>
+      <div class="empty-title">No active sessions</div>
+      <div>Be the first to create a study session for ${selectedCourse.code}!</div>
+    </div>`;
+  } else {
+    cards = `<div class="requests-grid" id="cards-grid">${reqs.map(r => buildCard(r)).join("")}</div>`;
+  }
+
+  sec.innerHTML = `
+    <div class="panel-header">
+      <div class="panel-title-row">
+        <div class="panel-color-dot" style="background:${selectedCourse.color}"></div>
+        <div class="panel-title">${selectedCourse.code}</div>
+      </div>
+      <div class="panel-subtitle">${selectedCourse.name} — ${reqs.length} active request${reqs.length!==1?"s":""}</div>
+      <div class="panel-actions">
+        <button class="btn-primary" id="open-create">+ Create Study Session</button>
+      </div>
+    </div>
+    ${cards}`;
+
+  document.getElementById("open-create").addEventListener("click", openCreateModal);
+}
+
+function buildCard(req) {
+  const tl   = getTimeLeft(req);
+  const pct  = (tl / req.expiresMs) * 100;
+  const sPct = Math.min(100,(req.filled/req.slots)*100);
+  const full = req.filled >= req.slots;
+  const exp  = tl === 0;
+
+  return `
+  <div class="request-card" id="card-${req.id}">
+    <div class="card-accent-bar" style="background:${selectedCourse.color}"></div>
+    <div class="card-top">
+      <div class="card-avatar" style="background:${selectedCourse.color}">${req.avatar}</div>
+      <div>
+        <div class="card-creator">${req.creator}</div>
+        <div class="card-time">Posted a study request</div>
+      </div>
+      ${exp ? `<span class="expired-tag">Expired</span>` : ""}
+    </div>
+    <div class="card-details">
+      <div class="card-detail">
+        <div class="card-detail-label">📅 Date</div>
+        <div class="card-detail-val">${fmtDate(req.date)}</div>
+      </div>
+      <div class="card-detail">
+        <div class="card-detail-label">🕐 Time</div>
+        <div class="card-detail-val">${req.time}</div>
+      </div>
+      <div class="card-detail full-width">
+        <div class="card-detail-label">📍 Location</div>
+        <div class="card-detail-val">${req.location}</div>
+      </div>
+    </div>
+    <div class="slots-wrap">
+      <div class="slots-bar"><div class="slots-fill" style="width:${sPct}%;background:${full?"#FF6B6B":selectedCourse.color}"></div></div>
+      <div class="slots-label"><span>${req.filled} / ${req.slots} people</span><span>${full?"Full":`${req.slots-req.filled} spots left`}</span></div>
+    </div>
+    ${!exp ? `
+    <div class="expiry-wrap">
+      <div class="expiry-bar"><div class="expiry-fill" id="expbar-${req.id}" style="width:${pct}%"></div></div>
+      <div class="expiry-label" id="explbl-${req.id}">Expires in ${fmtTimeLeft(tl)}</div>
+    </div>` : ""}
+    <button class="join-btn" ${exp||full?"disabled":""}>
+      ${exp?"Expired":full?"Full":"Join Session"}
+    </button>
+  </div>`;
+}
+
+// =====================================================================
+// TIMER — updates expiry bars every second
+// =====================================================================
+let timerInterval = null;
+function startTimer() {
+  if (timerInterval) clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    const allReqs = Object.values(REQUESTS).flat();
+    let needsRerender = false;
+
+    allReqs.forEach(req => {
+      const tl  = getTimeLeft(req);
+      const pct = (tl / req.expiresMs) * 100;
+
+      const bar = document.getElementById("expbar-"+req.id);
+      const lbl = document.getElementById("explbl-"+req.id);
+      if (bar) bar.style.width = pct + "%";
+      if (lbl) lbl.textContent = "Expires in " + fmtTimeLeft(tl);
+
+      if (tl === 0) needsRerender = true;
+    });
+
+    if (needsRerender) {
+      renderCourse();
+      updateCounts();
+    }
+  }, 1000);
+}
+
+// =====================================================================
+// CREATE MODAL
+// =====================================================================
+function openCreateModal() {
+  document.getElementById("create-modal").classList.remove("hidden");
+  // set today as default date
+  const today = new Date().toISOString().split("T")[0];
+  document.getElementById("c-date").value = today;
+}
+document.getElementById("create-cancel").addEventListener("click", () => {
+  document.getElementById("create-modal").classList.add("hidden");
+});
+document.getElementById("create-modal").addEventListener("click", e => {
+  if (e.target === e.currentTarget) e.currentTarget.classList.add("hidden");
+});
+document.getElementById("c-duration").addEventListener("input", function() {
+  document.getElementById("c-hint-dur").textContent = Math.min(30, parseInt(this.value)||20);
+});
+document.getElementById("create-submit").addEventListener("click", () => {
+  const slots    = parseInt(document.getElementById("c-slots").value)    || 4;
+  const duration = Math.min(30, parseInt(document.getElementById("c-duration").value) || 20);
+  const date     = document.getElementById("c-date").value;
+  const time     = document.getElementById("c-time").value;
+  const location = document.getElementById("c-location").value.trim();
+
+  if (!date || !time || !location) {
+    document.getElementById("c-location").focus();
+    return;
+  }
+
+  const req = {
+    id: Date.now(),
+    creator: currentUser.name,
+    avatar: currentUser.initials,
+    slots,
+    filled: 1,
+    date,
+    time,
+    location,
+    duration,
+    createdAt: Date.now(),
+    expiresMs: duration * 60000,
+  };
+
+  if (!REQUESTS[selectedCourse.id]) REQUESTS[selectedCourse.id] = [];
+  REQUESTS[selectedCourse.id].unshift(req);
+
+  if (notifEnabled) {
+    notifications.unshift({
+      id: Date.now(),
+      course: selectedCourse.code,
+      text: `You created a study session for ${selectedCourse.code}`,
+      time: "just now",
+    });
+    renderNotifications();
+  }
+
+  document.getElementById("create-modal").classList.add("hidden");
+  document.getElementById("c-location").value = "";
+  document.getElementById("c-time").value = "";
+
+  renderCourse();
+  updateCounts();
+});
+
+// =====================================================================
+// NOTIFICATIONS
+// =====================================================================
+document.getElementById("notif-btn").addEventListener("click", e => {
+  e.stopPropagation();
+  document.getElementById("notif-panel").classList.toggle("hidden");
+  document.getElementById("profile-dropdown").classList.add("hidden");
+});
+document.getElementById("notif-toggle").addEventListener("click", () => {
+  notifEnabled = !notifEnabled;
+  const track = document.getElementById("notif-toggle");
+  const label = document.getElementById("notif-toggle-label");
+  track.classList.toggle("on", notifEnabled);
+  label.textContent = notifEnabled ? "On" : "Off";
+  document.getElementById("notif-dot").style.display = notifEnabled ? "" : "none";
+  renderNotifications();
+});
+
+function renderNotifications() {
+  const list = document.getElementById("notif-list");
+  const dot  = document.getElementById("notif-dot");
+
+  if (!notifEnabled) {
+    list.innerHTML = `<div class="notif-empty">Notifications are turned off</div>`;
+    dot.style.display = "none";
+    return;
+  }
+  dot.style.display = notifications.length > 0 ? "" : "none";
+  if (notifications.length === 0) {
+    list.innerHTML = `<div class="notif-empty">No notifications yet</div>`;
+    return;
+  }
+  list.innerHTML = notifications.map(n => `
+    <div class="notif-item">
+      <span class="notif-course">${n.course}</span> — ${n.text}
+      <div class="notif-meta">${n.time}</div>
+    </div>`).join("");
+}
+
+// =====================================================================
+// PROFILE DROPDOWN
+// =====================================================================
+document.getElementById("avatar-btn").addEventListener("click", e => {
+  e.stopPropagation();
+  document.getElementById("profile-dropdown").classList.toggle("hidden");
+  document.getElementById("notif-panel").classList.add("hidden");
+});
+document.getElementById("dd-settings").addEventListener("click", () => {
+  document.getElementById("profile-dropdown").classList.add("hidden");
+  document.getElementById("settings-modal").classList.remove("hidden");
+});
+document.getElementById("dd-logout").addEventListener("click", () => {
+  if (timerInterval) clearInterval(timerInterval);
+  currentUser = null;
+  document.getElementById("app-page").classList.add("hidden");
+  document.getElementById("login-page").classList.remove("hidden");
+  document.getElementById("login-email").value    = "";
+  document.getElementById("login-password").value = "";
+  document.getElementById("login-btn").textContent = "Sign In →";
+  document.getElementById("login-btn").disabled = false;
+  document.getElementById("profile-dropdown").classList.add("hidden");
+});
+
+// =====================================================================
+// SETTINGS MODAL
+// =====================================================================
+document.getElementById("settings-close").addEventListener("click", () => {
+  document.getElementById("settings-modal").classList.add("hidden");
+});
+document.getElementById("settings-modal").addEventListener("click", e => {
+  if (e.target === e.currentTarget) e.currentTarget.classList.add("hidden");
+});
+
+// =====================================================================
+// CLOSE DROPDOWNS ON OUTSIDE CLICK
+// =====================================================================
+document.addEventListener("click", () => {
+  document.getElementById("profile-dropdown").classList.add("hidden");
+  document.getElementById("notif-panel").classList.add("hidden");
+});
+
+// =====================================================================
+// INIT NOTIFICATIONS
+// =====================================================================
+renderNotifications();
+currentUser = { name: "Student", email: "student@university.edu", initials: "ST" };
+showApp();
+</script>
+</body>
+</html>
