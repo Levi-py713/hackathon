@@ -8,7 +8,20 @@
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; }
-body { font-family: 'DM Sans', sans-serif; background: #05101f; color: #fff; overflow-x: hidden; }
+
+:root {
+  --bg:      #0D0F14;
+  --surface: #13161E;
+  --surface2:#1A1E28;
+  --border:  rgba(255,255,255,0.07);
+  --accent:  #5B8EFF;
+  --accent2: #FF6B6B;
+  --text:    #E8EAF0;
+  --text2:   #7B82A0;
+  --success: #4FCF8E;
+}
+
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
 h1,h2,h3,h4 { font-family: 'Syne', sans-serif; }
 button { font-family: 'Syne', sans-serif; cursor: pointer; border: none; }
 input, textarea { font-family: 'DM Sans', sans-serif; }
@@ -16,224 +29,237 @@ input, textarea { font-family: 'DM Sans', sans-serif; }
 .screen { display: none; min-height: 100vh; }
 .screen.active { display: flex; flex-direction: column; }
 
-/* ══ LANDING ══ */
-#landing { align-items: center; justify-content: center; position: relative; overflow: hidden; }
-.grid-bg { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.015) 1px,transparent 1px); background-size: 48px 48px; }
-.glow { position: absolute; top: 20%; left: 50%; transform: translateX(-50%); width: 700px; height: 350px; border-radius: 50%; background: radial-gradient(ellipse,rgba(253,181,21,0.07) 0%,transparent 70%); pointer-events: none; }
-.landing-inner { position: relative; z-index: 1; text-align: center; max-width: 620px; padding: 0 32px; }
-.badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(253,181,21,0.08); border: 1px solid rgba(253,181,21,0.2); border-radius: 100px; padding: 5px 14px; margin-bottom: 28px; }
-.badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #FDB515; animation: blink 2s infinite; }
-.badge span { color: #FDB515; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; font-family: 'Syne', sans-serif; }
-.logo { font-size: clamp(52px,9vw,88px); font-weight: 800; color: #fff; line-height: 0.95; letter-spacing: -0.02em; margin-bottom: 18px; }
-.logo span { color: #FDB515; }
-.tagline { color: rgba(255,255,255,0.45); font-size: 17px; line-height: 1.6; margin-bottom: 44px; }
-.btn-primary { display: inline-flex; align-items: center; gap: 12px; border: 1.5px solid #FDB515; border-radius: 12px; padding: 15px 30px; color: #FDB515; background: transparent; font-size: 15px; font-weight: 700; transition: all 0.2s; }
-.btn-primary:hover { background: #FDB515; color: #05101f; }
-.landing-stats { display: flex; gap: 44px; justify-content: center; margin-top: 56px; }
-.stat-num { color: #FDB515; font-size: 26px; font-weight: 800; font-family: 'Syne', sans-serif; }
-.stat-lbl { color: rgba(255,255,255,0.3); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 3px; }
+/* ══ LANDING (split panel login) ══ */
+#landing {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+  flex-direction: unset;
+}
+@media (max-width: 780px) {
+  #landing { grid-template-columns: 1fr; }
+  .sl-left { display: none !important; }
+}
 
-/* ══ CAL CENTRAL ══ */
-#calcentral { background: #f4f4f0; align-items: center; justify-content: center; }
-.cal-header { position: fixed; top: 0; left: 0; right: 0; background: #003262; padding: 10px 24px; display: flex; align-items: center; gap: 14px; z-index: 100; }
-.cal-logo-circle { width: 38px; height: 38px; border-radius: 50%; background: #FDB515; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; color: #003262; font-family: 'Syne', sans-serif; flex-shrink: 0; }
-.cal-header-title { color: #fff; font-weight: 700; font-size: 15px; font-family: 'Syne', sans-serif; }
-.cal-header-sub { color: rgba(255,255,255,0.45); font-size: 10px; letter-spacing: 0.08em; }
-.cal-card { background: #fff; border-radius: 12px; box-shadow: 0 4px 40px rgba(0,0,0,0.1); padding: 44px 40px; width: 100%; max-width: 420px; border: 1px solid #e5e5e5; margin-top: 72px; }
-.cal-card-logo { width: 54px; height: 54px; border-radius: 50%; background: #003262; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 800; color: #FDB515; margin: 0 auto 14px; font-family: 'Syne', sans-serif; }
-.cal-card h2 { text-align: center; font-size: 20px; color: #111; margin-bottom: 6px; font-family: 'Syne', sans-serif; }
-.cal-card p { text-align: center; font-size: 13px; color: #777; margin-bottom: 22px; }
-.notice { background: #fffbeb; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #92400e; margin-bottom: 22px; }
-.light-field { margin-bottom: 18px; }
-.light-field label { display: block; font-size: 12px; font-weight: 600; color: #444; margin-bottom: 6px; letter-spacing: 0.04em; }
-.light-field input { width: 100%; border: 1.5px solid #d1d5db; border-radius: 8px; padding: 11px 14px; font-size: 14px; color: #111; outline: none; transition: border 0.15s; font-family: 'DM Sans', sans-serif; }
-.light-field input:focus { border-color: #003262; }
-.btn-cal { width: 100%; padding: 12px; border-radius: 8px; background: #003262; color: #fff; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; transition: background 0.2s; }
-.btn-cal:hover:not(:disabled) { background: #002244; }
-.btn-cal:disabled { background: #6b7280; cursor: default; }
-.cal-disclaimer { text-align: center; font-size: 11px; color: #aaa; margin-top: 18px; }
-.err-msg { color: #dc2626; font-size: 12px; margin-bottom: 14px; display: none; }
+/* Left hero */
+.sl-left {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  justify-content: flex-start; gap: 48px;
+  padding: 52px; position: relative; overflow: hidden;
+}
+.sl-left-grid {
+  position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(91,142,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(91,142,255,0.04) 1px, transparent 1px);
+  background-size: 40px 40px; pointer-events: none;
+}
+.sl-glow {
+  position: absolute; width: 500px; height: 500px; border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(91,142,255,0.11) 0%, transparent 65%);
+  bottom: -140px; right: -140px; pointer-events: none;
+}
+.sl-glow2 {
+  position: absolute; width: 280px; height: 280px; border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(79,207,142,0.07) 0%, transparent 65%);
+  top: -60px; left: -60px; pointer-events: none;
+}
+.sl-brand { position: relative; z-index: 1; display: flex; align-items: center; gap: 10px; }
+.sl-brand-icon {
+  width: 36px; height: 36px; background: var(--accent); border-radius: 10px;
+  display: flex; align-items: center; justify-content: center; font-size: 17px;
+}
+.sl-brand-name { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; letter-spacing: -0.3px; color: var(--text); }
+.sl-brand-name span { color: var(--accent); }
+.sl-hero { position: relative; z-index: 1; }
+.sl-eyebrow {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: rgba(91,142,255,0.09); border: 1px solid rgba(91,142,255,0.18);
+  border-radius: 20px; padding: 4px 12px; font-size: 11px; font-weight: 600;
+  color: var(--accent); margin-bottom: 22px; letter-spacing: 0.04em; text-transform: uppercase;
+}
+.sl-eyebrow-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: blink 2s infinite; }
+.sl-headline {
+  font-family: 'Syne', sans-serif; font-size: clamp(28px, 3.2vw, 42px);
+  font-weight: 800; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 18px; color: var(--text);
+}
+.sl-headline em { font-style: normal; color: var(--accent); }
+.sl-subline { font-size: 14px; color: var(--text2); line-height: 1.65; max-width: 38ch; }
+.sl-stats {
+  position: relative; z-index: 1; display: flex; gap: 28px;
+  padding-top: 28px; border-top: 1px solid var(--border);
+}
+.sl-stat-num { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: var(--text); letter-spacing: -0.04em; }
+.sl-stat-lbl { font-size: 11px; color: var(--text2); margin-top: 2px; }
+
+/* Right form panel */
+.sl-right {
+  display: flex; align-items: center; justify-content: center;
+  padding: 48px 40px; background: var(--bg); position: relative;
+}
+.sl-right::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 50% at 50% 40%, rgba(91,142,255,0.05), transparent 70%);
+  pointer-events: none;
+}
+.sl-card {
+  position: relative; z-index: 1; width: 100%; max-width: 380px;
+  animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+/* Auth tabs */
+.auth-tabs { display: none; }
+.auth-tab { display: none; }
+.auth-panel { display: none; }
+.auth-panel.active { display: block; }
+
+.sl-heading { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; letter-spacing: -0.04em; margin-bottom: 6px; color: var(--text); }
+.sl-subhead { font-size: 13px; color: var(--text2); margin-bottom: 24px; }
+
+/* Fields */
+.sl-label {
+  display: block; font-size: 10px; font-weight: 700; letter-spacing: 0.09em;
+  text-transform: uppercase; color: var(--text2); margin-bottom: 7px;
+}
+.sl-input {
+  width: 100%; background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; padding: 12px 15px; font-family: 'DM Sans', sans-serif;
+  font-size: 14px; color: var(--text); outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s; margin-bottom: 16px;
+}
+.sl-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(91,142,255,0.12); }
+.sl-input::placeholder { color: var(--text2); opacity: 0.6; }
+.sl-btn {
+  width: 100%; padding: 13px; border-radius: 10px; background: var(--accent);
+  color: #fff; font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700;
+  cursor: pointer; border: none; transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+  box-shadow: 0 4px 18px rgba(91,142,255,0.3); display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.sl-btn:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 6px 24px rgba(91,142,255,0.4); }
+.sl-btn:active { transform: translateY(0); }
+.sl-btn:disabled { opacity: 0.5; cursor: default; transform: none; }
+.sl-error {
+  background: rgba(255,107,107,0.1); border: 1px solid rgba(255,107,107,0.2);
+  color: var(--accent2); border-radius: 8px; padding: 10px 14px;
+  font-size: 12px; margin-bottom: 14px; display: none;
+}
+.auth-switch { text-align: center; font-size: 12px; color: var(--text2); margin-top: 16px; }
+.auth-switch a { color: var(--accent); font-weight: 600; cursor: pointer; }
+.auth-switch a:hover { text-decoration: underline; }
+.sl-note { text-align: center; font-size: 11px; color: var(--text2); margin-top: 20px; opacity: 0.5; }
+
+/* CalNet screen */
+#calcentral { background: var(--bg); align-items: center; justify-content: center; }
+.calnet-wrap {
+  width: 100%; max-width: 420px; padding: 40px 24px;
+  animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both;
+}
+.calnet-back {
+  display: inline-flex; align-items: center; gap: 6px; background: none; border: none;
+  color: var(--accent); font-size: 13px; font-weight: 600; cursor: pointer;
+  margin-bottom: 28px; padding: 0; transition: opacity 0.15s;
+}
+.calnet-back:hover { opacity: 0.75; }
+.calnet-heading { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; letter-spacing: -0.04em; margin-bottom: 6px; color: var(--text); }
+.calnet-sub { font-size: 13px; color: var(--text2); margin-bottom: 24px; }
+.calnet-notice {
+  display: flex; align-items: flex-start; gap: 10px;
+  background: rgba(91,142,255,0.07); border: 1px solid rgba(91,142,255,0.15);
+  border-radius: 10px; padding: 12px 14px; font-size: 12px; color: var(--text2);
+  margin-bottom: 22px; line-height: 1.5;
+}
+.calnet-notice strong { color: var(--text); }
+.err-msg { color: var(--accent2); font-size: 12px; margin-bottom: 14px; display: none; }
 
 /* ══ PROFILE SETUP ══ */
-#profilesetup { background: #05101f; align-items: center; justify-content: center; }
-.setup-inner { width: 100%; max-width: 540px; padding: 40px 24px; }
-.setup-step-label { color: rgba(255,255,255,0.3); font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; font-family: 'Syne', sans-serif; }
-.setup-inner h1 { font-size: 30px; font-weight: 800; margin-bottom: 28px; }
-.dark-field { margin-bottom: 20px; }
-.dark-field label { display: block; color: rgba(255,255,255,0.45); font-size: 11px; font-weight: 700; margin-bottom: 8px; letter-spacing: 0.1em; text-transform: uppercase; font-family: 'Syne', sans-serif; }
-.dark-field input, .dark-field textarea { width: 100%; background: rgba(255,255,255,0.04); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 12px 14px; color: #fff; font-size: 14px; outline: none; transition: border 0.15s; }
-.dark-field input:focus, .dark-field textarea:focus { border-color: #FDB515; }
-.dark-field input::placeholder, .dark-field textarea::placeholder { color: rgba(255,255,255,0.2); }
+#profilesetup {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+  flex-direction: unset;
+  background: var(--bg);
+}
+/* Left info panel */
+.setup-left {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  justify-content: space-between;
+  padding: 40px 44px; position: relative; overflow: hidden;
+}
+.setup-left-grid {
+  position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(91,142,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(91,142,255,0.04) 1px, transparent 1px);
+  background-size: 40px 40px; pointer-events: none;
+}
+.setup-left-glow {
+  position: absolute; width: 400px; height: 400px; border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(91,142,255,0.1) 0%, transparent 65%);
+  bottom: -100px; right: -100px; pointer-events: none;
+}
+.setup-left-top { position: relative; z-index: 1; }
+.setup-left-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 40px; }
+.setup-left-brand-icon { width: 32px; height: 32px; background: var(--accent); border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+.setup-left-brand-name { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 800; color: var(--text); }
+.setup-left-brand-name span { color: var(--accent); }
+.setup-step-label { color: var(--accent); font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; font-family: 'Syne', sans-serif; }
+.setup-headline { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 12px; color: var(--text); }
+.setup-headline em { font-style: normal; color: var(--accent); }
+.setup-desc { font-size: 13px; color: var(--text2); line-height: 1.65; max-width: 34ch; }
+.setup-left-bottom { position: relative; z-index: 1; padding-top: 24px; border-top: 1px solid var(--border); }
+.setup-classes-preview { display: flex; flex-wrap: wrap; gap: 6px; }
+.setup-preview-chip { background: rgba(91,142,255,0.08); border: 1px solid rgba(91,142,255,0.18); border-radius: 6px; padding: 4px 10px; font-size: 11px; color: var(--accent); font-weight: 700; font-family: 'Syne', sans-serif; }
+.setup-preview-label { font-size: 10px; color: var(--text2); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+/* Right form panel */
+.setup-right {
+  overflow-y: auto; padding: 40px 44px;
+  display: flex; flex-direction: column; justify-content: center;
+  background: var(--bg);
+}
+.setup-inner { width: 100%; max-width: 400px; margin: 0 auto; }
+.dark-field { margin-bottom: 16px; }
+.dark-field label { display: block; color: var(--text2); font-size: 10px; font-weight: 700; margin-bottom: 7px; letter-spacing: 0.09em; text-transform: uppercase; font-family: 'Syne', sans-serif; }
+.dark-field input, .dark-field textarea { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 11px 14px; color: var(--text); font-size: 14px; outline: none; transition: border 0.15s; }
+.dark-field input:focus, .dark-field textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(91,142,255,0.12); }
+.dark-field input::placeholder, .dark-field textarea::placeholder { color: var(--text2); opacity: 0.6; }
 .dark-field textarea { resize: none; }
 .year-pills { display: flex; gap: 8px; flex-wrap: wrap; }
-.year-pill { padding: 8px 14px; border-radius: 8px; border: 1.5px solid rgba(255,255,255,0.1); background: transparent; color: rgba(255,255,255,0.4); font-size: 12px; font-weight: 700; transition: all 0.15s; }
-.year-pill:hover { border-color: rgba(253,181,21,0.5); color: rgba(253,181,21,0.7); }
-.year-pill.selected { border-color: #FDB515; background: rgba(253,181,21,0.12); color: #FDB515; }
+.year-pill { padding: 8px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--text2); font-size: 12px; font-weight: 700; transition: all 0.15s; }
+.year-pill:hover { border-color: rgba(91,142,255,0.5); color: var(--accent); }
+.year-pill.selected { border-color: var(--accent); background: rgba(91,142,255,0.12); color: var(--accent); }
 
 /* Class search */
 .class-search-wrap { position: relative; }
-.class-search-input { width: 100%; background: rgba(255,255,255,0.04); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 12px 14px 12px 40px; color: #fff; font-size: 14px; outline: none; transition: border 0.15s; font-family: 'DM Sans', sans-serif; }
-.class-search-input:focus { border-color: #FDB515; }
-.class-search-input::placeholder { color: rgba(255,255,255,0.2); }
-.search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: rgba(255,255,255,0.3); font-size: 15px; pointer-events: none; }
-.class-dropdown { background: #0e1e3a; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; margin-top: 6px; overflow: hidden; display: none; max-height: 220px; overflow-y: auto; }
+.class-search-input { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px 12px 40px; color: var(--text); font-size: 14px; outline: none; transition: border 0.15s; font-family: 'DM Sans', sans-serif; }
+.class-search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(91,142,255,0.12); }
+.class-search-input::placeholder { color: var(--text2); opacity: 0.6; }
+.search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text2); font-size: 15px; pointer-events: none; }
+.class-dropdown { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; margin-top: 6px; overflow: hidden; display: none; max-height: 220px; overflow-y: auto; }
 .class-dropdown.open { display: block; }
-.class-option { padding: 10px 14px; cursor: pointer; font-size: 13px; display: flex; justify-content: space-between; align-items: center; transition: background 0.1s; border-bottom: 1px solid rgba(255,255,255,0.04); color: rgba(255,255,255,0.75); }
+.class-option { padding: 10px 14px; cursor: pointer; font-size: 13px; display: flex; justify-content: space-between; align-items: center; transition: background 0.1s; border-bottom: 1px solid var(--border); color: var(--text); }
 .class-option:last-child { border-bottom: none; }
-.class-option:hover { background: rgba(253,181,21,0.08); }
-.opt-code { font-weight: 700; font-family: 'Syne', sans-serif; color: #FDB515; }
+.class-option:hover { background: rgba(91,142,255,0.08); }
+.opt-code { font-weight: 700; font-family: 'Syne', sans-serif; color: var(--accent); }
 .opt-title { color: rgba(255,255,255,0.4); font-size: 11px; margin-top: 1px; }
-.opt-add { color: #FDB515; font-size: 18px; }
+.opt-add { color: var(--accent); font-size: 18px; }
 .class-option.already { opacity: 0.4; cursor: default; }
 .added-classes { display: flex; flex-wrap: wrap; gap: 8px; min-height: 36px; margin-top: 12px; }
-.class-chip { display: inline-flex; align-items: center; gap: 6px; background: rgba(253,181,21,0.1); border: 1px solid rgba(253,181,21,0.3); border-radius: 8px; padding: 6px 10px; color: #FDB515; font-size: 12px; font-weight: 700; font-family: 'Syne', sans-serif; }
-.chip-x { background: none; border: none; color: rgba(253,181,21,0.5); font-size: 16px; line-height: 1; padding: 0; cursor: pointer; transition: color 0.15s; }
-.chip-x:hover { color: #FDB515; }
-.chip-empty { color: rgba(255,255,255,0.2); font-size: 13px; padding: 8px 0; }
+.class-chip { display: inline-flex; align-items: center; gap: 6px; background: rgba(91,142,255,0.1); border: 1px solid rgba(91,142,255,0.25); border-radius: 8px; padding: 6px 10px; color: var(--accent); font-size: 12px; font-weight: 700; font-family: 'Syne', sans-serif; }
+.chip-x { background: none; border: none; color: rgba(91,142,255,0.5); font-size: 16px; line-height: 1; padding: 0; cursor: pointer; transition: color 0.15s; }
+.chip-x:hover { color: var(--accent); }
+.chip-empty { color: var(--text2); font-size: 13px; padding: 8px 0; }
 
-.toggle-row { display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 14px 16px; margin-bottom: 28px; }
-.toggle-label { font-size: 14px; font-weight: 600; color: #fff; font-family: 'Syne', sans-serif; }
-.toggle-sub { font-size: 12px; color: rgba(255,255,255,0.35); margin-top: 3px; }
-.toggle { width: 44px; height: 24px; border-radius: 12px; background: rgba(255,255,255,0.12); position: relative; cursor: pointer; transition: background 0.2s; flex-shrink: 0; }
-.toggle.on { background: #FDB515; }
+.toggle-row { display: flex; align-items: center; justify-content: space-between; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; margin-bottom: 28px; }
+.toggle-label { font-size: 14px; font-weight: 600; color: var(--text); font-family: 'Syne', sans-serif; }
+.toggle-sub { font-size: 12px; color: var(--text2); margin-top: 3px; }
+.toggle { width: 44px; height: 24px; border-radius: 12px; background: var(--surface2); position: relative; cursor: pointer; transition: background 0.2s; flex-shrink: 0; }
+.toggle.on { background: var(--accent); }
 .toggle-knob { position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; transition: left 0.2s; pointer-events: none; }
 .toggle.on .toggle-knob { left: 23px; }
-.btn-enter { width: 100%; padding: 14px; border-radius: 12px; background: rgba(253,181,21,0.15); color: rgba(253,181,21,0.35); font-size: 15px; font-weight: 700; transition: all 0.2s; }
-.btn-enter.ready { background: #FDB515; color: #05101f; }
-.btn-enter.ready:hover { background: #e8a800; }
+.btn-enter { width: 100%; padding: 14px; border-radius: 12px; background: rgba(91,142,255,0.12); color: rgba(91,142,255,0.4); font-size: 15px; font-weight: 700; transition: all 0.2s; box-shadow: none; }
+.btn-enter.ready { background: var(--accent); color: #fff; box-shadow: 0 4px 18px rgba(91,142,255,0.3); }
+.btn-enter.ready:hover { opacity: 0.9; transform: translateY(-1px); }
 
-/* ══ DASHBOARD ══ */
-#dashboard { flex-direction: row; min-height: 100vh; }
-.sidebar { width: 244px; background: #0a1628; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; flex-shrink: 0; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
-.sidebar-logo { padding: 20px 20px 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-.sidebar-logo .name { font-size: 20px; font-weight: 800; font-family: 'Syne', sans-serif; }
-.sidebar-logo .name span { color: #FDB515; }
-.sidebar-logo .sub { font-size: 10px; color: rgba(255,255,255,0.22); letter-spacing: 0.12em; margin-top: 1px; }
-.nav { padding: 14px 10px 0; }
-.nav-btn { display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 12px; border-radius: 8px; background: transparent; color: rgba(255,255,255,0.38); font-size: 13px; font-weight: 500; text-align: left; transition: all 0.15s; margin-bottom: 2px; }
-.nav-btn:hover { background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.7); }
-.nav-btn.active { background: rgba(253,181,21,0.1); color: #FDB515; font-weight: 700; }
-.nav-btn .icon { font-size: 15px; }
-.course-nav-section { padding: 18px 10px 0; flex: 1; }
-.course-nav-label { color: rgba(255,255,255,0.22); font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 0 8px; margin-bottom: 8px; font-family: 'Syne', sans-serif; display: flex; align-items: center; justify-content: space-between; }
-.btn-add-small { background: none; color: #FDB515; font-size: 20px; cursor: pointer; line-height: 1; padding: 0; opacity: 0.7; transition: opacity 0.15s; }
-.btn-add-small:hover { opacity: 1; }
-.course-nav-btn { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 8px 10px; border-radius: 7px; background: transparent; color: rgba(255,255,255,0.45); font-size: 12px; font-weight: 700; font-family: 'Syne', sans-serif; text-align: left; transition: all 0.15s; margin-bottom: 2px; cursor: pointer; }
-.course-nav-btn:hover { color: rgba(255,255,255,0.7); background: rgba(255,255,255,0.04); }
-.course-nav-btn.active { color: #FDB515; background: rgba(253,181,21,0.1); }
-.cnt-badge { background: rgba(255,255,255,0.06); border-radius: 20px; padding: 1px 7px; font-size: 10px; color: rgba(255,255,255,0.25); }
-.sidebar-user { padding: 14px 14px 16px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; gap: 10px; margin-top: auto; }
-.sidebar-avatar { width: 32px; height: 32px; border-radius: 50%; background: #FDB515; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: #05101f; flex-shrink: 0; font-family: 'Syne', sans-serif; }
-.avail-dot { width: 7px; height: 7px; border-radius: 50%; background: #374151; flex-shrink: 0; }
-.avail-dot.on { background: #22c55e; }
-.dash-main { flex: 1; overflow: auto; }
-.tab-content { display: none; }
-.tab-content.active { display: block; }
-.dash-pad { padding: 36px 40px; }
-.stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 36px; }
-.stat-card { border-radius: 14px; padding: 20px 18px; }
-.stat-card .s-icon { font-size: 22px; margin-bottom: 10px; }
-.stat-card .s-num { font-size: 28px; font-weight: 800; font-family: 'Syne', sans-serif; }
-.stat-card .s-lbl { font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 3px; }
-.section-title { font-size: 17px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 12px; }
-.courses-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(270px,1fr)); gap: 14px; margin-bottom: 36px; }
-.course-card { background: #0a1628; border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; padding: 20px; cursor: pointer; transition: all 0.2s; }
-.course-card:hover { background: #0e1e3a; border-color: rgba(253,181,21,0.25); }
-.course-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
-.tag { display: inline-block; background: rgba(253,181,21,0.1); border: 1px solid rgba(253,181,21,0.25); border-radius: 6px; padding: 3px 9px; color: #FDB515; font-size: 11px; font-weight: 700; font-family: 'Syne', sans-serif; }
-.btn-rm-course { background: none; color: rgba(255,255,255,0.2); font-size: 16px; cursor: pointer; padding: 0; line-height: 1; transition: color 0.15s; }
-.btn-rm-course:hover { color: #ef4444; }
-.course-card-name { font-weight: 700; font-size: 14px; margin-bottom: 4px; font-family: 'Syne', sans-serif; }
-.course-card-meta { color: rgba(255,255,255,0.3); font-size: 12px; margin-bottom: 14px; }
-.avatar-stack { display: flex; }
-.mini-avatar { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 800; color: #fff; margin-left: -6px; border: 2px solid #0a1628; flex-shrink: 0; }
-.mini-avatar:first-child { margin-left: 0; }
-.course-card-add { background: rgba(253,181,21,0.03); border: 1.5px dashed rgba(253,181,21,0.2); border-radius: 14px; padding: 20px; cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; min-height: 130px; }
-.course-card-add:hover { background: rgba(253,181,21,0.07); border-color: rgba(253,181,21,0.4); }
-.course-card-add .add-icon { font-size: 26px; color: rgba(253,181,21,0.5); }
-.course-card-add .add-lbl { color: rgba(253,181,21,0.55); font-size: 13px; font-weight: 700; }
-.green { color: #22c55e; }
-.classes-layout { display: flex; min-height: 100vh; }
-.classes-sidebar { width: 210px; border-right: 1px solid rgba(255,255,255,0.05); padding: 24px 14px; flex-shrink: 0; }
-.classes-sidebar-lbl { color: rgba(255,255,255,0.25); font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; font-family: 'Syne', sans-serif; }
-.class-pick-btn { display: block; width: 100%; text-align: left; padding: 10px 12px; border-radius: 8px; background: transparent; color: rgba(255,255,255,0.5); font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; margin-bottom: 4px; transition: all 0.15s; cursor: pointer; }
-.class-pick-btn .cpb-sub { color: rgba(255,255,255,0.2); font-size: 10px; font-weight: 400; font-family: 'DM Sans', sans-serif; margin-top: 2px; }
-.class-pick-btn:hover { color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.04); }
-.class-pick-btn.active { color: #FDB515; background: rgba(253,181,21,0.1); }
-.class-pick-btn.active .cpb-sub { color: rgba(253,181,21,0.5); }
-.classes-main { flex: 1; padding: 32px 36px; overflow: auto; }
-.filter-row { display: flex; gap: 12px; margin-bottom: 28px; flex-wrap: wrap; }
-.filter-tag { display: inline-flex; align-items: center; gap: 6px; border-radius: 8px; padding: 7px 14px; font-size: 12px; font-weight: 700; font-family: 'Syne', sans-serif; }
-.peers-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(290px,1fr)); gap: 16px; }
-.peer-card { background: #0a1628; border: 1.5px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 20px; transition: all 0.2s; }
-.peer-card:hover { background: #0e1e3a; border-color: rgba(253,181,21,0.2); }
-.peer-top { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
-.peer-avatar { width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; color: #fff; flex-shrink: 0; font-family: 'Syne', sans-serif; }
-.peer-name { font-weight: 700; font-size: 14px; font-family: 'Syne', sans-serif; }
-.peer-sub { color: rgba(255,255,255,0.35); font-size: 11px; margin-top: 2px; }
-.active-badge { background: rgba(34,197,94,0.1); color: #22c55e; border-radius: 20px; padding: 2px 8px; font-size: 10px; font-weight: 700; }
-.peer-bio { color: rgba(255,255,255,0.4); font-size: 12px; font-style: italic; margin-bottom: 12px; }
-.peer-classes { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 16px; }
-.mini-tag { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 5px; padding: 2px 8px; color: rgba(255,255,255,0.38); font-size: 10px; }
-.peer-actions { display: flex; gap: 8px; }
-.btn-connect { flex: 2; padding: 9px; border-radius: 8px; border: 1px solid rgba(253,181,21,0.3); background: rgba(253,181,21,0.08); color: #FDB515; font-size: 12px; font-weight: 700; transition: all 0.2s; }
-.btn-connect:hover:not(.connected) { background: rgba(253,181,21,0.15); }
-.btn-connect.connected { border-color: rgba(34,197,94,0.3); background: rgba(34,197,94,0.08); color: #22c55e; cursor: default; }
-.btn-msg { flex: 1; padding: 9px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: transparent; color: rgba(255,255,255,0.45); font-size: 12px; transition: all 0.2s; }
-.btn-msg:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.7); }
-.empty-state { text-align: center; padding: 60px 20px; }
-.empty-state .e-icon { font-size: 40px; margin-bottom: 12px; }
-.empty-state .e-title { font-size: 16px; font-weight: 700; color: rgba(255,255,255,0.4); margin-bottom: 6px; font-family: 'Syne', sans-serif; }
-.empty-state .e-sub { font-size: 13px; color: rgba(255,255,255,0.25); }
-.messages-layout { display: flex; height: 100vh; }
-.msg-list { width: 260px; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; flex-shrink: 0; }
-.msg-list-header { padding: 22px 20px 16px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 17px; font-weight: 800; font-family: 'Syne', sans-serif; }
-.msg-list-items { flex: 1; overflow: auto; }
-.msg-item { display: flex; gap: 12px; padding: 14px 16px; cursor: pointer; transition: all 0.15s; border-left: 2px solid transparent; }
-.msg-item:hover { background: rgba(255,255,255,0.03); }
-.msg-item.active { background: rgba(253,181,21,0.07); border-left-color: #FDB515; }
-.msg-item-av { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: #fff; flex-shrink: 0; font-family: 'Syne', sans-serif; }
-.msg-item-name { font-size: 13px; font-weight: 700; font-family: 'Syne', sans-serif; }
-.msg-item-preview { color: rgba(255,255,255,0.35); font-size: 12px; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 160px; }
-.msg-item-time { color: rgba(255,255,255,0.22); font-size: 10px; }
-.chat-area { flex: 1; display: flex; flex-direction: column; }
-.chat-empty { flex: 1; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 10px; color: rgba(255,255,255,0.2); }
-.chat-header { padding: 16px 22px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; gap: 12px; }
-.messages-body { flex: 1; overflow: auto; padding: 20px 22px; display: flex; flex-direction: column; gap: 12px; }
-.bubble-wrap { display: flex; }
-.bubble-wrap.mine { justify-content: flex-end; }
-.bubble { max-width: 70%; border-radius: 12px; padding: 10px 14px; }
-.bubble.theirs { background: rgba(255,255,255,0.07); }
-.bubble.mine { background: #FDB515; }
-.bubble-text { font-size: 13px; }
-.bubble.mine .bubble-text { color: #05101f; }
-.bubble-time { font-size: 10px; margin-top: 4px; text-align: right; }
-.bubble.mine .bubble-time { color: rgba(5,16,31,0.5); }
-.bubble.theirs .bubble-time { color: rgba(255,255,255,0.25); }
-.chat-input-bar { padding: 14px 20px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; gap: 10px; }
-.chat-input { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 11px 14px; color: #fff; font-size: 13px; outline: none; font-family: 'DM Sans', sans-serif; }
-.chat-input::placeholder { color: rgba(255,255,255,0.25); }
-.btn-send { background: #FDB515; border-radius: 10px; padding: 0 18px; color: #05101f; font-size: 16px; font-weight: 800; }
-.btn-send:hover { background: #e8a800; }
-.no-msgs { padding: 24px; color: rgba(255,255,255,0.25); font-size: 13px; }
-.profile-pad { padding: 36px 40px; max-width: 580px; }
-.profile-card { background: #0a1628; border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; padding: 28px; margin-bottom: 16px; }
-.connections-pad { padding: 36px 40px; }
-
-/* ══ ADD CLASS MODAL ══ */
-.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 200; display: none; align-items: center; justify-content: center; padding: 24px; backdrop-filter: blur(4px); }
-.modal-overlay.open { display: flex; }
-.modal { background: #0e1e3a; border: 1px solid rgba(255,255,255,0.1); border-radius: 18px; padding: 32px; width: 100%; max-width: 480px; position: relative; animation: fadeUp 0.2s ease; }
-.modal h2 { font-size: 22px; font-weight: 800; margin-bottom: 6px; }
-.modal > p { color: rgba(255,255,255,0.4); font-size: 13px; margin-bottom: 24px; }
-.modal-close { position: absolute; top: 16px; right: 18px; background: none; color: rgba(255,255,255,0.4); font-size: 22px; cursor: pointer; transition: color 0.15s; }
-.modal-close:hover { color: #fff; }
-.modal-added { display: flex; flex-wrap: wrap; gap: 8px; min-height: 32px; margin-top: 12px; }
-.modal-footer { display: flex; gap: 10px; margin-top: 24px; }
-.btn-cancel { flex: 1; padding: 12px; border-radius: 10px; background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.5); font-size: 13px; font-weight: 700; transition: all 0.15s; }
-.btn-cancel:hover { background: rgba(255,255,255,0.1); }
-.btn-done { flex: 2; padding: 12px; border-radius: 10px; background: #FDB515; color: #05101f; font-size: 13px; font-weight: 700; transition: all 0.15s; }
-.btn-done:hover { background: #e8a800; }
 
 .spinner { width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; display: inline-block; }
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.35} }
@@ -243,98 +269,143 @@ input, textarea { font-family: 'DM Sans', sans-serif; }
 </head>
 <body>
 
-<!-- ════════ LANDING ════════ -->
+<!-- ════════ LANDING (split panel) ════════ -->
 <section id="landing" class="screen active">
-  <div class="grid-bg"></div>
-  <div class="glow"></div>
-  <div class="landing-inner">
-    <div class="badge"><div class="badge-dot"></div><span>UC Berkeley · Study Network</span></div>
-    <h1 class="logo">Study<span>Link</span></h1>
-    <p class="tagline">Find Berkeley students in your exact courses.<br>Sign in, add your classes, connect and study.</p>
-    <button class="btn-primary" onclick="showScreen('calcentral')">🔐 Log in with CalNet ID</button>
-    <div class="landing-stats">
-      <div><div class="stat-num">3,200+</div><div class="stat-lbl">Students</div></div>
-      <div><div class="stat-num">130+</div><div class="stat-lbl">Courses</div></div>
-      <div><div class="stat-num">900+</div><div class="stat-lbl">Groups</div></div>
+
+  <!-- Left hero -->
+  <div class="sl-left">
+    <div class="sl-left-grid"></div>
+    <div class="sl-glow"></div>
+    <div class="sl-glow2"></div>
+    <div class="sl-brand">
+      <div class="sl-brand-icon">🔗</div>
+      <div class="sl-brand-name">Study<span>Link</span></div>
+    </div>
+    <div class="sl-hero">
+      <div class="sl-eyebrow"><div class="sl-eyebrow-dot"></div>UC Berkeley · Spring 2026</div>
+      <div class="sl-headline">Connect with students<br>in your <em>exact</em> courses</div>
+      <div class="sl-subline">Sign in with CalNet, add your classes, and find study partners who are taking the same courses as you.</div>
+    </div>
+    <div class="sl-stats">
+      <div><div class="sl-stat-num">3,200+</div><div class="sl-stat-lbl">Students</div></div>
+      <div><div class="sl-stat-num">130+</div><div class="sl-stat-lbl">Courses</div></div>
+      <div><div class="sl-stat-num">900+</div><div class="sl-stat-lbl">Groups</div></div>
     </div>
   </div>
+
+  <!-- Right auth card -->
+  <div class="sl-right">
+    <div class="sl-card">
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-signin" onclick="switchAuthTab('signin')">Sign In</button>
+      </div>
+
+      <!-- Sign In -->
+      <div class="auth-panel active" id="panel-signin">
+        <div class="sl-heading">Welcome back</div>
+        <div class="sl-subhead">Sign in to access your study network</div>
+        <div class="sl-error" id="sl-signin-err"></div>
+        <label class="sl-label">CalNet ID</label>
+        <input class="sl-input" type="text" id="calnet-id" placeholder="e.g. 3034XXXXXX" />
+        <label class="sl-label">Passphrase</label>
+        <input class="sl-input" type="password" id="calnet-pass" placeholder="Enter your passphrase" style="margin-bottom:0" />
+        <div style="height:22px;"></div>
+        <button class="sl-btn" id="cal-btn" onclick="calLogin()">Authorize &amp; Continue →</button>
+        <div class="auth-switch">New to StudyLink? <a onclick="createAccount()">Create an account</a></div>
+        <div style="margin-top:12px;text-align:center;">
+          <a onclick="deleteAccount()" style="font-size:11px;color:rgba(255,107,107,0.5);cursor:pointer;transition:color 0.15s;" onmouseover="this.style.color='#FF6B6B'" onmouseout="this.style.color='rgba(255,107,107,0.5)'">Delete account</a>
+        </div>
+      </div>
+
+      <div class="sl-note">Demo only — no credentials are sent or stored</div>
+    </div>
+  </div>
+
 </section>
 
 <!-- ════════ CAL CENTRAL ════════ -->
 <section id="calcentral" class="screen">
-  <div class="cal-header">
-    <div class="cal-logo-circle">C</div>
-    <div>
-      <div class="cal-header-title">University of California, Berkeley</div>
-      <div class="cal-header-sub">CALCENTRAL · STUDENT INFORMATION SYSTEM</div>
-    </div>
-  </div>
   <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:24px;">
-    <div class="cal-card">
-      <div class="cal-card-logo">C</div>
-      <h2>CalNet Authentication</h2>
-      <p>Authorize StudyLink to access your enrolled courses</p>
-      <div class="notice">🔒 <strong>StudyLink</strong> is requesting <strong>read-only</strong> access to your Spring 2026 enrollment.</div>
-      <div class="light-field">
-        <label>CalNet ID (Student ID)</label>
-        <input type="text" id="calnet-id" placeholder="e.g. 3034XXXXXX" />
-      </div>
-      <div class="light-field">
-        <label>Passphrase</label>
-        <input type="password" id="calnet-pass" placeholder="Enter your passphrase" />
-      </div>
+    <div class="calnet-wrap">
+      <button class="calnet-back" onclick="showScreen('landing')">← Back</button>
+      <div class="calnet-heading">Connecting to bCourses</div>
+      <div class="calnet-sub">Authorizing read-only access to your Spring 2026 enrollment</div>
+      <div class="calnet-notice">🔒 <strong>StudyLink</strong> is requesting <strong>read-only</strong> access to fetch your enrolled courses. No credentials are stored.</div>
       <div class="err-msg" id="cal-err">Please enter both fields.</div>
-      <button class="btn-cal" id="cal-btn" onclick="calLogin()">Authorize &amp; Continue</button>
-      <p class="cal-disclaimer">Demo only — no credentials are sent or stored.</p>
+      <button class="sl-btn" id="cal-scrape-btn" onclick="startScrape()" style="margin-top:8px;">Open bCourses Login →</button>
+      <div class="sl-note" style="margin-top:16px;">A browser window will open for you to log in to bCourses directly.</div>
     </div>
   </div>
 </section>
 
 <!-- ════════ PROFILE SETUP ════════ -->
 <section id="profilesetup" class="screen">
-  <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:40px 24px;">
+
+  <!-- Left panel -->
+  <div class="setup-left">
+    <div class="setup-left-grid"></div>
+    <div class="setup-left-glow"></div>
+    <div class="setup-left-top">
+      <div class="setup-left-brand">
+        <div class="setup-left-brand-icon">🔗</div>
+        <div class="setup-left-brand-name">Study<span>Link</span></div>
+      </div>
+      <div class="setup-step-label">Step 2 of 2</div>
+      <div class="setup-headline">Almost there —<br>tell us about <em>you</em></div>
+      <div class="setup-desc">Fill in your profile so classmates can find you. Your bCourses classes are already loaded below.</div>
+    </div>
+    <div class="setup-left-bottom">
+      <div class="setup-preview-label">Classes from bCourses</div>
+      <div class="setup-classes-preview" id="setup-preview-chips"></div>
+    </div>
+  </div>
+
+  <!-- Right form panel -->
+  <div class="setup-right">
     <div class="setup-inner">
-      <div class="setup-step-label">Set up your account</div>
-      <h1>Tell us about yourself</h1>
 
       <div class="dark-field">
         <label>Display Name</label>
         <input type="text" id="setup-name" placeholder="Jane Doe" oninput="checkReady()" />
       </div>
-      <div class="dark-field">
-        <label>Major</label>
-        <input type="text" id="setup-major" placeholder="EECS, CS, Data Science…" />
-      </div>
-      <div class="dark-field" style="margin-bottom:20px;">
-        <label>Year</label>
-        <div class="year-pills">
-          <button class="year-pill" onclick="pickYear(this,'Freshman')">Freshman</button>
-          <button class="year-pill" onclick="pickYear(this,'Sophomore')">Sophomore</button>
-          <button class="year-pill" onclick="pickYear(this,'Junior')">Junior</button>
-          <button class="year-pill" onclick="pickYear(this,'Senior')">Senior</button>
-          <button class="year-pill" onclick="pickYear(this,'Graduate')">Graduate</button>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="dark-field">
+          <label>Major</label>
+          <input type="text" id="setup-major" placeholder="EECS, CS…" />
+        </div>
+        <div class="dark-field">
+          <label>Year</label>
+          <select id="setup-year-select" onchange="pickYearSelect(this.value)" style="width:100%;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-size:14px;outline:none;font-family:'DM Sans',sans-serif;appearance:none;cursor:pointer;">
+            <option value="">Select…</option>
+            <option value="Freshman">Freshman</option>
+            <option value="Sophomore">Sophomore</option>
+            <option value="Junior">Junior</option>
+            <option value="Senior">Senior</option>
+            <option value="Graduate">Graduate</option>
+          </select>
         </div>
       </div>
 
       <div class="dark-field">
-        <label>Add Your Classes</label>
+        <label>Add / Edit Classes</label>
         <div class="class-search-wrap">
           <span class="search-icon">⌕</span>
           <input class="class-search-input" type="text" id="setup-search"
-            placeholder="Search e.g. CS 61B, MATH 54, EECS 16A…"
+            placeholder="Search e.g. CS 61B, MATH 54…"
             autocomplete="off" oninput="renderSetupDrop()" onfocus="renderSetupDrop()" />
         </div>
         <div class="class-dropdown" id="setup-drop"></div>
         <div class="added-classes" id="setup-chips">
-          <span class="chip-empty" id="setup-chip-empty">No classes added yet</span>
+          <span class="chip-empty">No classes added yet</span>
         </div>
       </div>
 
       <div class="dark-field">
-        <label>Short Bio <span style="color:rgba(255,255,255,0.2);font-weight:400;text-transform:none;letter-spacing:0;">(optional)</span></label>
-        <textarea id="setup-bio" rows="3" placeholder="e.g. Looking for CS 61B group, free Mon/Wed evenings"></textarea>
+        <label>Short Bio <span style="font-weight:400;text-transform:none;letter-spacing:0;opacity:0.4;">(optional)</span></label>
+        <textarea id="setup-bio" rows="2" placeholder="e.g. Looking for CS 61B group, free Mon/Wed evenings"></textarea>
       </div>
-      <div class="toggle-row">
+
+      <div class="toggle-row" style="margin-bottom:16px;">
         <div>
           <div class="toggle-label">Available this week</div>
           <div class="toggle-sub">Others can see you're open to meet</div>
@@ -343,135 +414,14 @@ input, textarea { font-family: 'DM Sans', sans-serif; }
           <div class="toggle-knob"></div>
         </div>
       </div>
-      <a href="WeLearn.html">
+
       <button class="btn-enter" id="btn-enter" onclick="enterDash()">Enter StudyLink →</button>
-      </a>
+
     </div>
   </div>
+
 </section>
 
-<!-- ════════ DASHBOARD ════════ -->
-<section id="dashboard" class="screen" style="flex-direction:row;">
-  <nav class="sidebar">
-    <div class="sidebar-logo">
-      <div class="name">Study<span>Link</span></div>
-      <div class="sub">UC BERKELEY · SP26</div>
-    </div>
-    <div class="nav">
-      <button class="nav-btn active" onclick="switchTab('home',this)"><span class="icon">⊞</span> Home</button>
-      <button class="nav-btn" onclick="switchTab('classes',this)"><span class="icon">📚</span> Browse Classes</button>
-      <button class="nav-btn" onclick="switchTab('connections',this)"><span class="icon">🤝</span> Connections</button>
-      <button class="nav-btn" onclick="switchTab('messages',this)"><span class="icon">💬</span> Messages</button>
-      <button class="nav-btn" onclick="switchTab('profile',this)"><span class="icon">◎</span> My Profile</button>
-    </div>
-    <div class="course-nav-section">
-      <div class="course-nav-label">
-        My Classes
-        <button class="btn-add-small" onclick="openModal()" title="Add class">+</button>
-      </div>
-      <div id="course-nav-list"></div>
-    </div>
-    <div class="sidebar-user">
-      <div class="sidebar-avatar" id="sb-init"></div>
-      <div style="flex:1;overflow:hidden;">
-        <div style="font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" id="sb-name"></div>
-        <div style="font-size:10px;color:rgba(255,255,255,0.3);" id="sb-sub"></div>
-      </div>
-      <div class="avail-dot" id="sb-dot"></div>
-    </div>
-  </nav>
-
-  <div class="dash-main">
-    <div class="tab-content active" id="tab-home">
-      <div class="dash-pad">
-        <div style="margin-bottom:32px;">
-          <h1 style="font-size:26px;font-weight:800;margin-bottom:4px;" id="home-greeting"></h1>
-          <p style="color:rgba(255,255,255,0.35);font-size:14px;" id="home-sub"></p>
-        </div>
-        <div class="stats-grid" id="stats-grid"></div>
-        <div class="section-title">
-          Your Classes
-          <button onclick="openModal()" style="display:inline-flex;align-items:center;gap:6px;background:rgba(253,181,21,0.1);border:1px solid rgba(253,181,21,0.25);border-radius:8px;padding:6px 12px;color:#FDB515;font-size:12px;font-weight:700;transition:all 0.15s;" onmouseover="this.style.background='rgba(253,181,21,0.18)'" onmouseout="this.style.background='rgba(253,181,21,0.1)'">+ Add Class</button>
-        </div>
-        <div class="courses-grid" id="courses-grid"></div>
-        <div class="section-title">Suggested Study Partners</div>
-        <div id="suggested-grid" style="display:flex;gap:14px;flex-wrap:wrap;"></div>
-      </div>
-    </div>
-
-    <div class="tab-content" id="tab-classes">
-      <div class="classes-layout">
-        <div class="classes-sidebar">
-          <div class="classes-sidebar-lbl">My Classes</div>
-          <div id="class-pick-list"></div>
-          <button onclick="openModal()" style="width:100%;margin-top:12px;padding:9px;border-radius:8px;background:rgba(253,181,21,0.08);border:1px dashed rgba(253,181,21,0.25);color:#FDB515;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.15s;" onmouseover="this.style.background='rgba(253,181,21,0.14)'" onmouseout="this.style.background='rgba(253,181,21,0.08)'">+ Add Class</button>
-        </div>
-        <div class="classes-main" id="classes-main"></div>
-      </div>
-    </div>
-
-    <div class="tab-content" id="tab-connections">
-      <div class="connections-pad">
-        <h1 style="font-size:24px;font-weight:800;margin-bottom:6px;">Connections</h1>
-        <p style="color:rgba(255,255,255,0.35);font-size:14px;margin-bottom:28px;" id="conn-sub">0 study partners</p>
-        <div class="peers-grid" id="conn-grid"></div>
-        <div id="conn-empty" class="empty-state" style="display:none;">
-          <div class="e-icon">🤝</div><div class="e-title">No connections yet</div>
-          <div class="e-sub">Browse classes and hit Connect to add study partners</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="tab-content" id="tab-messages">
-      <div class="messages-layout">
-        <div class="msg-list">
-          <div class="msg-list-header">Messages</div>
-          <div class="msg-list-items" id="msg-items"><div class="no-msgs">No messages yet</div></div>
-        </div>
-        <div class="chat-area" id="chat-area">
-          <div class="chat-empty" id="chat-empty"><div style="font-size:36px;">💬</div><div>Select a conversation</div></div>
-          <div id="chat-win" style="display:none;flex-direction:column;height:100%;">
-            <div class="chat-header" id="chat-header"></div>
-            <div class="messages-body" id="msg-body"></div>
-            <div class="chat-input-bar">
-              <input class="chat-input" id="chat-in" placeholder="Type a message…" onkeydown="if(event.key==='Enter')sendMsg()" />
-              <button class="btn-send" onclick="sendMsg()">→</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="tab-content" id="tab-profile">
-      <div class="profile-pad">
-        <h1 style="font-size:24px;font-weight:800;margin-bottom:28px;">My Profile</h1>
-        <div class="profile-card" id="prof-card"></div>
-        <div class="profile-card" id="prof-avail"></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ════════ ADD CLASS MODAL ════════ -->
-<div class="modal-overlay" id="add-modal" onclick="if(event.target===this)closeModal()">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal()">×</button>
-    <h2>Add a Class</h2>
-    <p>Search the Berkeley course catalog and add to your profile</p>
-    <div class="class-search-wrap">
-      <span class="search-icon">⌕</span>
-      <input class="class-search-input" type="text" id="modal-search"
-        placeholder="e.g. CS 61B, EECS 16A, MATH 53…"
-        autocomplete="off" oninput="renderModalDrop()" onfocus="renderModalDrop()" />
-    </div>
-    <div class="class-dropdown" id="modal-drop"></div>
-    <div class="modal-added" id="modal-chips"></div>
-    <div class="modal-footer">
-      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
-      <button class="btn-done" onclick="closeModal()">Done</button>
-    </div>
-  </div>
-</div>
 
 <script>
 // ═══════════════════════════════════════════
@@ -523,26 +473,6 @@ const CATALOG = [
   {code:"PSYCH 1",   title:"General Psychology"},
 ];
 
-// ═══════════════════════════════════════════
-//  MOCK PEER DATA  (replaced by DB in prod)
-// ═══════════════════════════════════════════
-const PEERS = [
-  {id:1,  name:"Maya Chen",    init:"MC", major:"EECS", year:"Soph",  classes:["CS 61B","EECS 16A","MATH 54"], available:true,  bio:"Looking for CS 61B and MATH 54 groups!"},
-  {id:2,  name:"Aiden Park",   init:"AP", major:"CS",   year:"Soph",  classes:["CS 61B","CS 70","MATH 54"],    available:true,  bio:"Available evenings & weekends"},
-  {id:3,  name:"Sofia Reyes",  init:"SR", major:"EECS", year:"Fresh", classes:["EECS 16A","MATH 54","CS 61B"], available:false, bio:"Prefer online study sessions"},
-  {id:4,  name:"Marcus J.",    init:"MJ", major:"CS",   year:"Soph",  classes:["CS 61B","CS 70","EECS 16A"],   available:true,  bio:"Strong in algorithms, need help w/ proofs"},
-  {id:5,  name:"Priya Nair",   init:"PN", major:"EECS", year:"Fresh", classes:["CS 70","EECS 16A","MATH 54"],  available:true,  bio:"Study group every Thursday!"},
-  {id:6,  name:"Leo Zhang",    init:"LZ", major:"CS",   year:"Jr",    classes:["CS 61B","MATH 54","CS 70"],    available:true,  bio:"TA for 61A, good at debugging"},
-  {id:7,  name:"Amara Osei",   init:"AO", major:"BioE", year:"Fresh", classes:["EECS 16A","MATH 54"],          available:false, bio:"Looking for EECS 16A lab partners"},
-  {id:8,  name:"Tyler Brooks", init:"TB", major:"CS",   year:"Soph",  classes:["CS 70","CS 61B"],              available:true,  bio:"Available Soda Hall weekdays"},
-  {id:9,  name:"Hannah Kim",   init:"HK", major:"Math", year:"Soph",  classes:["MATH 54","MATH 53","STAT 134"],available:true,  bio:"Love working through problem sets!"},
-  {id:10, name:"Raj Patel",    init:"RP", major:"CS",   year:"Jr",    classes:["CS 162","CS 170","CS 188"],    available:true,  bio:"Working on OS project, need study buddy"},
-  {id:11, name:"Emma Torres",  init:"ET", major:"DS",   year:"Soph",  classes:["DATA 100","STAT 140","CS 61B"],available:false, bio:"Data science + CS double major"},
-  {id:12, name:"Jake Wu",      init:"JW", major:"CS",   year:"Fresh", classes:["CS 61A","MATH 1A","EECS 16A"], available:true,  bio:"New to Berkeley, looking for study friends!"},
-];
-
-const PCOLS = ["#1e40af","#065f46","#7e22ce","#9a3412","#0e7490","#1d4ed8","#047857","#6d28d9","#0f766e","#b45309","#be123c","#4338ca"];
-const pc = p => PCOLS[p.name.charCodeAt(0) % PCOLS.length];
 
 // ═══════════════════════════════════════════
 //  STATE
@@ -551,16 +481,49 @@ const S = {
   user:        {name:"",major:"",year:"",bio:"",available:true},
   classes:     [],   // codes the user has added
   connected:   new Set(),
-  messages:    {
-    1:[{from:"them",text:"Hey! Want to form a CS 61B study group?",time:"Mon 2:14pm"}],
-    4:[{from:"them",text:"Are you free Thursday for CS 70 problem sets?",time:"Tue 9:42am"},
-       {from:"me",  text:"Yeah Thursday works! Moffitt 4th floor?",      time:"Tue 10:01am"}],
-  },
-  activeChat:  null,
-  activeCourse:null,
   setupAvail:  true,
   setupYear:   "",
 };
+
+// ═══════════════════════════════════════════
+//  ACCOUNT  — save / load / clear
+// ═══════════════════════════════════════════
+const ACCOUNT_KEY = 'studylink_account';
+
+function saveAccount() {
+  localStorage.setItem(ACCOUNT_KEY, JSON.stringify({ user: S.user, classes: S.classes }));
+  localStorage.setItem('studylink_classes', JSON.stringify(S.classes));
+}
+
+function loadAccount() {
+  try {
+    const raw = localStorage.getItem(ACCOUNT_KEY);
+    if (!raw) return false;
+    const account = JSON.parse(raw);
+    if (!account.user || !account.user.name) return false;
+    S.user    = account.user;
+    S.classes = account.classes || [];
+    S.classes.forEach(code => {
+      if (!CATALOG.find(c => c.code === code))
+        CATALOG.push({ code, title: 'Imported from bCourses' });
+    });
+    if (S.classes.length) S.activeCourse = S.classes[0];
+    return true;
+  } catch(e) { return false; }
+}
+
+function signOut() {
+  localStorage.removeItem(ACCOUNT_KEY);
+  localStorage.removeItem('studylink_classes');
+  location.reload();
+}
+
+function deleteAccount() {
+  if (!confirm('Delete your StudyLink account? This cannot be undone.')) return;
+  ['studylink_account','studylink_classes','welearn_account',
+   'studylink_new_signup','studylink_return_to'].forEach(k => localStorage.removeItem(k));
+  location.reload();
+}
 
 // ═══════════════════════════════════════════
 //  SCREEN ROUTING
@@ -568,63 +531,116 @@ const S = {
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  if (id === 'dashboard') initDash();
+}
+
+// Auto-login returning user on page load
+(function checkReturningUser() {
+  // If WeLearn signup sent us here for bCourses setup, skip to that screen
+  const fromSignup = localStorage.getItem('studylink_new_signup');
+  if (fromSignup) {
+    localStorage.removeItem('studylink_new_signup');
+    // Pre-fill name from the signup data
+    try {
+      const signupData = JSON.parse(fromSignup);
+      if (signupData.name) {
+        document.getElementById('setup-name').value = signupData.name;
+        checkReady();
+      }
+    } catch(e) {}
+    showScreen('calcentral');
+    return;
+  }
+  if (loadAccount()) { window.location.href = 'WeLearn.html'; return; }
+})();
+
+// ═══════════════════════════════════════════
+//  AUTH TAB SWITCHER
+// ═══════════════════════════════════════════
+function switchAuthTab(tab) {
+  // single tab - always signin
+  document.getElementById('panel-signin').classList.add('active');
 }
 
 // ═══════════════════════════════════════════
-//  CAL CENTRAL LOGIN
+//  SIGN UP (new account → bCourses setup)
+// ═══════════════════════════════════════════
+function createAccount() {
+  showScreen('calcentral');
+  setTimeout(startScrape, 300);
+}
+
+// ═══════════════════════════════════════════
+//  SIGN IN → bCourses
 // ═══════════════════════════════════════════
 function calLogin() {
   const id   = document.getElementById('calnet-id').value.trim();
   const pass = document.getElementById('calnet-pass').value.trim();
-  const err  = document.getElementById('cal-err');
+  const err  = document.getElementById('sl-signin-err');
   const btn  = document.getElementById('cal-btn');
-  if (!id || !pass) { err.style.display='block'; return; }
+  if (!id || !pass) { err.style.display='block'; err.textContent='Please enter both fields.'; return; }
+  // Check if account exists
+  const saved = localStorage.getItem(ACCOUNT_KEY);
+  if (!saved) {
+    err.style.display = 'block';
+    err.textContent = 'No account found. Use “Create an account” to get started.';
+    return;
+  }
   err.style.display = 'none';
   btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span> Authenticating…';
-  // Call local Flask scraper server
-  btn.innerHTML = '<span class="spinner"></span> Opening bCourses login…';
+  btn.innerHTML = '<span class="spinner"></span> Signing in…';
+  if (loadAccount()) {
+    window.location.href = 'WeLearn.html';
+  } else {
+    err.style.display = 'block';
+    err.textContent = 'No account found. Use “Create an account” to get started.';
+    btn.disabled = false;
+    btn.innerHTML = 'Authorize &amp; Continue →';
+  }
+}
+
+// ═══════════════════════════════════════════
+//  BCOURSES SCRAPE
+// ═══════════════════════════════════════════
+function startScrape() {
+  const btn = document.getElementById('cal-scrape-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Opening bCourses…';
+
+  function goToSetup(data) {
+    if (data) loadCoursesIntoState(data);
+    btn.disabled = false;
+    btn.innerHTML = 'Open bCourses Login →';
+    showScreen('profilesetup');
+    renderSetupChips();
+    // Scroll the right panel to top so the form is immediately visible
+    setTimeout(() => {
+      const right = document.querySelector('.setup-right');
+      if (right) right.scrollTop = 0;
+      document.getElementById('setup-name')?.focus();
+    }, 100);
+  }
+
   fetch('http://127.0.0.1:5001/scrape', { method: 'POST' })
     .then(r => r.json())
     .then(data => {
       if (data.error) throw new Error(data.error);
-      const catalogCodes = CATALOG.map(c => c.code);
-      S.classes = (data.classes || []).filter(code => catalogCodes.includes(code));
-      const extras = (data.classes || []).filter(code => !catalogCodes.includes(code));
-      extras.forEach(code => {
-        CATALOG.push({ code, title: "Imported from bCourses" });
-        S.classes.push(code);
-      });
-      btn.disabled = false;
-      btn.innerHTML = 'Sign In →';
-      showScreen('profilesetup');
-      renderSetupChips();
+      goToSetup(data);
     })
     .catch(() => {
-      // Flask server not running — fall back to static JSON
       fetch('user_classes.json')
         .then(r => r.json())
-        .then(data => {
-          const catalogCodes = CATALOG.map(c => c.code);
-          S.classes = (data.classes || []).filter(code => catalogCodes.includes(code));
-          const extras = (data.classes || []).filter(code => !catalogCodes.includes(code));
-          extras.forEach(code => {
-            CATALOG.push({ code, title: "Imported from bCourses" });
-            S.classes.push(code);
-          });
-          btn.disabled = false;
-          btn.innerHTML = 'Sign In →';
-          showScreen('profilesetup');
-          renderSetupChips();
-        })
-        .catch(() => {
-          btn.disabled = false;
-          btn.innerHTML = 'Sign In →';
-          showScreen('profilesetup');
-          renderSetupChips();
-        });
+        .then(data => goToSetup(data))
+        .catch(() => goToSetup(null));
     });
+}
+
+function loadCoursesIntoState(data) {
+  const catalogCodes = CATALOG.map(c => c.code);
+  S.classes = (data.classes || []).filter(code => catalogCodes.includes(code));
+  (data.classes || []).filter(code => !catalogCodes.includes(code)).forEach(code => {
+    CATALOG.push({ code, title: 'Imported from bCourses' });
+    S.classes.push(code);
+  });
 }
 
 // ═══════════════════════════════════════════
@@ -672,11 +688,23 @@ function renderSetupChips() {
         <button class="chip-x" onclick="removeClassSetup('${c}')">×</button>
       </div>`).join('');
   }
+  // Update left panel preview
+  const preview = document.getElementById('setup-preview-chips');
+  if (preview) {
+    preview.innerHTML = S.classes.length
+      ? S.classes.map(c=>`<span class="setup-preview-chip">${c}</span>`).join('')
+      : '<span style="color:var(--text2);font-size:12px;">No classes loaded yet</span>';
+  }
 }
 
 function pickYear(btn, y) {
   document.querySelectorAll('.year-pill').forEach(b=>b.classList.remove('selected'));
   btn.classList.add('selected');
+  S.setupYear = y;
+  checkReady();
+}
+
+function pickYearSelect(y) {
   S.setupYear = y;
   checkReady();
 }
@@ -697,383 +725,17 @@ function enterDash() {
     available: S.setupAvail,
   };
   if (S.classes.length && !S.activeCourse) S.activeCourse = S.classes[0];
-  // Persist selected classes so WeLearn.html can read them
-  localStorage.setItem('studylink_classes', JSON.stringify(S.classes));
-  showScreen('dashboard');
-}
-
-// ═══════════════════════════════════════════
-//  ADD CLASS MODAL  (dashboard)
-// ═══════════════════════════════════════════
-function openModal() {
-  document.getElementById('modal-search').value = '';
-  document.getElementById('modal-drop').classList.remove('open');
-  renderModalChips();
-  document.getElementById('add-modal').classList.add('open');
-  setTimeout(()=>document.getElementById('modal-search').focus(), 50);
-}
-function closeModal() {
-  document.getElementById('add-modal').classList.remove('open');
-  rebuildAll();
-}
-
-function renderModalDrop() {
-  const q  = document.getElementById('modal-search').value.toLowerCase();
-  const dd = document.getElementById('modal-drop');
-  if (!q) { dd.classList.remove('open'); return; }
-  const hits = CATALOG.filter(c =>
-    c.code.toLowerCase().includes(q) || c.title.toLowerCase().includes(q)
-  ).slice(0,8);
-  if (!hits.length) { dd.classList.remove('open'); return; }
-  dd.innerHTML = hits.map(c => {
-    const added = S.classes.includes(c.code);
-    return `<div class="class-option ${added?'already':''}" onclick="${added?'':'addClassModal(\''+c.code+'\')'}">
-      <div><div class="opt-code">${c.code}</div><div class="opt-title">${c.title}</div></div>
-      <span class="opt-add">${added?'✓':'+'}</span>
-    </div>`;
-  }).join('');
-  dd.classList.add('open');
-}
-
-function addClassModal(code) {
-  if (S.classes.includes(code)) return;
-  S.classes.push(code);
-  if (!S.activeCourse) S.activeCourse = code;
-  document.getElementById('modal-search').value = '';
-  document.getElementById('modal-drop').classList.remove('open');
-  renderModalChips();
-}
-
-function removeClassModal(code) {
-  S.classes = S.classes.filter(c=>c!==code);
-  if (S.activeCourse === code) S.activeCourse = S.classes[0]||null;
-  renderModalChips();
-}
-
-function renderModalChips() {
-  const wrap = document.getElementById('modal-chips');
-  wrap.innerHTML = S.classes.length
-    ? S.classes.map(c=>`<div class="class-chip">${c}<button class="chip-x" onclick="removeClassModal('${c}')">×</button></div>`).join('')
-    : '<span style="color:rgba(255,255,255,0.2);font-size:13px;">No classes yet</span>';
-}
-
-// Close dropdowns on outside click
-document.addEventListener('click', e => {
-  if (!e.target.closest('#setup-search') && !e.target.closest('#setup-drop'))
-    document.getElementById('setup-drop')?.classList.remove('open');
-  if (!e.target.closest('#modal-search') && !e.target.closest('#modal-drop'))
-    document.getElementById('modal-drop')?.classList.remove('open');
-});
-
-// ═══════════════════════════════════════════
-//  DASHBOARD INIT
-// ═══════════════════════════════════════════
-function initDash() {
-  const u = S.user;
-  const init = u.name.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase();
-  document.getElementById('sb-init').textContent = init;
-  document.getElementById('sb-name').textContent  = u.name;
-  document.getElementById('sb-sub').textContent   = `${u.major} · ${u.year}`;
-  document.getElementById('sb-dot').classList.toggle('on', u.available);
-  rebuildAll();
-}
-
-function rebuildAll() {
-  buildCourseNav();
-  buildHome();
-  buildClasses();
-  buildConnections();
-  buildMessages();
-  buildProfile();
-}
-
-const peersFor = code => PEERS.filter(p => p.classes.includes(code));
-const totalMatches = () => new Set(S.classes.flatMap(c => peersFor(c).map(p=>p.id))).size;
-
-// ═══════════════════════════════════════════
-//  SIDEBAR COURSE NAV
-// ═══════════════════════════════════════════
-function buildCourseNav() {
-  const el = document.getElementById('course-nav-list');
-  if (!S.classes.length) {
-    el.innerHTML = '<div style="color:rgba(255,255,255,0.2);font-size:12px;padding:6px 10px;">No classes yet</div>';
-    return;
+  saveAccount();
+  // If user came from WeLearn signup, go back there — otherwise stay on dashboard
+  const returnTo = localStorage.getItem('studylink_return_to');
+  if (returnTo) {
+    localStorage.removeItem('studylink_return_to');
+    window.location.href = returnTo;
+  } else {
+    window.location.href = 'WeLearn.html';
   }
-  el.innerHTML = '';
-  S.classes.forEach(code => {
-    const btn = document.createElement('button');
-    btn.className = 'course-nav-btn' + (code===S.activeCourse?' active':'');
-    btn.innerHTML = `<span>${code}</span><span class="cnt-badge">${peersFor(code).length}</span>`;
-    btn.onclick = () => { S.activeCourse=code; switchTab('classes'); buildClasses(); buildCourseNav(); };
-    el.appendChild(btn);
-  });
 }
 
-// ═══════════════════════════════════════════
-//  HOME TAB
-// ═══════════════════════════════════════════
-function buildHome() {
-  document.getElementById('home-greeting').textContent = `Good to see you, ${S.user.name.split(' ')[0]} 👋`;
-  document.getElementById('home-sub').textContent = `Spring 2026 · ${S.classes.length} class${S.classes.length!==1?'es':''} added`;
-
-  document.getElementById('stats-grid').innerHTML = [
-    {icon:'📚',num:S.classes.length,   lbl:'My Classes',    color:'#FDB515',bg:'rgba(253,181,21,0.08)',bd:'rgba(253,181,21,0.15)'},
-    {icon:'👥',num:totalMatches(),      lbl:'Total Matches', color:'#60a5fa',bg:'rgba(96,165,250,0.08)',bd:'rgba(96,165,250,0.15)'},
-    {icon:'🤝',num:S.connected.size,   lbl:'Connections',   color:'#22c55e',bg:'rgba(34,197,94,0.08)', bd:'rgba(34,197,94,0.15)'},
-    {icon:'💬',num:Object.keys(S.messages).length,lbl:'Chats',color:'#a78bfa',bg:'rgba(167,139,250,0.08)',bd:'rgba(167,139,250,0.15)'},
-  ].map(s=>`<div class="stat-card" style="background:${s.bg};border:1px solid ${s.bd}">
-    <div class="s-icon">${s.icon}</div><div class="s-num" style="color:${s.color}">${s.num}</div><div class="s-lbl">${s.lbl}</div>
-  </div>`).join('');
-
-  const grid = document.getElementById('courses-grid');
-  const courseCards = S.classes.map(code => {
-    const peers = peersFor(code);
-    const avail = peers.filter(p=>p.available).length;
-    const cat   = CATALOG.find(c=>c.code===code)||{title:''};
-    const avatars = peers.slice(0,4).map(p=>`<div class="mini-avatar" style="background:${pc(p)}">${p.init}</div>`).join('');
-    return `<div class="course-card" onclick="S.activeCourse='${code}';switchTab('classes');buildClasses();buildCourseNav();">
-      <div class="course-card-top">
-        <span class="tag">${code}</span>
-        <button class="btn-rm-course" onclick="event.stopPropagation();rmClass('${code}')" title="Remove">×</button>
-      </div>
-      <div class="course-card-name">${cat.title||code}</div>
-      <div class="course-card-meta">${peers.length} student${peers.length!==1?'s':''} found</div>
-      <div style="display:flex;align-items:center;gap:10px;">
-        <div class="avatar-stack">${avatars}</div>
-        <span style="color:rgba(255,255,255,0.4);font-size:12px;">${peers.length} matches · <span class="green">${avail} available</span></span>
-      </div>
-    </div>`;
-  });
-  courseCards.push(`<div class="course-card-add" onclick="openModal()"><div class="add-icon">+</div><div class="add-lbl">Add another class</div></div>`);
-  grid.innerHTML = courseCards.join('');
-
-  // Suggested
-  const allIds = new Set(S.classes.flatMap(c => peersFor(c).map(p=>p.id)));
-  const suggested = PEERS.filter(p => allIds.has(p.id) && p.available).slice(0,4);
-  document.getElementById('suggested-grid').innerHTML = suggested.length === 0
-    ? '<div style="color:rgba(255,255,255,0.25);font-size:13px;padding:8px 0;">Add classes above to see suggested partners.</div>'
-    : suggested.map(p => {
-        const shared = p.classes.filter(c=>S.classes.includes(c));
-        const isConn = S.connected.has(p.id);
-        return `<div style="background:#0a1628;border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:16px;width:200px;">
-          <div style="display:flex;gap:10px;align-items:center;margin-bottom:10px;">
-            <div style="width:32px;height:32px;border-radius:50%;background:${pc(p)};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;flex-shrink:0;">${p.init}</div>
-            <div><div style="font-size:12px;font-weight:700;font-family:'Syne',sans-serif;">${p.name}</div><div style="font-size:10px;color:rgba(255,255,255,0.3);">${p.year} · ${p.major}</div></div>
-          </div>
-          <div style="color:rgba(255,255,255,0.3);font-size:10px;margin-bottom:10px;">Shared: <span style="color:#FDB515;">${shared.join(', ')}</span></div>
-          <div style="display:flex;gap:6px;">
-            <button onclick="connectPeer(${p.id})" style="flex:1;padding:7px;border-radius:7px;border:1px solid ${isConn?'rgba(34,197,94,0.3)':'rgba(253,181,21,0.3)'};background:transparent;color:${isConn?'#22c55e':'#FDB515'};font-size:11px;font-weight:700;">${isConn?'✓ Connected':'Connect'}</button>
-            <button onclick="openChat(${p.id})" style="padding:7px 10px;border-radius:7px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:rgba(255,255,255,0.4);font-size:11px;">💬</button>
-          </div>
-        </div>`;
-      }).join('');
-}
-
-function rmClass(code) {
-  S.classes = S.classes.filter(c=>c!==code);
-  if (S.activeCourse===code) S.activeCourse = S.classes[0]||null;
-  rebuildAll();
-}
-
-// ═══════════════════════════════════════════
-//  CLASSES TAB
-// ═══════════════════════════════════════════
-function buildClasses() {
-  const list = document.getElementById('class-pick-list');
-  list.innerHTML = '';
-  S.classes.forEach(code => {
-    const btn = document.createElement('button');
-    btn.className = 'class-pick-btn' + (code===S.activeCourse?' active':'');
-    btn.innerHTML = `${code}<div class="cpb-sub">${peersFor(code).length} matches</div>`;
-    btn.onclick = () => { S.activeCourse=code; buildClasses(); buildCourseNav(); };
-    list.appendChild(btn);
-  });
-
-  const main = document.getElementById('classes-main');
-  if (!S.activeCourse || !S.classes.length) {
-    main.innerHTML = `<div class="empty-state"><div class="e-icon">📚</div><div class="e-title">Add a class to see matches</div><div class="e-sub">Use the button on the left</div></div>`;
-    return;
-  }
-  const peers  = peersFor(S.activeCourse);
-  const avail  = peers.filter(p=>p.available).length;
-  const cat    = CATALOG.find(c=>c.code===S.activeCourse)||{title:''};
-  main.innerHTML = `
-    <div style="margin-bottom:28px;">
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap;">
-        <h1 style="font-size:24px;font-weight:800;">${S.activeCourse}</h1>
-        ${cat.title?`<span class="tag" style="font-size:11px;">${cat.title}</span>`:''}
-      </div>
-    </div>
-    <div class="filter-row">
-      <span class="filter-tag" style="background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);color:#22c55e;">🟢 ${avail} available now</span>
-      <span class="filter-tag" style="background:rgba(96,165,250,0.08);border:1px solid rgba(96,165,250,0.2);color:#60a5fa;">👥 ${peers.length} students found</span>
-    </div>
-    ${peers.length===0
-      ? `<div class="empty-state"><div class="e-icon">🔍</div><div class="e-title">No other students yet</div><div class="e-sub">Share StudyLink with your classmates!</div></div>`
-      : `<div class="peers-grid">${peers.map(peerCard).join('')}</div>`}`;
-}
-
-function peerCard(p) {
-  const c = S.connected.has(p.id);
-  return `<div class="peer-card">
-    <div class="peer-top">
-      <div class="peer-avatar" style="background:${pc(p)}">${p.init}</div>
-      <div style="flex:1;">
-        <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;">
-          <span class="peer-name">${p.name}</span>
-          ${p.available?`<span class="active-badge">● Active</span>`:''}
-        </div>
-        <div class="peer-sub">${p.major} · ${p.year}</div>
-      </div>
-    </div>
-    ${p.bio?`<div class="peer-bio">"${p.bio}"</div>`:''}
-    <div class="peer-classes">${p.classes.map(x=>`<span class="mini-tag">${x}</span>`).join('')}</div>
-    <div class="peer-actions">
-      <button class="btn-connect ${c?'connected':''}" onclick="connectPeer(${p.id})">${c?'✓ Connected':'Connect'}</button>
-      <button class="btn-msg" onclick="openChat(${p.id})">💬 Message</button>
-    </div>
-  </div>`;
-}
-
-// ═══════════════════════════════════════════
-//  CONNECTIONS
-// ═══════════════════════════════════════════
-function buildConnections() {
-  const conns = PEERS.filter(p=>S.connected.has(p.id));
-  document.getElementById('conn-sub').textContent = `${conns.length} study partner${conns.length!==1?'s':''} connected`;
-  document.getElementById('conn-grid').innerHTML  = conns.map(peerCard).join('');
-  document.getElementById('conn-empty').style.display = conns.length===0 ? 'block' : 'none';
-}
-
-function connectPeer(id) { S.connected.add(id); rebuildAll(); }
-
-// ═══════════════════════════════════════════
-//  MESSAGES
-// ═══════════════════════════════════════════
-function buildMessages() {
-  const items = document.getElementById('msg-items');
-  const peers = PEERS.filter(p => S.messages[p.id]);
-  if (!peers.length) { items.innerHTML = '<div class="no-msgs">No messages yet</div>'; return; }
-  items.innerHTML = peers.map(p => {
-    const last = S.messages[p.id].at(-1);
-    return `<div class="msg-item ${S.activeChat===p.id?'active':''}" onclick="openChatWin(${p.id})">
-      <div class="msg-item-av" style="background:${pc(p)}">${p.init}</div>
-      <div style="flex:1;overflow:hidden;">
-        <div style="display:flex;justify-content:space-between;">
-          <span class="msg-item-name">${p.name}</span>
-          <span class="msg-item-time">${last.time}</span>
-        </div>
-        <div class="msg-item-preview">${last.from==='me'?'You: ':''}${last.text}</div>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-function openChat(id) {
-  if (!S.messages[id]) S.messages[id] = [];
-  switchTab('messages');
-  openChatWin(id);
-}
-
-function openChatWin(id) {
-  S.activeChat = id;
-  const p = PEERS.find(x=>x.id===id);
-  document.getElementById('chat-empty').style.display = 'none';
-  const win = document.getElementById('chat-win');
-  win.style.display = 'flex'; win.style.flexDirection = 'column'; win.style.height = '100%';
-  document.getElementById('chat-header').innerHTML = `
-    <div class="msg-item-av" style="width:36px;height:36px;background:${pc(p)}">${p.init}</div>
-    <div>
-      <div style="font-weight:700;font-size:14px;font-family:'Syne',sans-serif;">${p.name}</div>
-      <div style="color:rgba(255,255,255,0.3);font-size:11px;margin-top:2px;">${p.major} · ${p.year}</div>
-    </div>
-    <div style="margin-left:auto;display:flex;align-items:center;gap:6px;font-size:11px;">
-      <div style="width:7px;height:7px;border-radius:50%;background:${p.available?'#22c55e':'#374151'}"></div>
-      <span style="color:${p.available?'#22c55e':'rgba(255,255,255,0.25)'};">${p.available?'Available':'Busy'}</span>
-    </div>`;
-  document.getElementById('chat-in').placeholder = `Message ${p.name.split(' ')[0]}…`;
-  renderMsgs(id);
-  buildMessages();
-}
-
-function renderMsgs(id) {
-  const body = document.getElementById('msg-body');
-  body.innerHTML = (S.messages[id]||[]).map(m=>`
-    <div class="bubble-wrap ${m.from==='me'?'mine':''}">
-      <div class="bubble ${m.from==='me'?'mine':'theirs'}">
-        <div class="bubble-text">${m.text}</div>
-        <div class="bubble-time">${m.time}</div>
-      </div>
-    </div>`).join('');
-  body.scrollTop = body.scrollHeight;
-}
-
-function sendMsg() {
-  const inp = document.getElementById('chat-in');
-  const txt = inp.value.trim();
-  if (!txt || !S.activeChat) return;
-  if (!S.messages[S.activeChat]) S.messages[S.activeChat] = [];
-  S.messages[S.activeChat].push({from:'me',text:txt,time:'now'});
-  inp.value = '';
-  renderMsgs(S.activeChat);
-  buildMessages();
-}
-
-// ═══════════════════════════════════════════
-//  PROFILE
-// ═══════════════════════════════════════════
-function buildProfile() {
-  const u = S.user;
-  const init = u.name.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase();
-  document.getElementById('prof-card').innerHTML = `
-    <div style="display:flex;gap:18px;align-items:center;margin-bottom:24px;">
-      <div style="width:60px;height:60px;border-radius:50%;background:#FDB515;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:#05101f;font-family:'Syne',sans-serif;">${init}</div>
-      <div>
-        <div style="font-size:20px;font-weight:800;font-family:'Syne',sans-serif;">${u.name}</div>
-        <div style="color:rgba(255,255,255,0.4);font-size:13px;margin-top:4px;">${u.major} · ${u.year} · UC Berkeley</div>
-      </div>
-    </div>
-    ${u.bio?`<div style="color:rgba(255,255,255,0.4);font-size:13px;font-style:italic;margin-bottom:22px;">"${u.bio}"</div>`:''}
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:24px;">
-      ${[[S.classes.length,'Classes'],[totalMatches(),'Matches'],[S.connected.size,'Connected']].map(([n,l])=>`
-        <div style="background:rgba(255,255,255,0.03);border-radius:10px;padding:14px 10px;text-align:center;">
-          <div style="font-size:22px;font-weight:800;color:#FDB515;font-family:'Syne',sans-serif;">${n}</div>
-          <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:2px;">${l}</div>
-        </div>`).join('')}
-    </div>
-    <div style="color:rgba(255,255,255,0.3);font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px;font-family:'Syne',sans-serif;">My Classes</div>
-    <div style="display:flex;flex-wrap:wrap;gap:8px;">
-      ${S.classes.length
-        ? S.classes.map(c=>`<span class="tag">${c}</span>`).join('')
-        : '<span style="color:rgba(255,255,255,0.2);font-size:13px;">No classes added</span>'}
-    </div>`;
-
-  document.getElementById('prof-avail').innerHTML = `
-    <div style="display:flex;align-items:center;justify-content:space-between;">
-      <div>
-        <div style="font-weight:700;font-size:14px;font-family:'Syne',sans-serif;">Available this week</div>
-        <div style="color:rgba(255,255,255,0.35);font-size:12px;margin-top:3px;">Visible to students in your classes</div>
-      </div>
-      <div class="toggle ${u.available?'on':''}" id="prof-tog" onclick="toggleAvail()"><div class="toggle-knob"></div></div>
-    </div>`;
-}
-
-function toggleAvail() {
-  S.user.available = !S.user.available;
-  document.getElementById('prof-tog')?.classList.toggle('on', S.user.available);
-  document.getElementById('sb-dot')?.classList.toggle('on', S.user.available);
-}
-
-// ═══════════════════════════════════════════
-//  TAB SWITCHING
-// ═══════════════════════════════════════════
-function switchTab(id, btn) {
-  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
-  document.getElementById('tab-'+id).classList.add('active');
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  (btn || document.querySelectorAll('.nav-btn')[{home:0,classes:1,connections:2,messages:3,profile:4}[id]])?.classList.add('active');
-  ({home:buildHome,classes:buildClasses,connections:buildConnections,messages:buildMessages,profile:buildProfile})[id]?.();
-}
 </script>
 </body>
 </html>
