@@ -697,6 +697,8 @@ function enterDash() {
     available: S.setupAvail,
   };
   if (S.classes.length && !S.activeCourse) S.activeCourse = S.classes[0];
+  // Persist selected classes so WeLearn.html can read them
+  localStorage.setItem('studylink_classes', JSON.stringify(S.classes));
   showScreen('dashboard');
 }
 
