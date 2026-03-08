@@ -935,6 +935,7 @@
           <div class="dropdown-email" id="dd-email">–</div>
         </div>
         <button class="dropdown-item" id="dd-settings">⚙️ Settings</button>
+        <button class="dropdown-item danger" id="dd-delete">🗑️ Delete Account</button>
         <button class="dropdown-item danger" id="dd-logout">🚪 Log Out</button>
       </div>
     </div>
@@ -1467,6 +1468,13 @@ document.getElementById("avatar-btn").addEventListener("click", e => {
 document.getElementById("dd-settings").addEventListener("click", () => {
   document.getElementById("profile-dropdown").classList.add("hidden");
   document.getElementById("settings-modal").classList.remove("hidden");
+});
+document.getElementById("dd-delete").addEventListener("click", () => {
+  document.getElementById("profile-dropdown").classList.add("hidden");
+  if (!confirm("Delete your account? This will remove all StudyLink and WeLearn data and cannot be undone.")) return;
+  ['studylink_account','studylink_classes','welearn_account',
+   'studylink_new_signup','studylink_return_to'].forEach(k => localStorage.removeItem(k));
+  window.location.href = 'studylink.html';
 });
 document.getElementById("dd-logout").addEventListener("click", () => {
   localStorage.removeItem('studylink_account');

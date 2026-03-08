@@ -108,16 +108,8 @@ input, textarea { font-family: 'DM Sans', sans-serif; }
 }
 
 /* Auth tabs */
-.auth-tabs {
-  display: flex; background: var(--surface2); border: 1px solid var(--border);
-  border-radius: 12px; padding: 4px; margin-bottom: 28px; gap: 2px;
-}
-.auth-tab {
-  flex: 1; padding: 9px 0; border-radius: 9px; background: transparent;
-  color: var(--text2); font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700;
-  cursor: pointer; border: none; transition: background 0.18s, color 0.18s;
-}
-.auth-tab.active { background: var(--surface); color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,0.35); }
+.auth-tabs { display: none; }
+.auth-tab { display: none; }
 .auth-panel { display: none; }
 .auth-panel.active { display: block; }
 
@@ -180,13 +172,54 @@ input, textarea { font-family: 'DM Sans', sans-serif; }
 .err-msg { color: var(--accent2); font-size: 12px; margin-bottom: 14px; display: none; }
 
 /* ══ PROFILE SETUP ══ */
-#profilesetup { background: var(--bg); align-items: center; justify-content: center; }
-.setup-inner { width: 100%; max-width: 540px; padding: 40px 24px; }
-.setup-step-label { color: var(--text2); font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; font-family: 'Syne', sans-serif; }
-.setup-inner h1 { font-size: 30px; font-weight: 800; margin-bottom: 28px; color: var(--text); }
-.dark-field { margin-bottom: 20px; }
-.dark-field label { display: block; color: var(--text2); font-size: 10px; font-weight: 700; margin-bottom: 8px; letter-spacing: 0.09em; text-transform: uppercase; font-family: 'Syne', sans-serif; }
-.dark-field input, .dark-field textarea { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; color: var(--text); font-size: 14px; outline: none; transition: border 0.15s; }
+#profilesetup {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+  flex-direction: unset;
+  background: var(--bg);
+}
+/* Left info panel */
+.setup-left {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  justify-content: space-between;
+  padding: 40px 44px; position: relative; overflow: hidden;
+}
+.setup-left-grid {
+  position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(91,142,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(91,142,255,0.04) 1px, transparent 1px);
+  background-size: 40px 40px; pointer-events: none;
+}
+.setup-left-glow {
+  position: absolute; width: 400px; height: 400px; border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(91,142,255,0.1) 0%, transparent 65%);
+  bottom: -100px; right: -100px; pointer-events: none;
+}
+.setup-left-top { position: relative; z-index: 1; }
+.setup-left-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 40px; }
+.setup-left-brand-icon { width: 32px; height: 32px; background: var(--accent); border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+.setup-left-brand-name { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 800; color: var(--text); }
+.setup-left-brand-name span { color: var(--accent); }
+.setup-step-label { color: var(--accent); font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; font-family: 'Syne', sans-serif; }
+.setup-headline { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 12px; color: var(--text); }
+.setup-headline em { font-style: normal; color: var(--accent); }
+.setup-desc { font-size: 13px; color: var(--text2); line-height: 1.65; max-width: 34ch; }
+.setup-left-bottom { position: relative; z-index: 1; padding-top: 24px; border-top: 1px solid var(--border); }
+.setup-classes-preview { display: flex; flex-wrap: wrap; gap: 6px; }
+.setup-preview-chip { background: rgba(91,142,255,0.08); border: 1px solid rgba(91,142,255,0.18); border-radius: 6px; padding: 4px 10px; font-size: 11px; color: var(--accent); font-weight: 700; font-family: 'Syne', sans-serif; }
+.setup-preview-label { font-size: 10px; color: var(--text2); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+/* Right form panel */
+.setup-right {
+  overflow-y: auto; padding: 40px 44px;
+  display: flex; flex-direction: column; justify-content: center;
+  background: var(--bg);
+}
+.setup-inner { width: 100%; max-width: 400px; margin: 0 auto; }
+.dark-field { margin-bottom: 16px; }
+.dark-field label { display: block; color: var(--text2); font-size: 10px; font-weight: 700; margin-bottom: 7px; letter-spacing: 0.09em; text-transform: uppercase; font-family: 'Syne', sans-serif; }
+.dark-field input, .dark-field textarea { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 11px 14px; color: var(--text); font-size: 14px; outline: none; transition: border 0.15s; }
 .dark-field input:focus, .dark-field textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(91,142,255,0.12); }
 .dark-field input::placeholder, .dark-field textarea::placeholder { color: var(--text2); opacity: 0.6; }
 .dark-field textarea { resize: none; }
@@ -265,7 +298,6 @@ input, textarea { font-family: 'DM Sans', sans-serif; }
     <div class="sl-card">
       <div class="auth-tabs">
         <button class="auth-tab active" id="tab-signin" onclick="switchAuthTab('signin')">Sign In</button>
-        <button class="auth-tab" id="tab-signup" onclick="switchAuthTab('signup')">Sign Up</button>
       </div>
 
       <!-- Sign In -->
@@ -279,22 +311,10 @@ input, textarea { font-family: 'DM Sans', sans-serif; }
         <input class="sl-input" type="password" id="calnet-pass" placeholder="Enter your passphrase" style="margin-bottom:0" />
         <div style="height:22px;"></div>
         <button class="sl-btn" id="cal-btn" onclick="calLogin()">Authorize &amp; Continue →</button>
-      </div>
-
-      <!-- Sign Up -->
-      <div class="auth-panel" id="panel-signup">
-        <div class="sl-heading">Create account</div>
-        <div class="sl-subhead">Connect your CalNet to get started</div>
-        <div class="sl-error" id="sl-signup-err"></div>
-        <label class="sl-label">Full Name</label>
-        <input class="sl-input" type="text" id="signup-name" placeholder="Jane Doe" />
-        <label class="sl-label">CalNet ID</label>
-        <input class="sl-input" type="text" id="signup-calnet" placeholder="e.g. 3034XXXXXX" />
-        <label class="sl-label">Passphrase</label>
-        <input class="sl-input" type="password" id="signup-pass" placeholder="Enter your passphrase" style="margin-bottom:0" />
-        <div style="height:22px;"></div>
-        <button class="sl-btn" id="signup-btn" onclick="doSignup()">Connect CalNet &amp; Continue →</button>
-        <div class="auth-switch">Already have an account? <a onclick="switchAuthTab('signin')">Sign in</a></div>
+        <div class="auth-switch">New to StudyLink? <a onclick="createAccount()">Create an account</a></div>
+        <div style="margin-top:12px;text-align:center;">
+          <a onclick="deleteAccount()" style="font-size:11px;color:rgba(255,107,107,0.5);cursor:pointer;transition:color 0.15s;" onmouseover="this.style.color='#FF6B6B'" onmouseout="this.style.color='rgba(255,107,107,0.5)'">Delete account</a>
+        </div>
       </div>
 
       <div class="sl-note">Demo only — no credentials are sent or stored</div>
@@ -320,49 +340,72 @@ input, textarea { font-family: 'DM Sans', sans-serif; }
 
 <!-- ════════ PROFILE SETUP ════════ -->
 <section id="profilesetup" class="screen">
-  <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:40px 24px;">
+
+  <!-- Left panel -->
+  <div class="setup-left">
+    <div class="setup-left-grid"></div>
+    <div class="setup-left-glow"></div>
+    <div class="setup-left-top">
+      <div class="setup-left-brand">
+        <div class="setup-left-brand-icon">🔗</div>
+        <div class="setup-left-brand-name">Study<span>Link</span></div>
+      </div>
+      <div class="setup-step-label">Step 2 of 2</div>
+      <div class="setup-headline">Almost there —<br>tell us about <em>you</em></div>
+      <div class="setup-desc">Fill in your profile so classmates can find you. Your bCourses classes are already loaded below.</div>
+    </div>
+    <div class="setup-left-bottom">
+      <div class="setup-preview-label">Classes from bCourses</div>
+      <div class="setup-classes-preview" id="setup-preview-chips"></div>
+    </div>
+  </div>
+
+  <!-- Right form panel -->
+  <div class="setup-right">
     <div class="setup-inner">
-      <div class="setup-step-label">Set up your account</div>
-      <h1>Tell us about yourself</h1>
 
       <div class="dark-field">
         <label>Display Name</label>
         <input type="text" id="setup-name" placeholder="Jane Doe" oninput="checkReady()" />
       </div>
-      <div class="dark-field">
-        <label>Major</label>
-        <input type="text" id="setup-major" placeholder="EECS, CS, Data Science…" />
-      </div>
-      <div class="dark-field" style="margin-bottom:20px;">
-        <label>Year</label>
-        <div class="year-pills">
-          <button class="year-pill" onclick="pickYear(this,'Freshman')">Freshman</button>
-          <button class="year-pill" onclick="pickYear(this,'Sophomore')">Sophomore</button>
-          <button class="year-pill" onclick="pickYear(this,'Junior')">Junior</button>
-          <button class="year-pill" onclick="pickYear(this,'Senior')">Senior</button>
-          <button class="year-pill" onclick="pickYear(this,'Graduate')">Graduate</button>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="dark-field">
+          <label>Major</label>
+          <input type="text" id="setup-major" placeholder="EECS, CS…" />
+        </div>
+        <div class="dark-field">
+          <label>Year</label>
+          <select id="setup-year-select" onchange="pickYearSelect(this.value)" style="width:100%;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-size:14px;outline:none;font-family:'DM Sans',sans-serif;appearance:none;cursor:pointer;">
+            <option value="">Select…</option>
+            <option value="Freshman">Freshman</option>
+            <option value="Sophomore">Sophomore</option>
+            <option value="Junior">Junior</option>
+            <option value="Senior">Senior</option>
+            <option value="Graduate">Graduate</option>
+          </select>
         </div>
       </div>
 
       <div class="dark-field">
-        <label>Add Your Classes</label>
+        <label>Add / Edit Classes</label>
         <div class="class-search-wrap">
           <span class="search-icon">⌕</span>
           <input class="class-search-input" type="text" id="setup-search"
-            placeholder="Search e.g. CS 61B, MATH 54, EECS 16A…"
+            placeholder="Search e.g. CS 61B, MATH 54…"
             autocomplete="off" oninput="renderSetupDrop()" onfocus="renderSetupDrop()" />
         </div>
         <div class="class-dropdown" id="setup-drop"></div>
         <div class="added-classes" id="setup-chips">
-          <span class="chip-empty" id="setup-chip-empty">No classes added yet</span>
+          <span class="chip-empty">No classes added yet</span>
         </div>
       </div>
 
       <div class="dark-field">
-        <label>Short Bio <span style="color:rgba(255,255,255,0.2);font-weight:400;text-transform:none;letter-spacing:0;">(optional)</span></label>
-        <textarea id="setup-bio" rows="3" placeholder="e.g. Looking for CS 61B group, free Mon/Wed evenings"></textarea>
+        <label>Short Bio <span style="font-weight:400;text-transform:none;letter-spacing:0;opacity:0.4;">(optional)</span></label>
+        <textarea id="setup-bio" rows="2" placeholder="e.g. Looking for CS 61B group, free Mon/Wed evenings"></textarea>
       </div>
-      <div class="toggle-row">
+
+      <div class="toggle-row" style="margin-bottom:16px;">
         <div>
           <div class="toggle-label">Available this week</div>
           <div class="toggle-sub">Others can see you're open to meet</div>
@@ -371,9 +414,12 @@ input, textarea { font-family: 'DM Sans', sans-serif; }
           <div class="toggle-knob"></div>
         </div>
       </div>
+
       <button class="btn-enter" id="btn-enter" onclick="enterDash()">Enter StudyLink →</button>
+
     </div>
   </div>
+
 </section>
 
 
@@ -434,7 +480,7 @@ const CATALOG = [
 const S = {
   user:        {name:"",major:"",year:"",bio:"",available:true},
   classes:     [],   // codes the user has added
-  connected:   new Set()
+  connected:   new Set(),
   setupAvail:  true,
   setupYear:   "",
 };
@@ -472,6 +518,13 @@ function signOut() {
   location.reload();
 }
 
+function deleteAccount() {
+  if (!confirm('Delete your StudyLink account? This cannot be undone.')) return;
+  ['studylink_account','studylink_classes','welearn_account',
+   'studylink_new_signup','studylink_return_to'].forEach(k => localStorage.removeItem(k));
+  location.reload();
+}
+
 // ═══════════════════════════════════════════
 //  SCREEN ROUTING
 // ═══════════════════════════════════════════
@@ -504,28 +557,14 @@ function showScreen(id) {
 //  AUTH TAB SWITCHER
 // ═══════════════════════════════════════════
 function switchAuthTab(tab) {
-  document.getElementById('tab-signin').classList.toggle('active', tab === 'signin');
-  document.getElementById('tab-signup').classList.toggle('active', tab === 'signup');
-  document.getElementById('panel-signin').classList.toggle('active', tab === 'signin');
-  document.getElementById('panel-signup').classList.toggle('active', tab === 'signup');
+  // single tab - always signin
+  document.getElementById('panel-signin').classList.add('active');
 }
 
 // ═══════════════════════════════════════════
 //  SIGN UP (new account → bCourses setup)
 // ═══════════════════════════════════════════
-function doSignup() {
-  const name   = document.getElementById('signup-name').value.trim();
-  const calnet = document.getElementById('signup-calnet').value.trim();
-  const pass   = document.getElementById('signup-pass').value.trim();
-  const err    = document.getElementById('sl-signup-err');
-  if (!name)   { err.style.display='block'; err.textContent='Please enter your full name.'; return; }
-  if (!calnet) { err.style.display='block'; err.textContent='Please enter your CalNet ID.'; return; }
-  if (!pass)   { err.style.display='block'; err.textContent='Please enter your passphrase.'; return; }
-  err.style.display = 'none';
-  // Pre-fill name on profile setup
-  document.getElementById('setup-name').value = name;
-  checkReady();
-  // Go to calcentral and immediately kick off bCourses
+function createAccount() {
   showScreen('calcentral');
   setTimeout(startScrape, 300);
 }
@@ -539,12 +578,24 @@ function calLogin() {
   const err  = document.getElementById('sl-signin-err');
   const btn  = document.getElementById('cal-btn');
   if (!id || !pass) { err.style.display='block'; err.textContent='Please enter both fields.'; return; }
+  // Check if account exists
+  const saved = localStorage.getItem(ACCOUNT_KEY);
+  if (!saved) {
+    err.style.display = 'block';
+    err.textContent = 'No account found. Use “Create an account” to get started.';
+    return;
+  }
   err.style.display = 'none';
   btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span> Connecting…';
-  showScreen('calcentral');
-  btn.disabled = false;
-  btn.innerHTML = 'Authorize &amp; Continue →';
+  btn.innerHTML = '<span class="spinner"></span> Signing in…';
+  if (loadAccount()) {
+    window.location.href = 'WeLearn.html';
+  } else {
+    err.style.display = 'block';
+    err.textContent = 'No account found. Use “Create an account” to get started.';
+    btn.disabled = false;
+    btn.innerHTML = 'Authorize &amp; Continue →';
+  }
 }
 
 // ═══════════════════════════════════════════
@@ -554,27 +605,32 @@ function startScrape() {
   const btn = document.getElementById('cal-scrape-btn');
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span> Opening bCourses…';
+
+  function goToSetup(data) {
+    if (data) loadCoursesIntoState(data);
+    btn.disabled = false;
+    btn.innerHTML = 'Open bCourses Login →';
+    showScreen('profilesetup');
+    renderSetupChips();
+    // Scroll the right panel to top so the form is immediately visible
+    setTimeout(() => {
+      const right = document.querySelector('.setup-right');
+      if (right) right.scrollTop = 0;
+      document.getElementById('setup-name')?.focus();
+    }, 100);
+  }
+
   fetch('http://127.0.0.1:5001/scrape', { method: 'POST' })
     .then(r => r.json())
     .then(data => {
       if (data.error) throw new Error(data.error);
-      loadCoursesIntoState(data);
-      btn.disabled = false;
-      btn.innerHTML = 'Open bCourses Login →';
-      showScreen('profilesetup');
-      renderSetupChips();
+      goToSetup(data);
     })
     .catch(() => {
       fetch('user_classes.json')
         .then(r => r.json())
-        .then(data => { loadCoursesIntoState(data); })
-        .catch(() => {})
-        .finally(() => {
-          btn.disabled = false;
-          btn.innerHTML = 'Open bCourses Login →';
-          showScreen('profilesetup');
-          renderSetupChips();
-        });
+        .then(data => goToSetup(data))
+        .catch(() => goToSetup(null));
     });
 }
 
@@ -632,11 +688,23 @@ function renderSetupChips() {
         <button class="chip-x" onclick="removeClassSetup('${c}')">×</button>
       </div>`).join('');
   }
+  // Update left panel preview
+  const preview = document.getElementById('setup-preview-chips');
+  if (preview) {
+    preview.innerHTML = S.classes.length
+      ? S.classes.map(c=>`<span class="setup-preview-chip">${c}</span>`).join('')
+      : '<span style="color:var(--text2);font-size:12px;">No classes loaded yet</span>';
+  }
 }
 
 function pickYear(btn, y) {
   document.querySelectorAll('.year-pill').forEach(b=>b.classList.remove('selected'));
   btn.classList.add('selected');
+  S.setupYear = y;
+  checkReady();
+}
+
+function pickYearSelect(y) {
   S.setupYear = y;
   checkReady();
 }
