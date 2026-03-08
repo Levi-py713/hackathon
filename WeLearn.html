@@ -802,7 +802,7 @@ document.addEventListener("click",()=>{document.getElementById("profile-dropdown
     currentUser={name:slAcct.name,email:slAcct.name.toLowerCase().replace(/ /g,'')+'@berkeley.edu',initials:initials(slAcct.name),major:slAcct.major||'',year:slAcct.year||''};
     showApp();
   } else {
-    window.location.href = 'studylink.html';
+    document.getElementById("login-page").classList.remove("hidden");
   }
 })();
 </script>
