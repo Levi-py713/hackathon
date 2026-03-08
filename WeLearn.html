@@ -12,7 +12,6 @@
     --bg: #0D0F14;
     --surface: #13161E;
     --surface2: #1A1E28;
-    --surface3: #20253300;
     --border: rgba(255,255,255,0.07);
     --accent: #5B8EFF;
     --accent2: #FF6B6B;
@@ -24,548 +23,246 @@
     --font-body: 'DM Sans', sans-serif;
   }
 
-  html, body {
-    height: 100%;
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--font-body);
-    font-size: 14px;
-    line-height: 1.5;
-    overflow: hidden;
-  }
-
-  /* ===== UTILITIES ===== */
+  html, body { height: 100%; background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: 14px; line-height: 1.5; overflow: hidden; }
   .hidden { display: none !important; }
-  .flex { display: flex; }
-  .flex-col { display: flex; flex-direction: column; }
-  .items-center { align-items: center; }
-  .justify-between { justify-content: space-between; }
-  .gap-8 { gap: 8px; }
-  .gap-12 { gap: 12px; }
-  .gap-16 { gap: 16px; }
-  .flex-1 { flex: 1; }
   .relative { position: relative; }
 
-  /* ===== SCROLLBAR ===== */
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
 
-  /* ===== ANIMATIONS ===== */
-  @keyframes slideUp {
-    from { opacity: 0; transform: translateY(28px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-8px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes modalIn {
-    from { opacity: 0; transform: scale(0.94) translateY(12px); }
-    to   { opacity: 1; transform: scale(1) translateY(0); }
-  }
-  @keyframes fadeOverlay {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-  }
-  @keyframes pulse {
-    0%,100% { opacity: 1; }
-    50% { opacity: 0.5; }
-  }
-  @keyframes cardIn {
-    from { opacity: 0; transform: translateY(16px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes modalIn { from { opacity: 0; transform: scale(0.94) translateY(12px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+  @keyframes fadeOverlay { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+  @keyframes cardIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* ===== APP SHELL ===== */
-  #app-page {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    overflow: hidden;
-  }
+  /* LOGIN */
+  #login-page { min-height: 100vh; background: var(--bg); display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; }
+  @media (max-width: 780px) { #login-page { grid-template-columns: 1fr; } .login-left { display: none !important; } }
+  .login-left { background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; justify-content: flex-start; gap: 48px; padding: 52px 52px 48px; position: relative; overflow: hidden; }
+  .login-left-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(91,142,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(91,142,255,0.04) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; }
+  .login-left-glow { position: absolute; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(ellipse, rgba(91,142,255,0.12) 0%, transparent 65%); bottom: -120px; right: -120px; pointer-events: none; }
+  .login-left-glow2 { position: absolute; width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(ellipse, rgba(79,207,142,0.07) 0%, transparent 65%); top: -60px; left: -60px; pointer-events: none; }
+  .login-brand { position: relative; z-index: 1; display: flex; align-items: center; gap: 10px; }
+  .login-brand-icon { width: 36px; height: 36px; background: var(--accent); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 17px; }
+  .login-brand-name { font-family: var(--font-display); font-size: 18px; font-weight: 800; letter-spacing: -0.3px; }
+  .login-brand-name span { color: var(--accent); }
+  .login-hero-body { position: relative; z-index: 1; }
+  .login-eyebrow { display: inline-flex; align-items: center; gap: 7px; background: rgba(91,142,255,0.09); border: 1px solid rgba(91,142,255,0.18); border-radius: 20px; padding: 4px 12px; font-size: 11px; font-weight: 600; color: var(--accent); margin-bottom: 22px; letter-spacing: 0.04em; text-transform: uppercase; }
+  .login-eyebrow-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; }
+  .login-headline { font-family: var(--font-display); font-size: clamp(28px, 3.2vw, 42px); font-weight: 800; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 18px; }
+  .login-headline em { font-style: normal; color: var(--accent); }
+  .login-subline { font-size: 14px; color: var(--text2); line-height: 1.65; max-width: 38ch; }
+  .login-stats { position: relative; z-index: 1; display: flex; gap: 28px; padding-top: 28px; border-top: 1px solid var(--border); }
+  .login-stat-num { font-family: var(--font-display); font-size: 22px; font-weight: 800; color: var(--text); letter-spacing: -0.04em; }
+  .login-stat-lbl { font-size: 11px; color: var(--text2); margin-top: 2px; letter-spacing: 0.02em; }
+  .login-right { display: flex; align-items: center; justify-content: center; padding: 48px 40px; position: relative; background: var(--bg); }
+  .login-right::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 70% 50% at 50% 40%, rgba(91,142,255,0.06), transparent 70%); pointer-events: none; }
+  .login-card { position: relative; z-index: 1; width: 100%; max-width: 380px; animation: slideUp 0.55s cubic-bezier(0.16,1,0.3,1) both; }
+  .login-card-heading { font-family: var(--font-display); font-size: 26px; font-weight: 800; letter-spacing: -0.04em; margin-bottom: 6px; }
+  .login-card-sub { font-size: 13px; color: var(--text2); margin-bottom: 32px; line-height: 1.5; }
+  .form-label { display: block; font-size: 10px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--text2); margin-bottom: 7px; }
+  .form-input { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 15px; font-family: var(--font-body); font-size: 14px; color: var(--text); outline: none; transition: border-color 0.2s, box-shadow 0.2s; margin-bottom: 18px; }
+  .form-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(91,142,255,0.12); }
+  .form-input::placeholder { color: var(--text2); opacity: 0.6; }
+  .btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: var(--accent); color: #fff; border: none; border-radius: 10px; padding: 13px 22px; font-family: var(--font-display); font-size: 14px; font-weight: 700; cursor: pointer; transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s; letter-spacing: 0.02em; white-space: nowrap; box-shadow: 0 4px 18px rgba(91,142,255,0.3); }
+  .btn-primary:hover:not(:disabled) { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 6px 24px rgba(91,142,255,0.4); }
+  .btn-primary:active { transform: translateY(0); }
+  .btn-primary.full { width: 100%; }
+  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-ghost { background: none; border: 1px solid var(--border); color: var(--text2); border-radius: 10px; padding: 11px 18px; font-family: var(--font-display); font-size: 13px; font-weight: 700; cursor: pointer; transition: border-color 0.2s, color 0.2s; }
+  .btn-ghost:hover { border-color: var(--text2); color: var(--text); }
+  .login-error { background: rgba(255,107,107,0.1); border: 1px solid rgba(255,107,107,0.2); color: var(--accent2); border-radius: 8px; padding: 10px 14px; font-size: 12px; margin-bottom: 14px; display: none; }
+  .login-footer-note { text-align: center; font-size: 11px; color: var(--text2); margin-top: 20px; opacity: 0.6; }
+  .auth-tabs { display: flex; background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 4px; margin-bottom: 28px; gap: 2px; }
+  .auth-tab { flex: 1; padding: 9px 0; border-radius: 9px; font-family: var(--font-display); font-size: 13px; font-weight: 700; cursor: pointer; border: none; background: transparent; color: var(--text2); transition: background 0.18s, color 0.18s; }
+  .auth-tab.active { background: var(--surface); color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,0.35); }
+  .auth-panel { display: none; }
+  .auth-panel.active { display: block; }
+  .auth-switch { text-align: center; font-size: 12px; color: var(--text2); margin-top: 18px; }
+  .auth-switch a { color: var(--accent); font-weight: 600; cursor: pointer; text-decoration: none; }
+  .auth-switch a:hover { text-decoration: underline; }
 
-  /* ===== TOPBAR ===== */
-  .topbar {
-    height: 62px;
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    padding: 0 22px;
-    gap: 14px;
-    position: relative;
-    z-index: 100;
-    flex-shrink: 0;
-  }
-  .topbar-logo {
-    font-family: var(--font-display);
-    font-size: 20px;
-    font-weight: 800;
-    letter-spacing: -0.3px;
-    user-select: none;
-  }
+  /* APP */
+  #app-page { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+  .topbar { height: 62px; background: var(--surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 22px; gap: 14px; position: relative; z-index: 100; flex-shrink: 0; }
+  .topbar-logo { font-family: var(--font-display); font-size: 20px; font-weight: 800; letter-spacing: -0.3px; user-select: none; }
   .topbar-logo span { color: var(--accent); }
-  .chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    background: rgba(79,207,142,0.09);
-    border: 1px solid rgba(79,207,142,0.18);
-    border-radius: 20px;
-    padding: 3px 10px;
-    font-size: 11px;
-    color: var(--success);
-    font-weight: 600;
-  }
+  .chip { display: inline-flex; align-items: center; gap: 5px; background: rgba(79,207,142,0.09); border: 1px solid rgba(79,207,142,0.18); border-radius: 20px; padding: 3px 10px; font-size: 11px; color: var(--success); font-weight: 600; }
   .chip-dot { width: 5px; height: 5px; background: var(--success); border-radius: 50%; }
+  .sync-chip { display: inline-flex; align-items: center; gap: 6px; background: rgba(91,142,255,0.08); border: 1px solid rgba(91,142,255,0.16); border-radius: 20px; padding: 3px 10px; font-size: 11px; color: var(--accent); font-weight: 600; }
+  .sync-spinner { width: 10px; height: 10px; border: 2px solid rgba(91,142,255,0.3); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; display: none; }
+  .sync-dot { width: 5px; height: 5px; background: var(--accent); border-radius: 50%; }
   .topbar-spacer { flex: 1; }
-  .icon-btn {
-    width: 38px; height: 38px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-    font-size: 17px;
-    transition: border-color 0.2s;
-    position: relative;
-    user-select: none;
-    flex-shrink: 0;
-  }
+  .icon-btn { width: 38px; height: 38px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 17px; transition: border-color 0.2s; position: relative; user-select: none; flex-shrink: 0; }
   .icon-btn:hover { border-color: rgba(91,142,255,0.4); }
-  .notif-dot {
-    position: absolute;
-    top: 7px; right: 7px;
-    width: 8px; height: 8px;
-    background: var(--accent2);
-    border-radius: 50%;
-    border: 2px solid var(--surface);
-  }
-  .avatar-btn {
-    width: 38px; height: 38px;
-    background: linear-gradient(135deg, var(--accent) 0%, #7B6EFF 100%);
-    border: 2px solid transparent;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-    font-family: var(--font-display);
-    font-size: 13px;
-    font-weight: 700;
-    transition: border-color 0.2s, transform 0.15s;
-    color: #fff;
-    position: relative;
-    user-select: none;
-    flex-shrink: 0;
-  }
+  .notif-dot { position: absolute; top: 7px; right: 7px; width: 8px; height: 8px; background: var(--accent2); border-radius: 50%; border: 2px solid var(--surface); }
+  .avatar-btn { width: 38px; height: 38px; background: linear-gradient(135deg, var(--accent) 0%, #7B6EFF 100%); border: 2px solid transparent; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-family: var(--font-display); font-size: 13px; font-weight: 700; transition: border-color 0.2s, transform 0.15s; color: #fff; position: relative; user-select: none; flex-shrink: 0; }
   .avatar-btn:hover { border-color: rgba(91,142,255,0.5); transform: scale(1.05); }
-
-  /* ===== DROPDOWN ===== */
-  .dropdown {
-    position: absolute;
-    top: calc(100% + 10px);
-    right: 0;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    overflow: hidden;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.55);
-    animation: fadeIn 0.15s ease both;
-    z-index: 300;
-    min-width: 200px;
-  }
-  .dropdown-header {
-    padding: 14px 16px;
-    border-bottom: 1px solid var(--border);
-  }
+  .dropdown { position: absolute; top: calc(100% + 10px); right: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.55); animation: fadeIn 0.15s ease both; z-index: 300; min-width: 200px; }
+  .dropdown-header { padding: 14px 16px; border-bottom: 1px solid var(--border); }
   .dropdown-name { font-family: var(--font-display); font-weight: 700; font-size: 14px; }
   .dropdown-email { font-size: 11px; color: var(--text2); margin-top: 2px; }
-  .dropdown-item {
-    width: 100%; padding: 11px 16px;
-    font-size: 13px; cursor: pointer;
-    display: flex; align-items: center; gap: 10px;
-    transition: background 0.15s;
-    color: var(--text);
-    background: none; border: none;
-    font-family: var(--font-body);
-    text-align: left;
-  }
+  .dropdown-item { width: 100%; padding: 11px 16px; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: background 0.15s; color: var(--text); background: none; border: none; font-family: var(--font-body); text-align: left; }
   .dropdown-item:hover { background: var(--surface2); }
   .dropdown-item.danger { color: var(--accent2); }
-
-  /* ===== NOTIFICATION PANEL ===== */
-  .notif-panel {
-    position: absolute;
-    top: calc(100% + 10px);
-    right: 0;
-    width: 310px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.55);
-    animation: fadeIn 0.15s ease both;
-    z-index: 300;
-    overflow: hidden;
-  }
-  .notif-header {
-    padding: 14px 16px 12px;
-    border-bottom: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: space-between;
-  }
+  .notif-panel { position: absolute; top: calc(100% + 10px); right: 0; width: 310px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.55); animation: fadeIn 0.15s ease both; z-index: 300; overflow: hidden; }
+  .notif-header { padding: 14px 16px 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
   .notif-header-title { font-family: var(--font-display); font-weight: 700; font-size: 14px; }
-  .notif-toggle-row {
-    display: flex; align-items: center; gap: 8px;
-    font-size: 11px; color: var(--text2);
-  }
-  .toggle-track {
-    width: 32px; height: 18px;
-    background: var(--surface2);
-    border-radius: 9px;
-    position: relative;
-    cursor: pointer;
-    border: 1px solid var(--border);
-    transition: background 0.2s, border-color 0.2s;
-    flex-shrink: 0;
-  }
+  .notif-toggle-row { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--text2); }
+  .toggle-track { width: 32px; height: 18px; background: var(--surface2); border-radius: 9px; position: relative; cursor: pointer; border: 1px solid var(--border); transition: background 0.2s, border-color 0.2s; flex-shrink: 0; }
   .toggle-track.on { background: var(--accent); border-color: var(--accent); }
-  .toggle-knob {
-    position: absolute;
-    top: 2px; left: 2px;
-    width: 12px; height: 12px;
-    background: #fff;
-    border-radius: 50%;
-    transition: transform 0.2s;
-    pointer-events: none;
-  }
+  .toggle-knob { position: absolute; top: 2px; left: 2px; width: 12px; height: 12px; background: #fff; border-radius: 50%; transition: transform 0.2s; pointer-events: none; }
   .toggle-track.on .toggle-knob { transform: translateX(14px); }
   .notif-list { max-height: 260px; overflow-y: auto; }
-  .notif-item {
-    padding: 11px 16px;
-    border-bottom: 1px solid var(--border);
-    font-size: 12px;
-    line-height: 1.55;
-  }
+  .notif-item { padding: 11px 16px; border-bottom: 1px solid var(--border); font-size: 12px; line-height: 1.55; }
   .notif-item:last-child { border-bottom: none; }
   .notif-course { color: var(--accent); font-weight: 600; }
   .notif-meta { color: var(--text2); font-size: 10px; margin-top: 2px; }
   .notif-empty { padding: 28px 16px; text-align: center; color: var(--text2); font-size: 13px; }
-
-  /* ===== LAYOUT ===== */
-  .content-area {
-    display: flex;
-    flex: 1;
-    overflow: hidden;
-  }
-
-  /* ===== SIDEBAR ===== */
-  .sidebar {
-    width: 234px;
-    background: var(--surface);
-    border-right: 1px solid var(--border);
-    display: flex;
-    flex-direction: column;
-    padding: 18px 10px;
-    gap: 2px;
-    overflow-y: auto;
-    flex-shrink: 0;
-  }
-  .sidebar-label {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text2);
-    padding: 6px 8px 8px;
-  }
-  .course-item {
-    display: flex;
-    align-items: center;
-    gap: 11px;
-    padding: 10px 9px;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background 0.15s;
-    background: none; border: none;
-    width: 100%; text-align: left;
-    color: var(--text);
-    font-family: var(--font-body);
-  }
+  .content-area { display: flex; flex: 1; overflow: hidden; }
+  .sidebar { width: 234px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 18px 10px; gap: 2px; overflow-y: auto; flex-shrink: 0; }
+  .sidebar-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text2); padding: 6px 8px 8px; }
+  .course-item { display: flex; align-items: center; gap: 11px; padding: 10px 9px; border-radius: 10px; cursor: pointer; transition: background 0.15s; background: none; border: none; width: 100%; text-align: left; color: var(--text); font-family: var(--font-body); }
   .course-item:hover { background: var(--surface2); }
   .course-item.active { background: rgba(91,142,255,0.11); }
-  .course-dot {
-    width: 10px; height: 10px;
-    border-radius: 3px;
-    flex-shrink: 0;
-  }
+  .course-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
   .course-info { flex: 1; min-width: 0; }
-  .course-code {
-    font-family: var(--font-display);
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.03em;
-  }
-  .course-name {
-    font-size: 11px;
-    color: var(--text2);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .course-count {
-    font-size: 11px; color: var(--text2);
-    background: var(--surface2);
-    border-radius: 20px;
-    padding: 2px 7px;
-    font-weight: 500;
-    flex-shrink: 0;
-  }
-
-  /* ===== MAIN PANEL ===== */
-  .main-panel {
-    flex: 1;
-    overflow-y: auto;
-    padding: 28px 30px;
-    background: var(--bg);
-  }
-  .welcome-banner {
-    background: linear-gradient(135deg, rgba(91,142,255,0.1), rgba(79,207,142,0.05));
-    border: 1px solid rgba(91,142,255,0.14);
-    border-radius: 16px;
-    padding: 22px 26px;
-    margin-bottom: 26px;
-    display: flex; align-items: center; gap: 18px;
-  }
+  .course-code { font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: 0.03em; }
+  .course-name { font-size: 11px; color: var(--text2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .course-count { font-size: 11px; color: var(--text2); background: var(--surface2); border-radius: 20px; padding: 2px 7px; font-weight: 500; flex-shrink: 0; }
+  .main-panel { flex: 1; overflow-y: auto; padding: 28px 30px; background: var(--bg); }
+  .welcome-banner { background: linear-gradient(135deg, rgba(91,142,255,0.1), rgba(79,207,142,0.05)); border: 1px solid rgba(91,142,255,0.14); border-radius: 16px; padding: 22px 26px; margin-bottom: 26px; display: flex; align-items: center; gap: 18px; }
   .welcome-text { flex: 1; }
-  .welcome-hi {
-    font-family: var(--font-display);
-    font-size: 20px;
-    font-weight: 800;
-  }
+  .welcome-hi { font-family: var(--font-display); font-size: 20px; font-weight: 800; }
   .welcome-sub { font-size: 13px; color: var(--text2); margin-top: 3px; }
   .welcome-emoji { font-size: 38px; }
-
   .panel-header { margin-bottom: 24px; }
-  .panel-title-row {
-    display: flex; align-items: center; gap: 12px; margin-bottom: 4px;
-  }
+  .panel-title-row { display: flex; align-items: center; gap: 12px; margin-bottom: 4px; }
   .panel-color-dot { width: 14px; height: 14px; border-radius: 4px; flex-shrink: 0; }
-  .panel-title {
-    font-family: var(--font-display);
-    font-size: 24px;
-    font-weight: 800;
-    letter-spacing: -0.4px;
-  }
+  .panel-title { font-family: var(--font-display); font-size: 24px; font-weight: 800; letter-spacing: -0.4px; }
   .panel-subtitle { font-size: 12px; color: var(--text2); margin-bottom: 16px; }
   .panel-actions { display: flex; gap: 10px; }
-
-  /* ===== CARDS GRID ===== */
-  .requests-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-    gap: 14px;
-  }
-  .request-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 18px;
-    position: relative;
-    overflow: hidden;
-    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
-    animation: cardIn 0.35s cubic-bezier(0.16,1,0.3,1) both;
-  }
-  .request-card:hover {
-    border-color: rgba(91,142,255,0.28);
-    transform: translateY(-2px);
-    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
-  }
-  .card-accent-bar {
-    position: absolute; top: 0; left: 0; right: 0; height: 3px;
-  }
+  .requests-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 14px; }
+  .request-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 18px; position: relative; overflow: hidden; transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s; animation: cardIn 0.35s cubic-bezier(0.16,1,0.3,1) both; }
+  .request-card:hover { border-color: rgba(91,142,255,0.28); transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+  .card-accent-bar { position: absolute; top: 0; left: 0; right: 0; height: 3px; }
   .card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
-  .card-avatar {
-    width: 40px; height: 40px;
-    border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    font-family: var(--font-display);
-    font-size: 13px;
-    font-weight: 700;
-    color: #fff;
-    flex-shrink: 0;
-  }
+  .card-avatar { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 13px; font-weight: 700; color: #fff; flex-shrink: 0; }
   .card-creator { font-weight: 600; font-size: 14px; }
   .card-time { font-size: 11px; color: var(--text2); margin-top: 1px; }
-  .expired-tag {
-    display: inline-block;
-    background: rgba(255,107,107,0.1);
-    color: var(--accent2);
-    border: 1px solid rgba(255,107,107,0.18);
-    border-radius: 20px;
-    padding: 2px 8px;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    margin-left: auto;
-    flex-shrink: 0;
-  }
-  .card-details {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    margin-bottom: 14px;
-  }
-  .card-detail {
-    background: var(--surface2);
-    border-radius: 8px;
-    padding: 8px 10px;
-  }
+  .my-tag { display: inline-block; background: rgba(91,142,255,0.12); color: var(--accent); border: 1px solid rgba(91,142,255,0.22); border-radius: 20px; padding: 2px 8px; font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; margin-left: auto; flex-shrink: 0; }
+  .card-details { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+  .card-detail { background: var(--surface2); border-radius: 8px; padding: 8px 10px; }
   .card-detail.full-width { grid-column: 1 / -1; }
-  .card-detail-label {
-    font-size: 9px;
-    color: var(--text2);
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
-    font-weight: 700;
-    margin-bottom: 2px;
-  }
+  .card-detail-label { font-size: 9px; color: var(--text2); text-transform: uppercase; letter-spacing: 0.07em; font-weight: 700; margin-bottom: 2px; }
   .card-detail-val { font-size: 13px; font-weight: 500; }
-
   .slots-wrap { margin-bottom: 4px; }
-  .slots-bar {
-    background: var(--surface2);
-    border-radius: 4px;
-    height: 6px;
-    overflow: hidden;
-    margin-bottom: 5px;
-  }
+  .slots-bar { background: var(--surface2); border-radius: 4px; height: 6px; overflow: hidden; margin-bottom: 5px; }
   .slots-fill { height: 100%; border-radius: 4px; transition: width 0.4s ease; }
   .slots-label { font-size: 11px; color: var(--text2); display: flex; justify-content: space-between; }
-
   .expiry-wrap { margin-top: 10px; }
-  .expiry-bar {
-    background: var(--surface2);
-    border-radius: 4px;
-    height: 4px;
-    overflow: hidden;
-    margin-bottom: 4px;
-  }
-  .expiry-fill {
-    height: 100%;
-    border-radius: 4px;
-    background: linear-gradient(90deg, var(--success), var(--warn));
-    transition: width 1s linear;
-  }
+  .expiry-bar { background: var(--surface2); border-radius: 4px; height: 4px; overflow: hidden; margin-bottom: 4px; }
+  .expiry-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--success), var(--warn)); transition: width 1s linear; }
   .expiry-label { font-size: 10px; color: var(--text2); text-align: right; }
-
-  .join-btn {
-    width: 100%; margin-top: 12px;
-    padding: 10px;
-    background: rgba(91,142,255,0.09);
-    color: var(--accent);
-    border: 1px solid rgba(91,142,255,0.18);
-    border-radius: 8px;
-    font-family: var(--font-display);
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
+  .join-btn { width: 100%; margin-top: 12px; padding: 10px; background: rgba(91,142,255,0.09); color: var(--accent); border: 1px solid rgba(91,142,255,0.18); border-radius: 8px; font-family: var(--font-display); font-size: 13px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
   .join-btn:hover:not(:disabled) { background: rgba(91,142,255,0.18); }
   .join-btn:disabled { opacity: 0.38; cursor: not-allowed; }
-
-  .empty-state {
-    text-align: center; padding: 70px 40px; color: var(--text2);
-  }
+  .join-btn.mine { background: rgba(255,107,107,0.07); color: var(--accent2); border-color: rgba(255,107,107,0.18); }
+  .join-btn.mine:hover:not(:disabled) { background: rgba(255,107,107,0.14); }
+  .skeleton-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 14px; }
+  .skeleton-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 18px; height: 220px; }
+  .skeleton-line { background: var(--surface2); border-radius: 6px; margin-bottom: 10px; animation: pulse 1.5s ease infinite; }
+  .empty-state { text-align: center; padding: 70px 40px; color: var(--text2); }
   .empty-icon { font-size: 44px; margin-bottom: 14px; opacity: 0.45; }
-  .empty-title {
-    font-family: var(--font-display);
-    font-size: 18px; font-weight: 700;
-    color: var(--text); margin-bottom: 8px;
-  }
-
-  /* ===== MODAL ===== */
-  .modal-overlay {
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.72);
-    display: flex; align-items: center; justify-content: center;
-    z-index: 500;
-    animation: fadeOverlay 0.2s ease both;
-  }
-  .modal {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 30px;
-    width: 470px;
-    max-width: 95vw;
-    max-height: 90vh;
-    overflow-y: auto;
-    box-shadow: 0 40px 100px rgba(0,0,0,0.65);
-    animation: modalIn 0.25s cubic-bezier(0.16,1,0.3,1) both;
-  }
-  .modal-title {
-    font-family: var(--font-display);
-    font-size: 20px;
-    font-weight: 800;
-    margin-bottom: 22px;
-  }
+  .empty-title { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.72); display: flex; align-items: center; justify-content: center; z-index: 500; animation: fadeOverlay 0.2s ease both; }
+  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 30px; width: 470px; max-width: 95vw; max-height: 90vh; overflow-y: auto; box-shadow: 0 40px 100px rgba(0,0,0,0.65); animation: modalIn 0.25s cubic-bezier(0.16,1,0.3,1) both; }
+  .modal-title { font-family: var(--font-display); font-size: 20px; font-weight: 800; margin-bottom: 22px; }
+  .modal-error { background: rgba(255,107,107,0.1); border: 1px solid rgba(255,107,107,0.2); color: var(--accent2); border-radius: 8px; padding: 10px 14px; font-size: 12px; margin-bottom: 12px; display: none; }
   .form-row { margin-bottom: 16px; }
   .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
-  .form-hint {
-    background: rgba(91,142,255,0.07);
-    border: 1px solid rgba(91,142,255,0.12);
-    border-radius: 8px;
-    padding: 10px 13px;
-    font-size: 12px;
-    color: var(--text2);
-    margin-bottom: 8px;
-  }
+  .form-hint { background: rgba(91,142,255,0.07); border: 1px solid rgba(91,142,255,0.12); border-radius: 8px; padding: 10px 13px; font-size: 12px; color: var(--text2); margin-bottom: 8px; }
   .form-hint strong { color: var(--text); }
   .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 22px; }
-
-  /* ===== SETTINGS MODAL ===== */
-  .profile-header {
-    display: flex; align-items: center; gap: 16px; margin-bottom: 22px;
-  }
-  .profile-avatar-lg {
-    width: 62px; height: 62px;
-    border-radius: 18px;
-    background: linear-gradient(135deg, var(--accent), #7B6EFF);
-    display: flex; align-items: center; justify-content: center;
-    font-family: var(--font-display);
-    font-size: 22px; font-weight: 800;
-    color: #fff;
-    flex-shrink: 0;
-  }
+  .profile-header { display: flex; align-items: center; gap: 16px; margin-bottom: 22px; }
+  .profile-avatar-lg { width: 62px; height: 62px; border-radius: 18px; background: linear-gradient(135deg, var(--accent), #7B6EFF); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 22px; font-weight: 800; color: #fff; flex-shrink: 0; }
   .profile-name { font-family: var(--font-display); font-weight: 800; font-size: 18px; }
   .profile-email { font-size: 12px; color: var(--text2); margin-top: 2px; }
-  .settings-field {
-    background: var(--surface2);
-    border-radius: 10px;
-    padding: 13px 14px;
-    margin-bottom: 10px;
-  }
-  .settings-field-label {
-    font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em;
-    color: var(--text2); font-weight: 700; margin-bottom: 4px;
-  }
+  .settings-field { background: var(--surface2); border-radius: 10px; padding: 13px 14px; margin-bottom: 10px; }
+  .settings-field-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text2); font-weight: 700; margin-bottom: 4px; }
   .settings-field-val { font-size: 14px; font-weight: 500; }
 </style>
 </head>
 <body>
 
+<!-- LOGIN PAGE -->
+<div id="login-page" class="hidden">
+  <div class="login-left">
+    <div class="login-left-grid"></div><div class="login-left-glow"></div><div class="login-left-glow2"></div>
+    <div class="login-brand"><div class="login-brand-icon">📚</div><div class="login-brand-name">We<span>Learn</span></div></div>
+    <div class="login-hero-body">
+      <div class="login-eyebrow"><div class="login-eyebrow-dot"></div>UC Berkeley · Spring 2026</div>
+      <div class="login-headline">Study smarter<br>with your <em>peers</em></div>
+      <div class="login-subline">Post sessions, join requests, and connect with classmates — all in real time.</div>
+    </div>
+    <div class="login-stats">
+      <div><div class="login-stat-num">3,200+</div><div class="login-stat-lbl">Students</div></div>
+      <div><div class="login-stat-num">130+</div><div class="login-stat-lbl">Courses</div></div>
+      <div><div class="login-stat-num">900+</div><div class="login-stat-lbl">Sessions</div></div>
+    </div>
+  </div>
+  <div class="login-right">
+    <div class="login-card">
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-signin" onclick="switchAuthTab('signin')">Sign In</button>
+        <button class="auth-tab" id="tab-signup" onclick="switchAuthTab('signup')">Sign Up</button>
+      </div>
+      <div class="auth-panel active" id="panel-signin">
+        <div class="login-card-heading">Welcome back</div>
+        <div class="login-card-sub" style="margin-bottom:24px;">Sign in to access your study groups</div>
+        <div class="login-error" id="login-error"></div>
+        <label class="form-label">University Email</label>
+        <input class="form-input" id="login-email" type="email" placeholder="you@berkeley.edu" />
+        <label class="form-label">Password</label>
+        <input class="form-input" id="login-password" type="password" placeholder="••••••••••" style="margin-bottom:0"/>
+        <div style="height:22px;"></div>
+        <button class="btn-primary full" id="login-btn">Sign In →</button>
+        <div class="auth-switch">No account? <a onclick="switchAuthTab('signup')">Create one</a></div>
+      </div>
+      <div class="auth-panel" id="panel-signup">
+        <div class="login-card-heading">Create account</div>
+        <div class="login-card-sub" style="margin-bottom:24px;">Join WeLearn and find your study group</div>
+        <div class="login-error" id="signup-error"></div>
+        <label class="form-label">Full Name</label>
+        <input class="form-input" id="signup-name" type="text" placeholder="Jane Doe" />
+        <label class="form-label">University Email</label>
+        <input class="form-input" id="signup-email" type="email" placeholder="you@berkeley.edu" />
+        <label class="form-label">Password</label>
+        <input class="form-input" id="signup-password" type="password" placeholder="At least 6 characters" style="margin-bottom:0"/>
+        <div style="height:22px;"></div>
+        <button class="btn-primary full" id="signup-btn">Create Account →</button>
+        <div class="auth-switch">Already have an account? <a onclick="switchAuthTab('signin')">Sign in</a></div>
+      </div>
+      <div class="login-footer-note">Demo only — no credentials are stored</div>
+    </div>
+  </div>
+</div>
 
-<!-- ========== APP PAGE ========== -->
+<!-- APP PAGE -->
 <div id="app-page" class="hidden">
-
-  <!-- TOPBAR -->
   <div class="topbar">
     <div class="topbar-logo">We<span>Learn</span></div>
     <div class="chip"><div class="chip-dot"></div>Spring 2026</div>
+    <div class="sync-chip" id="sync-chip">
+      <div class="sync-spinner" id="sync-spinner"></div>
+      <div class="sync-dot" id="sync-dot"></div>
+      <span id="sync-label">Live</span>
+    </div>
     <div class="topbar-spacer"></div>
-
-    <!-- Notification Bell -->
     <div class="relative" id="notif-wrap">
       <div class="icon-btn" id="notif-btn">🔔<div class="notif-dot" id="notif-dot"></div></div>
       <div class="notif-panel hidden" id="notif-panel">
@@ -573,16 +270,12 @@
           <div class="notif-header-title">Notifications</div>
           <div class="notif-toggle-row">
             <span id="notif-toggle-label">On</span>
-            <div class="toggle-track on" id="notif-toggle">
-              <div class="toggle-knob"></div>
-            </div>
+            <div class="toggle-track on" id="notif-toggle"><div class="toggle-knob"></div></div>
           </div>
         </div>
         <div class="notif-list" id="notif-list"></div>
       </div>
     </div>
-
-    <!-- Avatar / Profile -->
     <div class="relative" id="profile-wrap">
       <div class="avatar-btn" id="avatar-btn"><span id="avatar-initials">?</span></div>
       <div class="dropdown hidden" id="profile-dropdown">
@@ -596,63 +289,36 @@
       </div>
     </div>
   </div>
-
-  <!-- BODY -->
   <div class="content-area">
-
-    <!-- SIDEBAR -->
-    <div class="sidebar" id="sidebar">
-      <div class="sidebar-label">My Courses</div>
-      <!-- course items injected by JS -->
-    </div>
-
-    <!-- MAIN -->
+    <div class="sidebar" id="sidebar"><div class="sidebar-label">My Courses</div></div>
     <div class="main-panel" id="main-panel">
-      <!-- Welcome banner -->
       <div class="welcome-banner">
         <div class="welcome-text">
           <div class="welcome-hi" id="welcome-hi">Welcome back 👋</div>
-          <div class="welcome-sub">Find or create a study group for your courses below</div>
+          <div class="welcome-sub" id="welcome-sub">Sessions are shared live — your friends will see your posts instantly</div>
         </div>
         <div class="welcome-emoji">📚</div>
       </div>
-
-      <!-- Course section -->
       <div id="course-section"></div>
     </div>
-
   </div>
 </div>
 
-<!-- ========== CREATE MODAL ========== -->
+<!-- CREATE MODAL -->
 <div class="modal-overlay hidden" id="create-modal">
   <div class="modal">
     <div class="modal-title">Create Study Session</div>
+    <div class="modal-error" id="create-error"></div>
     <div class="form-row-2">
-      <div>
-        <label class="form-label">Max People</label>
-        <input class="form-input" id="c-slots" type="number" min="2" max="20" value="4" style="margin-bottom:0"/>
-      </div>
-      <div>
-        <label class="form-label">Duration (max 30 min)</label>
-        <input class="form-input" id="c-duration" type="number" min="5" max="30" value="20" style="margin-bottom:0"/>
-      </div>
+      <div><label class="form-label">Max People</label><input class="form-input" id="c-slots" type="number" min="2" max="20" value="4" style="margin-bottom:0"/></div>
+      <div><label class="form-label">Duration (max 30 min)</label><input class="form-input" id="c-duration" type="number" min="5" max="30" value="20" style="margin-bottom:0"/></div>
     </div>
     <div class="form-row-2">
-      <div>
-        <label class="form-label">Date</label>
-        <input class="form-input" id="c-date" type="date" style="margin-bottom:0"/>
-      </div>
-      <div>
-        <label class="form-label">Time</label>
-        <input class="form-input" id="c-time" type="time" style="margin-bottom:0"/>
-      </div>
+      <div><label class="form-label">Date</label><input class="form-input" id="c-date" type="date" style="margin-bottom:0"/></div>
+      <div><label class="form-label">Time</label><input class="form-input" id="c-time" type="time" style="margin-bottom:0"/></div>
     </div>
-    <div class="form-row">
-      <label class="form-label">Location</label>
-      <input class="form-input" id="c-location" type="text" placeholder="e.g. Library Room 204" style="margin-bottom:0"/>
-    </div>
-    <div class="form-hint" id="c-hint">⏱ Request will expire after <strong id="c-hint-dur">20</strong> minutes.</div>
+    <div class="form-row"><label class="form-label">Location</label><input class="form-input" id="c-location" type="text" placeholder="e.g. Library Room 204" style="margin-bottom:0"/></div>
+    <div class="form-hint">⏱ Request will expire after <strong id="c-hint-dur">20</strong> minutes.</div>
     <div class="modal-actions">
       <button class="btn-ghost" id="create-cancel">Cancel</button>
       <button class="btn-primary" id="create-submit">Post Request →</button>
@@ -660,54 +326,37 @@
   </div>
 </div>
 
-<!-- ========== SETTINGS MODAL ========== -->
+<!-- SETTINGS MODAL -->
 <div class="modal-overlay hidden" id="settings-modal">
   <div class="modal">
     <div class="modal-title">Profile Settings</div>
     <div class="profile-header">
       <div class="profile-avatar-lg" id="settings-avatar">?</div>
-      <div>
-        <div class="profile-name" id="settings-name">–</div>
-        <div class="profile-email" id="settings-email">–</div>
-      </div>
+      <div><div class="profile-name" id="settings-name">–</div><div class="profile-email" id="settings-email">–</div></div>
     </div>
-    <div class="settings-field">
-      <div class="settings-field-label">Institution</div>
-      <div class="settings-field-val">UC Berkeley</div>
-    </div>
-    <div class="settings-field">
-      <div class="settings-field-label">Major</div>
-      <div class="settings-field-val" id="settings-major">–</div>
-    </div>
-    <div class="settings-field">
-      <div class="settings-field-label">Year</div>
-      <div class="settings-field-val" id="settings-year">–</div>
-    </div>
-    <div class="settings-field">
-      <div class="settings-field-label">Enrolled Courses</div>
-      <div class="settings-field-val" id="settings-courses">–</div>
-    </div>
-    <div class="modal-actions">
-      <button class="btn-primary" id="settings-close">Done</button>
-    </div>
+    <div class="settings-field"><div class="settings-field-label">Institution</div><div class="settings-field-val">UC Berkeley</div></div>
+    <div class="settings-field"><div class="settings-field-label">Major</div><div class="settings-field-val" id="settings-major">–</div></div>
+    <div class="settings-field"><div class="settings-field-label">Year</div><div class="settings-field-val" id="settings-year">–</div></div>
+    <div class="settings-field"><div class="settings-field-label">Enrolled Courses</div><div class="settings-field-val" id="settings-courses">–</div></div>
+    <div class="settings-field"><div class="settings-field-label">Session Sharing</div><div class="settings-field-val" style="color:var(--success);font-size:12px;">✓ Your sessions are visible to all WeLearn users</div></div>
+    <div class="modal-actions"><button class="btn-primary" id="settings-close">Done</button></div>
   </div>
 </div>
 
 <script>
 // =====================================================================
-// DATA
+// SHARED STORAGE — sessions stored with shared:true so all users see them
+// Key format: welearn_sessions_v1:courseId:sessionId
 // =====================================================================
-const CATALOG_TITLES = {"CS 61A":"Structure & Interpretation of Computer Programs","CS 61B":"Data Structures","CS 61C":"Great Ideas in Computer Architecture","CS 70":"Discrete Mathematics & Probability Theory","CS 161":"Computer Security","CS 162":"Operating Systems","CS 170":"Efficient Algorithms & Intractable Problems","CS 186":"Introduction to Database Systems","CS 188":"Introduction to AI","CS 189":"Introduction to ML","EECS 16A":"Designing Information Devices I","EECS 16B":"Designing Information Devices II","MATH 1A":"Calculus","MATH 1B":"Calculus","MATH 53":"Multivariable Calculus","MATH 54":"Linear Algebra & Diff. Equations","MATH 55":"Discrete Mathematics","STAT 134":"Concepts of Probability","DATA 8":"Foundations of Data Science","DATA 100":"Principles of Data Science","PHYSICS 7A":"Physics for Scientists & Engineers","PHYSICS 7B":"Physics for Scientists & Engineers","CHEM 1A":"General Chemistry","ECON 1":"Introduction to Economics","ECON 100A":"Microeconomic Theory","HIST 7A":"US History to Civil War","HISTORY 7B":"US History Since Civil War","POLSCI 1":"Introduction to Political Science","POLSCI C135":"Politics of the Developing World","POLSCI C155":"Ethnic Politics in America"};
+const STORAGE_KEY = 'welearn_sessions_v1';
+
+const CATALOG_TITLES = {"CS 61A":"Structure & Interpretation","CS 61B":"Data Structures","CS 61C":"Computer Architecture","CS 70":"Discrete Math & Probability","CS 161":"Computer Security","CS 162":"Operating Systems","CS 170":"Algorithms","CS 186":"Database Systems","CS 188":"Intro to AI","CS 189":"Intro to ML","EECS 16A":"Designing Info Devices I","EECS 16B":"Designing Info Devices II","MATH 1A":"Calculus","MATH 1B":"Calculus","MATH 53":"Multivariable Calculus","MATH 54":"Linear Algebra","MATH 55":"Discrete Mathematics","STAT 134":"Concepts of Probability","DATA 8":"Foundations of Data Science","DATA 100":"Principles of Data Science","PHYSICS 7A":"Physics for Scientists","PHYSICS 7B":"Physics for Scientists","CHEM 1A":"General Chemistry","ECON 1":"Intro to Economics","ECON 100A":"Microeconomic Theory"};
 const COURSE_COLORS = ["#4F8EF7","#F76B4F","#4FCF8E","#CF4FBF","#F7C94F","#5B8EFF","#FF6B6B","#A78BFA","#34D399","#FB923C"];
+
 const _savedAccount = JSON.parse(localStorage.getItem('studylink_account') || '{}');
 const _savedClasses = (_savedAccount.classes || JSON.parse(localStorage.getItem('studylink_classes') || '[]'));
-const COURSES = (_savedClasses.length ? _savedClasses : ["CS 301","MATH 241","PHYS 210","ENGL 201","ECON 102"]).map((code, i) => ({
-  id: i + 1, code,
-  name: CATALOG_TITLES[code] || code,
-  color: COURSE_COLORS[i % COURSE_COLORS.length],
-}));
-
-const REQUESTS = Object.fromEntries(COURSES.map(c => [c.id, []]));
+const COURSES = (_savedClasses.length ? _savedClasses : ["CS 301","MATH 241","PHYS 210","ENGL 201","ECON 102"])
+  .map((code, i) => ({ id: 'course_' + i, code, name: CATALOG_TITLES[code] || code, color: COURSE_COLORS[i % COURSE_COLORS.length] }));
 
 // =====================================================================
 // STATE
@@ -715,57 +364,199 @@ const REQUESTS = Object.fromEntries(COURSES.map(c => [c.id, []]));
 let currentUser    = null;
 let selectedCourse = COURSES[0];
 let notifEnabled   = true;
-let notifications  = [
-  { id:1, course:"CS 301",   text:"Jordan M. created a new study session", time:"5 min ago" },
-  { id:2, course:"MATH 241", text:"Alex T. posted a request for Calculus", time:"12 min ago" },
-];
+let notifications  = [];
+let sharedSessions = {}; // courseId -> session[]  (local cache of shared storage)
+let pollInterval   = null;
+let timerInterval  = null;
+let lastKnownKeys  = new Set();
 
 // =====================================================================
 // HELPERS
 // =====================================================================
-function getTimeLeft(req) {
-  return Math.max(0, req.expiresMs - (Date.now() - req.createdAt));
-}
-function fmtTimeLeft(ms) {
-  const s = Math.floor(ms / 1000);
-  return `${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`;
-}
-function fmtDate(d) {
-  return new Date(d+"T00:00").toLocaleDateString("en-US",{month:"short",day:"numeric"});
-}
-function initials(name) {
-  return name.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
-}
-function activeRequests(courseId) {
-  return (REQUESTS[courseId]||[]).filter(r => getTimeLeft(r) > 0);
+function getTimeLeft(req) { return Math.max(0, req.expiresMs - (Date.now() - req.createdAt)); }
+function fmtTimeLeft(ms) { const s = Math.floor(ms/1000); return `${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`; }
+function fmtDate(d) { return new Date(d+"T00:00").toLocaleDateString("en-US",{month:"short",day:"numeric"}); }
+function initials(name) { return name.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase(); }
+function activeRequests(courseId) { return (sharedSessions[courseId]||[]).filter(r => getTimeLeft(r) > 0); }
+
+function setSyncState(state) {
+  const spinner = document.getElementById('sync-spinner');
+  const dot     = document.getElementById('sync-dot');
+  const label   = document.getElementById('sync-label');
+  if (!spinner) return;
+  if (state === 'syncing') {
+    spinner.style.display = 'block'; dot.style.display = 'none'; label.textContent = 'Syncing…';
+  } else if (state === 'live') {
+    spinner.style.display = 'none'; dot.style.display = 'block';
+    dot.style.background = 'var(--accent)'; label.textContent = 'Live';
+  } else {
+    spinner.style.display = 'none'; dot.style.display = 'block';
+    dot.style.background = 'var(--accent2)'; label.textContent = 'Offline';
+  }
 }
 
 // =====================================================================
-// LOGIN
+// SHARED STORAGE LAYER
 // =====================================================================
+async function loadSharedSessions() {
+  try {
+    const listResult = await window.storage.list(STORAGE_KEY + ':', true);
+    if (!listResult) return;
 
+    const newSessions = {};
+    COURSES.forEach(c => { newSessions[c.id] = []; });
 
+    const newKeys = new Set(listResult.keys);
+    let changed = false;
 
+    for (const key of listResult.keys) {
+      try {
+        const result = await window.storage.get(key, true);
+        if (!result) continue;
+        const session = JSON.parse(result.value);
+        // key: STORAGE_KEY:courseId:sessionId  — courseId is at index 1
+        const courseId = key.split(':')[1];
+        if (!newSessions[courseId]) newSessions[courseId] = [];
+        if (getTimeLeft(session) > 0) {
+          newSessions[courseId].push(session);
+        } else {
+          // prune expired sessions silently
+          window.storage.delete(key, true).catch(() => {});
+          changed = true;
+        }
+        if (!lastKnownKeys.has(key)) changed = true;
+      } catch(e) { /* skip corrupted entries */ }
+    }
 
+    for (const k of lastKnownKeys) { if (!newKeys.has(k)) changed = true; }
+    lastKnownKeys = newKeys;
+
+    // sort newest first
+    Object.keys(newSessions).forEach(cid => newSessions[cid].sort((a,b) => b.createdAt - a.createdAt));
+
+    const wasEmpty = Object.values(sharedSessions).every(a => a.length === 0);
+    sharedSessions = newSessions;
+
+    if (changed || wasEmpty) { renderCourse(); updateCounts(); }
+    setSyncState('live');
+  } catch(e) {
+    console.error('loadSharedSessions error:', e);
+    setSyncState('error');
+  }
+}
+
+async function persistSession(courseId, session) {
+  const key = `${STORAGE_KEY}:${courseId}:${session.id}`;
+  setSyncState('syncing');
+  try {
+    await window.storage.set(key, JSON.stringify(session), true);
+    setSyncState('live');
+  } catch(e) { console.error('persistSession error:', e); setSyncState('error'); }
+}
+
+async function removeSession(courseId, sessionId) {
+  const key = `${STORAGE_KEY}:${courseId}:${sessionId}`;
+  try { await window.storage.delete(key, true); } catch(e) { /* ignore */ }
+}
+
+// =====================================================================
+// AUTH
+// =====================================================================
+function switchAuthTab(tab) {
+  ['signin','signup'].forEach(t => {
+    document.getElementById('tab-'+t).classList.toggle('active', t===tab);
+    document.getElementById('panel-'+t).classList.toggle('active', t===tab);
+  });
+}
+
+document.getElementById("login-btn").addEventListener("click", doLogin);
+document.getElementById("login-password").addEventListener("keydown", e => { if(e.key==="Enter") doLogin(); });
+document.getElementById("login-email").addEventListener("keydown", e => { if(e.key==="Enter") doLogin(); });
+
+function doLogin() {
+  const email = document.getElementById("login-email").value.trim();
+  const pw    = document.getElementById("login-password").value;
+  const errEl = document.getElementById("login-error");
+  if (!email || !pw) { errEl.style.display="block"; errEl.textContent="Please enter your email and password."; return; }
+  if (!email.includes("@")) { errEl.style.display="block"; errEl.textContent="Please enter a valid university email."; return; }
+  const stored = JSON.parse(localStorage.getItem('welearn_account') || 'null');
+  if (stored && stored.email === email && stored.password === pw) {
+    errEl.style.display = "none";
+    const btn = document.getElementById("login-btn"); btn.textContent="Signing in…"; btn.disabled=true;
+    setTimeout(() => {
+      currentUser = { name:stored.name, email:stored.email, initials:initials(stored.name), major:stored.major||'', year:stored.year||'' };
+      btn.textContent="Sign In →"; btn.disabled=false; showApp();
+    }, 800);
+    return;
+  }
+  if (stored && stored.email !== email) { errEl.style.display="block"; errEl.textContent="No account found with that email."; return; }
+  errEl.style.display="none";
+  const btn = document.getElementById("login-btn"); btn.textContent="Signing in…"; btn.disabled=true;
+  setTimeout(() => {
+    const raw=email.split("@")[0], name=raw.charAt(0).toUpperCase()+raw.slice(1);
+    currentUser = { name, email, initials:initials(name) };
+    btn.textContent="Sign In →"; btn.disabled=false; showApp();
+  }, 800);
+}
+
+document.getElementById("signup-btn").addEventListener("click", doSignup);
+document.getElementById("signup-password").addEventListener("keydown", e => { if(e.key==="Enter") doSignup(); });
+
+function doSignup() {
+  const name=document.getElementById("signup-name").value.trim();
+  const email=document.getElementById("signup-email").value.trim();
+  const pw=document.getElementById("signup-password").value;
+  const errEl=document.getElementById("signup-error");
+  if (!name) { errEl.style.display="block"; errEl.textContent="Please enter your full name."; return; }
+  if (!email||!email.includes("@")) { errEl.style.display="block"; errEl.textContent="Please enter a valid university email."; return; }
+  if (pw.length<6) { errEl.style.display="block"; errEl.textContent="Password must be at least 6 characters."; return; }
+  errEl.style.display="none";
+  const btn=document.getElementById("signup-btn"); btn.textContent="Creating…"; btn.disabled=true;
+  setTimeout(() => {
+    localStorage.setItem('welearn_account', JSON.stringify({name,email,password:pw,major:'',year:'',classes:[]}));
+    btn.textContent="Create Account →"; btn.disabled=false;
+    currentUser = { name, email, initials:initials(name), major:'', year:'' };
+    showApp();
+  }, 600);
+}
+
+// =====================================================================
+// APP
+// =====================================================================
 function showApp() {
-  const app = document.getElementById("app-page");
-  app.classList.remove("hidden");
+  document.getElementById("login-page").classList.add("hidden");
+  document.getElementById("app-page").classList.remove("hidden");
 
-  // populate topbar
   document.getElementById("avatar-initials").textContent = currentUser.initials;
   document.getElementById("dd-name").textContent         = currentUser.name;
   document.getElementById("dd-email").textContent        = currentUser.email;
   document.getElementById("settings-avatar").textContent = currentUser.initials;
   document.getElementById("settings-name").textContent   = currentUser.name;
   document.getElementById("settings-email").textContent  = currentUser.email;
-  if (document.getElementById("settings-major"))   document.getElementById("settings-major").textContent  = currentUser.major || 'Undeclared';
-  if (document.getElementById("settings-year"))    document.getElementById("settings-year").textContent   = currentUser.year  || '–';
-  if (document.getElementById("settings-courses")) document.getElementById("settings-courses").textContent = COURSES.length + ' course' + (COURSES.length !== 1 ? 's' : '') + ' this semester';
+  document.getElementById("settings-major").textContent  = currentUser.major||'Undeclared';
+  document.getElementById("settings-year").textContent   = currentUser.year||'–';
+  document.getElementById("settings-courses").textContent= COURSES.length+' course'+(COURSES.length!==1?'s':'')+' this semester';
   document.getElementById("welcome-hi").textContent      = `Welcome back, ${currentUser.name.split(" ")[0]} 👋`;
 
   buildSidebar();
-  renderCourse();
-  startTimer();
+  showSkeletonLoader();
+
+  // Initial load + poll every 5 s for live updates from other users
+  loadSharedSessions();
+  if (pollInterval) clearInterval(pollInterval);
+  pollInterval = setInterval(loadSharedSessions, 5000);
+
+  startExpiryTimer();
+  renderNotifications();
+}
+
+function showSkeletonLoader() {
+  document.getElementById("course-section").innerHTML = `
+    <div class="panel-header">
+      <div class="panel-title-row"><div class="panel-color-dot" style="background:${selectedCourse.color}"></div><div class="panel-title">${selectedCourse.code}</div></div>
+      <div class="panel-subtitle">Loading shared sessions…</div>
+    </div>
+    <div class="skeleton-grid">${[1,2,3].map(()=>`<div class="skeleton-card"><div class="skeleton-line" style="height:14px;width:60%"></div><div class="skeleton-line" style="height:10px;width:40%"></div><div class="skeleton-line" style="height:70px;margin-top:18px"></div><div class="skeleton-line" style="height:8px;margin-top:12px"></div></div>`).join('')}</div>`;
 }
 
 // =====================================================================
@@ -773,20 +564,11 @@ function showApp() {
 // =====================================================================
 function buildSidebar() {
   const sb = document.getElementById("sidebar");
-  // remove old course items
   sb.querySelectorAll(".course-item").forEach(el => el.remove());
-
   COURSES.forEach(course => {
     const btn = document.createElement("button");
-    btn.className = "course-item" + (course.id === selectedCourse.id ? " active" : "");
-    btn.dataset.id = course.id;
-    btn.innerHTML = `
-      <div class="course-dot" style="background:${course.color}"></div>
-      <div class="course-info">
-        <div class="course-code">${course.code}</div>
-        <div class="course-name">${course.name}</div>
-      </div>
-      <div class="course-count" id="count-${course.id}">${activeRequests(course.id).length}</div>`;
+    btn.className = "course-item"+(course.id===selectedCourse.id?" active":"");
+    btn.innerHTML = `<div class="course-dot" style="background:${course.color}"></div><div class="course-info"><div class="course-code">${course.code}</div><div class="course-name">${course.name}</div></div><div class="course-count" id="count-${course.id}">…</div>`;
     btn.addEventListener("click", () => {
       selectedCourse = course;
       sb.querySelectorAll(".course-item").forEach(b => b.classList.remove("active"));
@@ -798,119 +580,112 @@ function buildSidebar() {
 }
 
 function updateCounts() {
-  COURSES.forEach(c => {
-    const el = document.getElementById("count-"+c.id);
-    if (el) el.textContent = activeRequests(c.id).length;
+  COURSES.forEach(c => { const el=document.getElementById("count-"+c.id); if(el) el.textContent=activeRequests(c.id).length; });
+}
+
+// =====================================================================
+// RENDER
+// =====================================================================
+function renderCourse() {
+  const reqs = activeRequests(selectedCourse.id);
+  const cards = reqs.length===0
+    ? `<div class="empty-state"><div class="empty-icon">🔍</div><div class="empty-title">No active sessions</div><div>Be the first to create a study session for ${selectedCourse.code}!</div></div>`
+    : `<div class="requests-grid">${reqs.map(r=>buildCard(r)).join("")}</div>`;
+
+  document.getElementById("course-section").innerHTML = `
+    <div class="panel-header">
+      <div class="panel-title-row"><div class="panel-color-dot" style="background:${selectedCourse.color}"></div><div class="panel-title">${selectedCourse.code}</div></div>
+      <div class="panel-subtitle">${selectedCourse.name} — ${reqs.length} active request${reqs.length!==1?"s":""}</div>
+      <div class="panel-actions"><button class="btn-primary" id="open-create">+ Create Study Session</button></div>
+    </div>${cards}`;
+
+  document.getElementById("open-create").addEventListener("click", openCreateModal);
+
+  // Wire join/cancel buttons
+  reqs.forEach(req => {
+    const btn = document.getElementById('join-'+req.id);
+    if (!btn || btn.disabled) return;
+    btn.addEventListener('click', () => {
+      if (req.creatorEmail === currentUser.email) cancelSession(req);
+      else joinSession(req);
+    });
   });
 }
 
-// =====================================================================
-// COURSE SECTION
-// =====================================================================
-function renderCourse() {
-  const sec = document.getElementById("course-section");
-  const reqs = activeRequests(selectedCourse.id);
-
-  let cards = "";
-  if (reqs.length === 0) {
-    cards = `<div class="empty-state">
-      <div class="empty-icon">🔍</div>
-      <div class="empty-title">No active sessions</div>
-      <div>Be the first to create a study session for ${selectedCourse.code}!</div>
-    </div>`;
-  } else {
-    cards = `<div class="requests-grid" id="cards-grid">${reqs.map(r => buildCard(r)).join("")}</div>`;
-  }
-
-  sec.innerHTML = `
-    <div class="panel-header">
-      <div class="panel-title-row">
-        <div class="panel-color-dot" style="background:${selectedCourse.color}"></div>
-        <div class="panel-title">${selectedCourse.code}</div>
-      </div>
-      <div class="panel-subtitle">${selectedCourse.name} — ${reqs.length} active request${reqs.length!==1?"s":""}</div>
-      <div class="panel-actions">
-        <button class="btn-primary" id="open-create">+ Create Study Session</button>
-      </div>
-    </div>
-    ${cards}`;
-
-  document.getElementById("open-create").addEventListener("click", openCreateModal);
-}
-
 function buildCard(req) {
-  const tl   = getTimeLeft(req);
-  const pct  = (tl / req.expiresMs) * 100;
+  const tl = getTimeLeft(req), pct = (tl/req.expiresMs)*100;
   const sPct = Math.min(100,(req.filled/req.slots)*100);
   const full = req.filled >= req.slots;
-  const exp  = tl === 0;
+  const isOwn = req.creatorEmail === currentUser.email;
+  const joined = (req.joinedBy||[]).includes(currentUser.email);
+
+  let btnLabel, btnDisabled, btnClass;
+  if (isOwn)        { btnLabel="Cancel My Session"; btnClass="join-btn mine"; btnDisabled=false; }
+  else if (joined)  { btnLabel="✓ Joined";           btnClass="join-btn";      btnDisabled=true;  }
+  else if (full)    { btnLabel="Full";               btnClass="join-btn";      btnDisabled=true;  }
+  else              { btnLabel="Join Session";        btnClass="join-btn";      btnDisabled=false; }
 
   return `
   <div class="request-card" id="card-${req.id}">
     <div class="card-accent-bar" style="background:${selectedCourse.color}"></div>
     <div class="card-top">
       <div class="card-avatar" style="background:${selectedCourse.color}">${req.avatar}</div>
-      <div>
-        <div class="card-creator">${req.creator}</div>
-        <div class="card-time">Posted a study request</div>
-      </div>
-      ${exp ? `<span class="expired-tag">Expired</span>` : ""}
+      <div><div class="card-creator">${req.creator}</div><div class="card-time">Posted a study request</div></div>
+      ${isOwn ? `<span class="my-tag">Mine</span>` : ""}
     </div>
     <div class="card-details">
-      <div class="card-detail">
-        <div class="card-detail-label">📅 Date</div>
-        <div class="card-detail-val">${fmtDate(req.date)}</div>
-      </div>
-      <div class="card-detail">
-        <div class="card-detail-label">🕐 Time</div>
-        <div class="card-detail-val">${req.time}</div>
-      </div>
-      <div class="card-detail full-width">
-        <div class="card-detail-label">📍 Location</div>
-        <div class="card-detail-val">${req.location}</div>
-      </div>
+      <div class="card-detail"><div class="card-detail-label">📅 Date</div><div class="card-detail-val">${fmtDate(req.date)}</div></div>
+      <div class="card-detail"><div class="card-detail-label">🕐 Time</div><div class="card-detail-val">${req.time}</div></div>
+      <div class="card-detail full-width"><div class="card-detail-label">📍 Location</div><div class="card-detail-val">${req.location}</div></div>
     </div>
     <div class="slots-wrap">
       <div class="slots-bar"><div class="slots-fill" style="width:${sPct}%;background:${full?"#FF6B6B":selectedCourse.color}"></div></div>
       <div class="slots-label"><span>${req.filled} / ${req.slots} people</span><span>${full?"Full":`${req.slots-req.filled} spots left`}</span></div>
     </div>
-    ${!exp ? `
     <div class="expiry-wrap">
       <div class="expiry-bar"><div class="expiry-fill" id="expbar-${req.id}" style="width:${pct}%"></div></div>
       <div class="expiry-label" id="explbl-${req.id}">Expires in ${fmtTimeLeft(tl)}</div>
-    </div>` : ""}
-    <button class="join-btn" ${exp||full?"disabled":""}>
-      ${exp?"Expired":full?"Full":"Join Session"}
-    </button>
+    </div>
+    <button id="join-${req.id}" class="${btnClass}" ${btnDisabled?"disabled":""}>${btnLabel}</button>
   </div>`;
 }
 
 // =====================================================================
-// TIMER — updates expiry bars every second
+// JOIN / CANCEL
 // =====================================================================
-let timerInterval = null;
-function startTimer() {
+async function joinSession(req) {
+  if ((req.joinedBy||[]).includes(currentUser.email) || req.filled>=req.slots) return;
+  req.filled += 1;
+  req.joinedBy = [...(req.joinedBy||[]), currentUser.email];
+  const idx = (sharedSessions[selectedCourse.id]||[]).findIndex(r=>r.id===req.id);
+  if (idx!==-1) sharedSessions[selectedCourse.id][idx] = req;
+  await persistSession(selectedCourse.id, req);
+  if (notifEnabled) { notifications.unshift({id:Date.now(),course:selectedCourse.code,text:`You joined a session for ${selectedCourse.code} by ${req.creator}`,time:"just now"}); renderNotifications(); }
+  renderCourse(); updateCounts();
+}
+
+async function cancelSession(req) {
+  if (!confirm(`Cancel your study session for ${selectedCourse.code}? This removes it for everyone.`)) return;
+  if (sharedSessions[selectedCourse.id]) sharedSessions[selectedCourse.id] = sharedSessions[selectedCourse.id].filter(r=>r.id!==req.id);
+  await removeSession(selectedCourse.id, req.id);
+  renderCourse(); updateCounts();
+}
+
+// =====================================================================
+// EXPIRY COUNTDOWN (client-side, every 1 s)
+// =====================================================================
+function startExpiryTimer() {
   if (timerInterval) clearInterval(timerInterval);
   timerInterval = setInterval(() => {
-    const allReqs = Object.values(REQUESTS).flat();
     let needsRerender = false;
-
-    allReqs.forEach(req => {
-      const tl  = getTimeLeft(req);
-      const pct = (tl / req.expiresMs) * 100;
-
-      const bar = document.getElementById("expbar-"+req.id);
-      const lbl = document.getElementById("explbl-"+req.id);
-      if (bar) bar.style.width = pct + "%";
-      if (lbl) lbl.textContent = "Expires in " + fmtTimeLeft(tl);
-
-      if (tl === 0) needsRerender = true;
+    Object.values(sharedSessions).flat().forEach(req => {
+      const tl=getTimeLeft(req), pct=(tl/req.expiresMs)*100;
+      const bar=document.getElementById("expbar-"+req.id), lbl=document.getElementById("explbl-"+req.id);
+      if (bar) bar.style.width=pct+"%";
+      if (lbl) lbl.textContent="Expires in "+fmtTimeLeft(tl);
+      if (tl===0) needsRerender=true;
     });
-
-    if (needsRerender) {
-      renderCourse();
-      updateCounts();
-    }
+    if (needsRerender) { renderCourse(); updateCounts(); }
   }, 1000);
 }
 
@@ -919,163 +694,112 @@ function startTimer() {
 // =====================================================================
 function openCreateModal() {
   document.getElementById("create-modal").classList.remove("hidden");
-  // set today as default date
-  const today = new Date().toISOString().split("T")[0];
-  document.getElementById("c-date").value = today;
+  document.getElementById("c-date").value = new Date().toISOString().split("T")[0];
+  const now=new Date();
+  document.getElementById("c-time").value=`${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}`;
+  document.getElementById("create-error").style.display="none";
 }
-document.getElementById("create-cancel").addEventListener("click", () => {
-  document.getElementById("create-modal").classList.add("hidden");
-});
-document.getElementById("create-modal").addEventListener("click", e => {
-  if (e.target === e.currentTarget) e.currentTarget.classList.add("hidden");
-});
-document.getElementById("c-duration").addEventListener("input", function() {
-  document.getElementById("c-hint-dur").textContent = Math.min(30, parseInt(this.value)||20);
-});
-document.getElementById("create-submit").addEventListener("click", () => {
-  const slots    = parseInt(document.getElementById("c-slots").value)    || 4;
-  const duration = Math.min(30, parseInt(document.getElementById("c-duration").value) || 20);
-  const date     = document.getElementById("c-date").value;
-  const time     = document.getElementById("c-time").value;
-  const location = document.getElementById("c-location").value.trim();
+document.getElementById("create-cancel").addEventListener("click", ()=>document.getElementById("create-modal").classList.add("hidden"));
+document.getElementById("create-modal").addEventListener("click", e=>{if(e.target===e.currentTarget) e.currentTarget.classList.add("hidden");});
+document.getElementById("c-duration").addEventListener("input", function(){ document.getElementById("c-hint-dur").textContent=Math.min(30,parseInt(this.value)||20); });
 
-  if (!date || !time || !location) {
-    document.getElementById("c-location").focus();
-    return;
+document.getElementById("create-submit").addEventListener("click", async () => {
+  const slots   = parseInt(document.getElementById("c-slots").value)||4;
+  const duration= Math.min(30,parseInt(document.getElementById("c-duration").value)||20);
+  const date    = document.getElementById("c-date").value;
+  const time    = document.getElementById("c-time").value;
+  const location= document.getElementById("c-location").value.trim();
+  const errEl   = document.getElementById("create-error");
+
+  if (!date||!time||!location) {
+    errEl.textContent="Please fill in all fields: date, time, and location."; errEl.style.display="block";
+    if (!location) document.getElementById("c-location").focus(); return;
   }
+  errEl.style.display="none";
+  const btn=document.getElementById("create-submit"); btn.textContent="Posting…"; btn.disabled=true;
 
   const req = {
-    id: Date.now(),
+    id: currentUser.email.replace(/[^a-z0-9]/gi,'_')+'_'+Date.now(),
     creator: currentUser.name,
+    creatorEmail: currentUser.email,
     avatar: currentUser.initials,
-    slots,
-    filled: 1,
-    date,
-    time,
-    location,
-    duration,
+    slots, filled:1,
+    joinedBy: [currentUser.email],
+    date, time, location, duration,
     createdAt: Date.now(),
-    expiresMs: duration * 60000,
+    expiresMs: duration*60000,
   };
 
-  if (!REQUESTS[selectedCourse.id]) REQUESTS[selectedCourse.id] = [];
-  REQUESTS[selectedCourse.id].unshift(req);
+  // Optimistic local update
+  if (!sharedSessions[selectedCourse.id]) sharedSessions[selectedCourse.id]=[];
+  sharedSessions[selectedCourse.id].unshift(req);
 
-  if (notifEnabled) {
-    notifications.unshift({
-      id: Date.now(),
-      course: selectedCourse.code,
-      text: `You created a study session for ${selectedCourse.code}`,
-      time: "just now",
-    });
-    renderNotifications();
-  }
+  // Persist to shared storage — other users will see this on their next poll
+  await persistSession(selectedCourse.id, req);
 
+  if (notifEnabled) { notifications.unshift({id:Date.now(),course:selectedCourse.code,text:`You created a study session for ${selectedCourse.code}`,time:"just now"}); renderNotifications(); }
+
+  btn.textContent="Post Request →"; btn.disabled=false;
   document.getElementById("create-modal").classList.add("hidden");
-  document.getElementById("c-location").value = "";
-  document.getElementById("c-time").value = "";
-
-  renderCourse();
-  updateCounts();
+  document.getElementById("c-location").value="";
+  renderCourse(); updateCounts();
 });
 
 // =====================================================================
 // NOTIFICATIONS
 // =====================================================================
-document.getElementById("notif-btn").addEventListener("click", e => {
-  e.stopPropagation();
-  document.getElementById("notif-panel").classList.toggle("hidden");
-  document.getElementById("profile-dropdown").classList.add("hidden");
-});
-document.getElementById("notif-toggle").addEventListener("click", () => {
-  notifEnabled = !notifEnabled;
-  const track = document.getElementById("notif-toggle");
-  const label = document.getElementById("notif-toggle-label");
-  track.classList.toggle("on", notifEnabled);
-  label.textContent = notifEnabled ? "On" : "Off";
-  document.getElementById("notif-dot").style.display = notifEnabled ? "" : "none";
+document.getElementById("notif-btn").addEventListener("click", e=>{e.stopPropagation();document.getElementById("notif-panel").classList.toggle("hidden");document.getElementById("profile-dropdown").classList.add("hidden");});
+document.getElementById("notif-toggle").addEventListener("click", ()=>{
+  notifEnabled=!notifEnabled;
+  document.getElementById("notif-toggle").classList.toggle("on",notifEnabled);
+  document.getElementById("notif-toggle-label").textContent=notifEnabled?"On":"Off";
+  document.getElementById("notif-dot").style.display=notifEnabled?"":"none";
   renderNotifications();
 });
-
 function renderNotifications() {
-  const list = document.getElementById("notif-list");
-  const dot  = document.getElementById("notif-dot");
-
-  if (!notifEnabled) {
-    list.innerHTML = `<div class="notif-empty">Notifications are turned off</div>`;
-    dot.style.display = "none";
-    return;
-  }
-  dot.style.display = notifications.length > 0 ? "" : "none";
-  if (notifications.length === 0) {
-    list.innerHTML = `<div class="notif-empty">No notifications yet</div>`;
-    return;
-  }
-  list.innerHTML = notifications.map(n => `
-    <div class="notif-item">
-      <span class="notif-course">${n.course}</span> — ${n.text}
-      <div class="notif-meta">${n.time}</div>
-    </div>`).join("");
+  const list=document.getElementById("notif-list"), dot=document.getElementById("notif-dot");
+  if (!notifEnabled){list.innerHTML=`<div class="notif-empty">Notifications are turned off</div>`;dot.style.display="none";return;}
+  dot.style.display=notifications.length>0?"":"none";
+  list.innerHTML=notifications.length===0?`<div class="notif-empty">No notifications yet</div>`:notifications.map(n=>`<div class="notif-item"><span class="notif-course">${n.course}</span> — ${n.text}<div class="notif-meta">${n.time}</div></div>`).join("");
 }
 
 // =====================================================================
-// PROFILE DROPDOWN
+// PROFILE / SETTINGS / LOGOUT
 // =====================================================================
-document.getElementById("avatar-btn").addEventListener("click", e => {
-  e.stopPropagation();
-  document.getElementById("profile-dropdown").classList.toggle("hidden");
-  document.getElementById("notif-panel").classList.add("hidden");
-});
-document.getElementById("dd-settings").addEventListener("click", () => {
+document.getElementById("avatar-btn").addEventListener("click",e=>{e.stopPropagation();document.getElementById("profile-dropdown").classList.toggle("hidden");document.getElementById("notif-panel").classList.add("hidden");});
+document.getElementById("dd-settings").addEventListener("click",()=>{document.getElementById("profile-dropdown").classList.add("hidden");document.getElementById("settings-modal").classList.remove("hidden");});
+document.getElementById("dd-delete").addEventListener("click",()=>{
   document.getElementById("profile-dropdown").classList.add("hidden");
-  document.getElementById("settings-modal").classList.remove("hidden");
+  if (!confirm("Delete your account? This cannot be undone.")) return;
+  ['studylink_account','studylink_classes','welearn_account','studylink_new_signup','studylink_return_to'].forEach(k=>localStorage.removeItem(k));
+  location.reload();
 });
-document.getElementById("dd-delete").addEventListener("click", () => {
+document.getElementById("dd-logout").addEventListener("click",()=>{
+  if(pollInterval) clearInterval(pollInterval);
+  if(timerInterval) clearInterval(timerInterval);
+  ['studylink_account','studylink_classes','welearn_account'].forEach(k=>localStorage.removeItem(k));
+  currentUser=null; sharedSessions={};
+  document.getElementById("app-page").classList.add("hidden");
+  document.getElementById("login-page").classList.remove("hidden");
+  document.getElementById("login-email").value="";
+  document.getElementById("login-password").value="";
   document.getElementById("profile-dropdown").classList.add("hidden");
-  if (!confirm("Delete your account? This will remove all StudyLink and WeLearn data and cannot be undone.")) return;
-  ['studylink_account','studylink_classes','welearn_account',
-   'studylink_new_signup','studylink_return_to'].forEach(k => localStorage.removeItem(k));
-  window.location.href = 'studylink.html';
 });
-document.getElementById("dd-logout").addEventListener("click", () => {
-  if (timerInterval) clearInterval(timerInterval);
-  ['studylink_account','studylink_classes','welearn_account',
-   'studylink_new_signup','studylink_return_to'].forEach(k => localStorage.removeItem(k));
-  window.location.href = 'studylink.html';
-});
+document.getElementById("settings-close").addEventListener("click",()=>document.getElementById("settings-modal").classList.add("hidden"));
+document.getElementById("settings-modal").addEventListener("click",e=>{if(e.target===e.currentTarget) e.currentTarget.classList.add("hidden");});
+document.addEventListener("click",()=>{document.getElementById("profile-dropdown").classList.add("hidden");document.getElementById("notif-panel").classList.add("hidden");});
 
 // =====================================================================
-// SETTINGS MODAL
+// AUTO-LOGIN
 // =====================================================================
-document.getElementById("settings-close").addEventListener("click", () => {
-  document.getElementById("settings-modal").classList.add("hidden");
-});
-document.getElementById("settings-modal").addEventListener("click", e => {
-  if (e.target === e.currentTarget) e.currentTarget.classList.add("hidden");
-});
-
-// =====================================================================
-// CLOSE DROPDOWNS ON OUTSIDE CLICK
-// =====================================================================
-document.addEventListener("click", () => {
-  document.getElementById("profile-dropdown").classList.add("hidden");
-  document.getElementById("notif-panel").classList.add("hidden");
-});
-
-// =====================================================================
-// INIT NOTIFICATIONS
-// =====================================================================
-renderNotifications();
-// Auto-login: check WeLearn account first, then StudyLink account
 (function init() {
-  const wlAcct = JSON.parse(localStorage.getItem('welearn_account') || 'null');
-  const slAcct = _savedAccount.user || null;
-
-  if (wlAcct && wlAcct.name) {
-    currentUser = { name: wlAcct.name, email: wlAcct.email, initials: initials(wlAcct.name), major: wlAcct.major || '', year: wlAcct.year || '' };
+  const wlAcct=JSON.parse(localStorage.getItem('welearn_account')||'null');
+  const slAcct=_savedAccount.user||null;
+  if (wlAcct&&wlAcct.name) {
+    currentUser={name:wlAcct.name,email:wlAcct.email,initials:initials(wlAcct.name),major:wlAcct.major||'',year:wlAcct.year||''};
     showApp();
-  } else if (slAcct && slAcct.name) {
-    currentUser = { name: slAcct.name, email: slAcct.name.toLowerCase().replace(/ /g,'') + '@berkeley.edu', initials: initials(slAcct.name), major: slAcct.major || '', year: slAcct.year || '' };
+  } else if (slAcct&&slAcct.name) {
+    currentUser={name:slAcct.name,email:slAcct.name.toLowerCase().replace(/ /g,'')+'@berkeley.edu',initials:initials(slAcct.name),major:slAcct.major||'',year:slAcct.year||''};
     showApp();
   } else {
     window.location.href = 'studylink.html';
