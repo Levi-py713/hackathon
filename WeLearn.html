@@ -737,6 +737,18 @@
   .join-btn:hover:not(:disabled) { background: rgba(91,142,255,0.18); }
   .join-btn:disabled { opacity: 0.38; cursor: not-allowed; }
 
+  /* ===== MODAL VALIDATION ERROR ===== */
+  .modal-error {
+    background: rgba(255,107,107,0.1);
+    border: 1px solid rgba(255,107,107,0.2);
+    color: var(--accent2);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 12px;
+    margin-bottom: 12px;
+    display: none;
+  }
+
   .empty-state {
     text-align: center; padding: 70px 40px; color: var(--text2);
   }
@@ -972,6 +984,7 @@
 <div class="modal-overlay hidden" id="create-modal">
   <div class="modal">
     <div class="modal-title">Create Study Session</div>
+    <div class="modal-error" id="create-error"></div>
     <div class="form-row-2">
       <div>
         <label class="form-label">Max People</label>
@@ -1085,9 +1098,6 @@ function activeRequests(courseId) {
 }
 
 // =====================================================================
-// LOGIN
-// =====================================================================
-// =====================================================================
 // AUTH TAB SWITCHER
 // =====================================================================
 function switchAuthTab(tab) {
@@ -1115,7 +1125,6 @@ function doLogin() {
   if (!email.includes("@")) {
     errEl.style.display = "block"; errEl.textContent = "Please enter a valid university email."; return;
   }
-  // Check if account exists in localStorage
   const stored = JSON.parse(localStorage.getItem('welearn_account') || 'null');
   if (stored && stored.email === email && stored.password === password) {
     errEl.style.display = "none";
@@ -1128,7 +1137,6 @@ function doLogin() {
     }, 800);
     return;
   }
-  // Fallback: accept any valid email (demo mode)
   if (stored && stored.email !== email) {
     errEl.style.display = "block"; errEl.textContent = "No account found with that email."; return;
   }
@@ -1170,17 +1178,13 @@ function doSignup() {
   btn.textContent = "Connecting to bCourses…"; btn.disabled = true;
 
   setTimeout(() => {
-    // Save partial account — will be completed after bCourses setup
     const account = { name, email, password, major: '', year: '', classes: [] };
     localStorage.setItem('welearn_account', JSON.stringify(account));
-    // Tell studylink.html who this is and to come back here when done
     localStorage.setItem('studylink_new_signup', JSON.stringify({ name, email }));
     localStorage.setItem('studylink_return_to', 'WeLearn.html');
-    // Clear any old profile data so setup runs fresh
     localStorage.removeItem('studylink_account');
     localStorage.removeItem('studylink_classes');
     btn.textContent = "Create Account →"; btn.disabled = false;
-    // Redirect to StudyLink for bCourses auth + profile setup
     window.location.href = 'studylink.html';
   }, 600);
 }
@@ -1190,7 +1194,6 @@ function showApp() {
   const app = document.getElementById("app-page");
   app.classList.remove("hidden");
 
-  // populate topbar
   document.getElementById("avatar-initials").textContent = currentUser.initials;
   document.getElementById("dd-name").textContent         = currentUser.name;
   document.getElementById("dd-email").textContent        = currentUser.email;
@@ -1212,7 +1215,6 @@ function showApp() {
 // =====================================================================
 function buildSidebar() {
   const sb = document.getElementById("sidebar");
-  // remove old course items
   sb.querySelectorAll(".course-item").forEach(el => el.remove());
 
   COURSES.forEach(course => {
@@ -1325,7 +1327,7 @@ function buildCard(req) {
 }
 
 // =====================================================================
-// TIMER — updates expiry bars every second
+// TIMER
 // =====================================================================
 let timerInterval = null;
 function startTimer() {
@@ -1354,14 +1356,23 @@ function startTimer() {
 }
 
 // =====================================================================
-// CREATE MODAL
+// CREATE MODAL — FIXED: default time pre-filled, visible validation error
 // =====================================================================
 function openCreateModal() {
   document.getElementById("create-modal").classList.remove("hidden");
-  // set today as default date
+  // Set today as default date
   const today = new Date().toISOString().split("T")[0];
   document.getElementById("c-date").value = today;
+  // ✅ FIX: Set current time as default so validation doesn't silently fail
+  const now = new Date();
+  const hh = String(now.getHours()).padStart(2, "0");
+  const mm = String(now.getMinutes()).padStart(2, "0");
+  document.getElementById("c-time").value = `${hh}:${mm}`;
+  // Clear any previous error
+  const errEl = document.getElementById("create-error");
+  errEl.style.display = "none";
 }
+
 document.getElementById("create-cancel").addEventListener("click", () => {
   document.getElementById("create-modal").classList.add("hidden");
 });
@@ -1377,11 +1388,17 @@ document.getElementById("create-submit").addEventListener("click", () => {
   const date     = document.getElementById("c-date").value;
   const time     = document.getElementById("c-time").value;
   const location = document.getElementById("c-location").value.trim();
+  const errEl    = document.getElementById("create-error");
 
+  // ✅ FIX: Show a visible inline error instead of silently doing nothing
   if (!date || !time || !location) {
-    document.getElementById("c-location").focus();
+    errEl.textContent = "Please fill in all fields: date, time, and location.";
+    errEl.style.display = "block";
+    if (!location) document.getElementById("c-location").focus();
+    else if (!time) document.getElementById("c-time").focus();
     return;
   }
+  errEl.style.display = "none";
 
   const req = {
     id: Date.now(),
@@ -1412,7 +1429,6 @@ document.getElementById("create-submit").addEventListener("click", () => {
 
   document.getElementById("create-modal").classList.add("hidden");
   document.getElementById("c-location").value = "";
-  document.getElementById("c-time").value = "";
 
   renderCourse();
   updateCounts();
@@ -1510,20 +1526,17 @@ document.addEventListener("click", () => {
 });
 
 // =====================================================================
-// INIT NOTIFICATIONS
+// INIT
 // =====================================================================
 renderNotifications();
-// Auto-login: check WeLearn account first, then StudyLink account
 (function init() {
   const wlAcct = JSON.parse(localStorage.getItem('welearn_account') || 'null');
   const slAcct = _savedAccount.user || null;
 
   if (wlAcct && wlAcct.name) {
-    // Returning WeLearn user
     currentUser = { name: wlAcct.name, email: wlAcct.email, initials: initials(wlAcct.name), major: wlAcct.major || '', year: wlAcct.year || '' };
     showApp();
   } else if (slAcct && slAcct.name) {
-    // Coming from StudyLink profile setup
     currentUser = { name: slAcct.name, email: slAcct.name.toLowerCase().replace(/ /g,'') + '@berkeley.edu', initials: initials(slAcct.name), major: slAcct.major || '', year: slAcct.year || '' };
     showApp();
   } else {
