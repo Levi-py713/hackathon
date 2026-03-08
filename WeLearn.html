@@ -860,28 +860,17 @@
 // =====================================================================
 // DATA
 // =====================================================================
-const COURSES = [
-  { id: 1, code: "CS 301",   name: "Data Structures & Algorithms", color: "#4F8EF7" },
-  { id: 2, code: "MATH 241", name: "Multivariable Calculus",        color: "#F76B4F" },
-  { id: 3, code: "PHYS 210", name: "Electromagnetism",              color: "#4FCF8E" },
-  { id: 4, code: "ENGL 201", name: "Technical Writing",             color: "#CF4FBF" },
-  { id: 5, code: "ECON 102", name: "Macroeconomics",                color: "#F7C94F" },
-];
+const COURSE_COLORS = ["#4F8EF7","#F76B4F","#4FCF8E","#CF4FBF","#F7C94F","#5B8EFF","#FF6B6B","#A78BFA","#34D399","#FB923C"];
+const CATALOG_TITLES = {"CS 61A":"Structure & Interpretation of Computer Programs","CS 61B":"Data Structures","CS 61C":"Great Ideas in Computer Architecture","CS 70":"Discrete Mathematics & Probability Theory","CS 161":"Computer Security","CS 162":"Operating Systems & System Programming","CS 170":"Efficient Algorithms & Intractable Problems","CS 186":"Introduction to Database Systems","CS 188":"Introduction to Artificial Intelligence","CS 189":"Introduction to Machine Learning","EECS 16A":"Designing Information Devices & Systems I","EECS 16B":"Designing Information Devices & Systems II","MATH 1A":"Calculus","MATH 1B":"Calculus","MATH 53":"Multivariable Calculus","MATH 54":"Linear Algebra & Differential Equations","MATH 55":"Discrete Mathematics","MATH 110":"Abstract Linear Algebra","STAT 134":"Concepts of Probability","DATA 8":"Foundations of Data Science","DATA 100":"Principles & Techniques of Data Science","PHYSICS 7A":"Physics for Scientists & Engineers","PHYSICS 7B":"Physics for Scientists & Engineers","CHEM 1A":"General Chemistry","ECON 1":"Introduction to Economics","ECON 100A":"Microeconomic Theory","HIST 7A":"The United States from Settlement to Civil War","HISTORY 7B":"The United States Since the Civil War"};
+const _saved = JSON.parse(localStorage.getItem('studylink_classes') || '[]');
+const COURSES = (_saved.length ? _saved : ["CS 301","MATH 241","PHYS 210","ENGL 201","ECON 102"]).map((code, i) => ({
+  id: i + 1,
+  code,
+  name: CATALOG_TITLES[code] || code,
+  color: COURSE_COLORS[i % COURSE_COLORS.length],
+}));
 
-const REQUESTS = {
-  1: [
-    { id: 1, creator:"Jordan M.", avatar:"JM", slots:4, filled:2, date:"2026-03-09", time:"14:00", location:"Library Room 204",       duration:25, createdAt: Date.now() - 5*60000,  expiresMs: 25*60000 },
-    { id: 2, creator:"Priya S.",  avatar:"PS", slots:3, filled:1, date:"2026-03-08", time:"10:00", location:"Student Union Floor 3",  duration:20, createdAt: Date.now() - 12*60000, expiresMs: 20*60000 },
-  ],
-  2: [
-    { id: 3, creator:"Alex T.",  avatar:"AT", slots:5, filled:3, date:"2026-03-08", time:"16:00", location:"Math Building 110",       duration:30, createdAt: Date.now() - 2*60000,  expiresMs: 30*60000 },
-  ],
-  3: [],
-  4: [
-    { id: 4, creator:"Sam W.", avatar:"SW", slots:4, filled:4, date:"2026-03-10", time:"13:00", location:"Humanities Hall 5B",        duration:15, createdAt: Date.now() - 8*60000,  expiresMs: 15*60000 },
-  ],
-  5: [],
-};
+const REQUESTS = Object.fromEntries(COURSES.map(c => [c.id, []]));
 
 // =====================================================================
 // STATE
@@ -889,10 +878,7 @@ const REQUESTS = {
 let currentUser    = null;
 let selectedCourse = COURSES[0];
 let notifEnabled   = true;
-let notifications  = [
-  { id:1, course:"CS 301",   text:"Jordan M. created a new study session", time:"5 min ago" },
-  { id:2, course:"MATH 241", text:"Alex T. posted a request for Calculus", time:"12 min ago" },
-];
+let notifications  = [];
 
 // =====================================================================
 // HELPERS
