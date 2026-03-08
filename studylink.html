@@ -320,13 +320,20 @@ input, textarea { font-family: 'DM Sans', sans-serif; }
         <input class="sl-input" type="password" id="calnet-pass" placeholder="Enter your passphrase" style="margin-bottom:0" />
         <div style="height:22px;"></div>
         <button class="sl-btn" id="cal-btn" onclick="calLogin()">Authorize &amp; Continue →</button>
-        <div class="auth-switch">New to StudyLink? <a onclick="createAccount()">Create an account</a></div>
-        <div style="margin-top:12px;text-align:center;">
-          <a onclick="deleteAccount()" style="font-size:11px;color:rgba(255,107,107,0.5);cursor:pointer;transition:color 0.15s;" onmouseover="this.style.color='#FF6B6B'" onmouseout="this.style.color='rgba(255,107,107,0.5)'">Delete account</a>
-        </div>
+        <div class="auth-switch">New to StudyLink? <a onclick="showCreatePanel()">Create an account</a></div>
+
       </div>
 
       <div class="sl-note">Demo only — no credentials are sent or stored</div>
+
+      <!-- Hidden create-account teaser panel -->
+      <div id="create-panel" style="display:none;margin-top:20px;padding-top:20px;border-top:1px solid var(--border);animation:fadeUp 0.35s ease;">
+        <div class="sl-heading" style="font-size:20px;margin-bottom:4px;">Create your account</div>
+        <div class="sl-subhead" style="margin-bottom:18px;">Connect bCourses to get started</div>
+        <button class="sl-btn" onclick="createAccount()" style="margin-bottom:10px;">Connect bCourses &amp; Set Up →</button>
+        <div class="auth-switch"><a onclick="hideCreatePanel()">← Back to sign in</a></div>
+      </div>
+
     </div>
   </div>
 
@@ -590,8 +597,19 @@ function showScreen(id) {
 //  AUTH TAB SWITCHER
 // ═══════════════════════════════════════════
 function switchAuthTab(tab) {
-  // single tab - always signin
   document.getElementById('panel-signin').classList.add('active');
+}
+
+function showCreatePanel() {
+  const panel = document.getElementById('create-panel');
+  panel.style.display = 'block';
+  setTimeout(() => {
+    panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 50);
+}
+
+function hideCreatePanel() {
+  document.getElementById('create-panel').style.display = 'none';
 }
 
 // ═══════════════════════════════════════════
@@ -619,7 +637,13 @@ function calLogin() {
     return;
   }
   const account = JSON.parse(raw);
-  if (!account.uid || account.uid !== id) {
+  // If account was created before uid/pass fields existed, prompt re-setup
+  if (!account.uid && !account.pass) {
+    err.style.display = 'block';
+    err.textContent = 'Account needs updating — please delete and create a new account.';
+    return;
+  }
+  if (account.uid !== id) {
     err.style.display = 'block';
     err.textContent = 'No account found for that University ID.';
     return;
