@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet" />
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { height: 100%; }
+html, body { height: 100%; scroll-behavior: smooth; overflow-y: auto; }
 
 :root {
   --bg:      #0D0F14;
@@ -37,8 +37,17 @@ input, textarea { font-family: 'DM Sans', sans-serif; }
   flex-direction: unset;
 }
 @media (max-width: 780px) {
-  #landing { grid-template-columns: 1fr; }
-  .sl-left { display: none !important; }
+  #landing {
+    grid-template-columns: 1fr;
+    grid-template-rows: 100vh auto;
+  }
+  .sl-left {
+    display: flex !important;
+    min-height: 100vh;
+  }
+  .sl-right {
+    min-height: 100vh;
+  }
 }
 
 /* Left hero */
@@ -370,6 +379,16 @@ input, textarea { font-family: 'DM Sans', sans-serif; }
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
         <div class="dark-field">
+          <label>University ID</label>
+          <input type="text" id="setup-uid" placeholder="e.g. 3034XXXXXX" oninput="checkReady()" />
+        </div>
+        <div class="dark-field">
+          <label>Create Passphrase</label>
+          <input type="password" id="setup-pass" placeholder="Min. 6 characters" oninput="checkReady()" />
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="dark-field">
           <label>Major</label>
           <input type="text" id="setup-major" placeholder="EECS, CS…" />
         </div>
@@ -470,6 +489,9 @@ const CATALOG = [
   {code:"ENGL 1A",   title:"Reading & Composition"},
   {code:"HIST 7A",   title:"The United States from Settlement to Civil War"},
   {code:"POLS 1",    title:"Introduction to Political Theory"},
+  {code:"POLSCI 1",  title:"Introduction to Political Science"},
+  {code:"POLSCI C135", title:"Politics of the Developing World"},
+  {code:"POLSCI C155", title:"Ethnic Politics in America"},
   {code:"PSYCH 1",   title:"General Psychology"},
 ];
 
@@ -479,10 +501,12 @@ const CATALOG = [
 // ═══════════════════════════════════════════
 const S = {
   user:        {name:"",major:"",year:"",bio:"",available:true},
-  classes:     [],   // codes the user has added
+  classes:     [],
   connected:   new Set(),
   setupAvail:  true,
   setupYear:   "",
+  uid:         "",
+  pass:        "",
 };
 
 // ═══════════════════════════════════════════
@@ -491,7 +515,7 @@ const S = {
 const ACCOUNT_KEY = 'studylink_account';
 
 function saveAccount() {
-  localStorage.setItem(ACCOUNT_KEY, JSON.stringify({ user: S.user, classes: S.classes }));
+  localStorage.setItem(ACCOUNT_KEY, JSON.stringify({ user: S.user, classes: S.classes, uid: S.uid, pass: S.pass }));
   localStorage.setItem('studylink_classes', JSON.stringify(S.classes));
 }
 
@@ -503,6 +527,8 @@ function loadAccount() {
     if (!account.user || !account.user.name) return false;
     S.user    = account.user;
     S.classes = account.classes || [];
+    S.uid     = account.uid  || '';
+    S.pass    = account.pass || '';
     S.classes.forEach(code => {
       if (!CATALOG.find(c => c.code === code))
         CATALOG.push({ code, title: 'Imported from bCourses' });
@@ -532,6 +558,13 @@ function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
+
+// Auto-scroll to sign-in card on load
+(function autoScroll() {
+  setTimeout(() => {
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  }, 900);
+})();
 
 // Auto-login returning user on page load
 (function checkReturningUser() {
@@ -574,25 +607,35 @@ function createAccount() {
 // ═══════════════════════════════════════════
 function calLogin() {
   const id   = document.getElementById('calnet-id').value.trim();
-  const pass = document.getElementById('calnet-pass').value.trim();
+  const pass = document.getElementById('calnet-pass').value;
   const err  = document.getElementById('sl-signin-err');
   const btn  = document.getElementById('cal-btn');
+  err.style.display = 'none';
   if (!id || !pass) { err.style.display='block'; err.textContent='Please enter both fields.'; return; }
-  // Check if account exists
-  const saved = localStorage.getItem(ACCOUNT_KEY);
-  if (!saved) {
+  const raw = localStorage.getItem(ACCOUNT_KEY);
+  if (!raw) {
     err.style.display = 'block';
-    err.textContent = 'No account found. Use “Create an account” to get started.';
+    err.textContent = 'No account found. Use \"Create an account\" to get started.';
     return;
   }
-  err.style.display = 'none';
+  const account = JSON.parse(raw);
+  if (!account.uid || account.uid !== id) {
+    err.style.display = 'block';
+    err.textContent = 'No account found for that University ID.';
+    return;
+  }
+  if (account.pass !== pass) {
+    err.style.display = 'block';
+    err.textContent = 'Wrong passphrase. Please try again.';
+    return;
+  }
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span> Signing in…';
   if (loadAccount()) {
     window.location.href = 'WeLearn.html';
   } else {
     err.style.display = 'block';
-    err.textContent = 'No account found. Use “Create an account” to get started.';
+    err.textContent = 'Could not load account. Please try again.';
     btn.disabled = false;
     btn.innerHTML = 'Authorize &amp; Continue →';
   }
@@ -710,13 +753,20 @@ function pickYearSelect(y) {
 }
 
 function checkReady() {
-  const name = document.getElementById('setup-name').value.trim();
-  document.getElementById('btn-enter').classList.toggle('ready', !!(name && S.setupYear));
+  const name = document.getElementById('setup-name')?.value.trim();
+  const uid  = document.getElementById('setup-uid')?.value.trim();
+  const pass = document.getElementById('setup-pass')?.value;
+  const ready = !!(name && S.setupYear && uid && pass && pass.length >= 6);
+  document.getElementById('btn-enter').classList.toggle('ready', ready);
 }
 
 function enterDash() {
   const name = document.getElementById('setup-name').value.trim();
-  if (!name || !S.setupYear) return;
+  const uid  = document.getElementById('setup-uid')?.value.trim();
+  const pass = document.getElementById('setup-pass')?.value;
+  if (!name || !S.setupYear || !uid || !pass || pass.length < 6) return;
+  S.uid  = uid;
+  S.pass = pass;
   S.user = {
     name,
     major:     document.getElementById('setup-major').value.trim() || 'Undeclared',

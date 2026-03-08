@@ -33,13 +33,13 @@ def normalize(name):
     name = re.sub(r'\s+Topic Reviews.*$', '', name, flags=re.IGNORECASE)
     name = re.sub(r'^SLC\s+', '', name, flags=re.IGNORECASE)
     name = name.strip()
-    name = re.sub(r'^([A-Za-z]+)(\d)', r'\1 \2', name)
+    name = re.sub(r'^([A-Za-z]+(?:\s[A-Za-z]+)?)([A-Z]?\d)', r'\1 \2', name)
     name = name.upper()
     aliases = {'EE 16A': 'EECS 16A', 'EE 16B': 'EECS 16B'}
     return aliases.get(name, name)
 
 def is_academic(raw_name, normalized):
-    if not re.match(r'^[A-Z]+(?:\s[A-Z]+)?\s[A-Z]?\d+[A-Z]?$', normalized):
+    if not re.match(r'^[A-Z]+(?:\s[A-Z]+)?\s[A-Z]?\d+[A-Z]*$', normalized):
         return False
     skip_keywords = ['training', 'enrollment', 'signatory', 'partysafe', 'shape',
                      'supernode', 'gbo', 'gba', 'aod', 'vb']

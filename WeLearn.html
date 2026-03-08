@@ -77,269 +77,6 @@
     to   { opacity: 1; transform: translateY(0); }
   }
 
-  /* ===== LOGIN PAGE ===== */
-  #login-page {
-    min-height: 100vh;
-    background: var(--bg);
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    overflow: hidden;
-  }
-  @media (max-width: 780px) {
-    #login-page { grid-template-columns: 1fr; }
-    .login-left { display: none !important; }
-  }
-
-  /* Left hero panel */
-  .login-left {
-    background: var(--surface);
-    border-right: 1px solid var(--border);
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    gap: 48px;
-    padding: 52px 52px 48px;
-    position: relative;
-    overflow: hidden;
-  }
-  .login-left-grid {
-    position: absolute; inset: 0;
-    background-image:
-      linear-gradient(rgba(91,142,255,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(91,142,255,0.04) 1px, transparent 1px);
-    background-size: 40px 40px;
-    pointer-events: none;
-  }
-  .login-left-glow {
-    position: absolute;
-    width: 500px; height: 500px;
-    border-radius: 50%;
-    background: radial-gradient(ellipse, rgba(91,142,255,0.12) 0%, transparent 65%);
-    bottom: -120px; right: -120px;
-    pointer-events: none;
-  }
-  .login-left-glow2 {
-    position: absolute;
-    width: 300px; height: 300px;
-    border-radius: 50%;
-    background: radial-gradient(ellipse, rgba(79,207,142,0.07) 0%, transparent 65%);
-    top: -60px; left: -60px;
-    pointer-events: none;
-  }
-  .login-brand {
-    position: relative; z-index: 1;
-    display: flex; align-items: center; gap: 10px;
-  }
-  .login-brand-icon {
-    width: 36px; height: 36px;
-    background: var(--accent);
-    border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 17px;
-  }
-  .login-brand-name {
-    font-family: var(--font-display);
-    font-size: 18px; font-weight: 800;
-    letter-spacing: -0.3px;
-  }
-  .login-brand-name span { color: var(--accent); }
-  .login-hero-body {
-    position: relative; z-index: 1;
-  }
-  .login-eyebrow {
-    display: inline-flex; align-items: center; gap: 7px;
-    background: rgba(91,142,255,0.09);
-    border: 1px solid rgba(91,142,255,0.18);
-    border-radius: 20px;
-    padding: 4px 12px;
-    font-size: 11px; font-weight: 600;
-    color: var(--accent);
-    margin-bottom: 22px;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-  }
-  .login-eyebrow-dot {
-    width: 6px; height: 6px;
-    background: var(--accent); border-radius: 50%;
-    animation: pulse 2s infinite;
-  }
-  .login-headline {
-    font-family: var(--font-display);
-    font-size: clamp(28px, 3.2vw, 42px);
-    font-weight: 800;
-    line-height: 1.1;
-    letter-spacing: -0.03em;
-    margin-bottom: 18px;
-  }
-  .login-headline em {
-    font-style: normal;
-    color: var(--accent);
-  }
-  .login-subline {
-    font-size: 14px;
-    color: var(--text2);
-    line-height: 1.65;
-    max-width: 38ch;
-  }
-  .login-stats {
-    position: relative; z-index: 1;
-    display: flex; gap: 28px;
-    padding-top: 28px;
-    border-top: 1px solid var(--border);
-  }
-  .login-stat-num {
-    font-family: var(--font-display);
-    font-size: 22px; font-weight: 800;
-    color: var(--text);
-    letter-spacing: -0.04em;
-  }
-  .login-stat-lbl {
-    font-size: 11px; color: var(--text2);
-    margin-top: 2px; letter-spacing: 0.02em;
-  }
-
-  /* Right form panel */
-  .login-right {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 48px 40px;
-    position: relative;
-    background: var(--bg);
-  }
-  .login-right::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: radial-gradient(ellipse 70% 50% at 50% 40%, rgba(91,142,255,0.06), transparent 70%);
-    pointer-events: none;
-  }
-  .login-card {
-    position: relative; z-index: 1;
-    width: 100%;
-    max-width: 380px;
-    animation: slideUp 0.55s cubic-bezier(0.16,1,0.3,1) both;
-  }
-  .login-card-heading {
-    font-family: var(--font-display);
-    font-size: 26px; font-weight: 800;
-    letter-spacing: -0.04em;
-    margin-bottom: 6px;
-  }
-  .login-card-sub {
-    font-size: 13px; color: var(--text2);
-    margin-bottom: 32px; line-height: 1.5;
-  }
-  .form-label {
-    display: block;
-    font-size: 10px; font-weight: 700;
-    letter-spacing: 0.09em; text-transform: uppercase;
-    color: var(--text2); margin-bottom: 7px;
-  }
-  .form-input {
-    width: 100%;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 12px 15px;
-    font-family: var(--font-body);
-    font-size: 14px; color: var(--text);
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    margin-bottom: 18px;
-  }
-  .form-input:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(91,142,255,0.12);
-  }
-  .form-input::placeholder { color: var(--text2); opacity: 0.6; }
-  .btn-primary {
-    display: inline-flex;
-    align-items: center; justify-content: center; gap: 8px;
-    background: var(--accent);
-    color: #fff; border: none;
-    border-radius: 10px;
-    padding: 13px 22px;
-    font-family: var(--font-display);
-    font-size: 14px; font-weight: 700;
-    cursor: pointer;
-    transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
-    letter-spacing: 0.02em;
-    white-space: nowrap;
-    box-shadow: 0 4px 18px rgba(91,142,255,0.3);
-  }
-  .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 6px 24px rgba(91,142,255,0.4); }
-  .btn-primary:active { transform: translateY(0); }
-  .btn-primary.full { width: 100%; }
-  .btn-ghost {
-    background: none;
-    border: 1px solid var(--border);
-    color: var(--text2);
-    border-radius: 10px;
-    padding: 11px 18px;
-    font-family: var(--font-display);
-    font-size: 13px; font-weight: 700;
-    cursor: pointer;
-    transition: border-color 0.2s, color 0.2s;
-  }
-  .btn-ghost:hover { border-color: var(--text2); color: var(--text); }
-  .login-error {
-    background: rgba(255,107,107,0.1);
-    border: 1px solid rgba(255,107,107,0.2);
-    color: var(--accent2);
-    border-radius: 8px;
-    padding: 10px 14px;
-    font-size: 12px;
-    margin-bottom: 14px;
-    display: none;
-  }
-  .login-footer-note {
-    text-align: center;
-    font-size: 11px;
-    color: var(--text2);
-    margin-top: 20px;
-    opacity: 0.6;
-  }
-  /* Auth tabs */
-  .auth-tabs {
-    display: flex;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 4px;
-    margin-bottom: 28px;
-    gap: 2px;
-  }
-  .auth-tab {
-    flex: 1; padding: 9px 0;
-    border-radius: 9px;
-    font-family: var(--font-display);
-    font-size: 13px; font-weight: 700;
-    cursor: pointer; border: none;
-    background: transparent;
-    color: var(--text2);
-    transition: background 0.18s, color 0.18s;
-  }
-  .auth-tab.active {
-    background: var(--surface);
-    color: var(--text);
-    box-shadow: 0 1px 4px rgba(0,0,0,0.35);
-  }
-  .auth-panel { display: none; }
-  .auth-panel.active { display: block; }
-  .auth-switch {
-    text-align: center;
-    font-size: 12px;
-    color: var(--text2);
-    margin-top: 18px;
-  }
-  .auth-switch a {
-    color: var(--accent);
-    font-weight: 600;
-    cursor: pointer;
-    text-decoration: none;
-  }
-  .auth-switch a:hover { text-decoration: underline; }
-
   /* ===== APP SHELL ===== */
   #app-page {
     display: flex;
@@ -818,87 +555,6 @@
 </head>
 <body>
 
-<!-- ========== LOGIN PAGE ========== -->
-<div id="login-page" class="hidden">
-
-  <!-- Left hero -->
-  <div class="login-left">
-    <div class="login-left-grid"></div>
-    <div class="login-left-glow"></div>
-    <div class="login-left-glow2"></div>
-
-    <div class="login-brand">
-      <div class="login-brand-icon">📚</div>
-      <div class="login-brand-name">We<span>Learn</span></div>
-    </div>
-
-    <div class="login-hero-body">
-      <div class="login-eyebrow"><div class="login-eyebrow-dot"></div>UC Berkeley · Spring 2026</div>
-      <div class="login-headline">Study smarter<br>with your <em>peers</em></div>
-      <div class="login-subline">Find study groups for your exact courses. Post sessions, join requests, and connect with students who get it.</div>
-    </div>
-
-    <div class="login-stats">
-      <div>
-        <div class="login-stat-num">3,200+</div>
-        <div class="login-stat-lbl">Students</div>
-      </div>
-      <div>
-        <div class="login-stat-num">130+</div>
-        <div class="login-stat-lbl">Courses</div>
-      </div>
-      <div>
-        <div class="login-stat-num">900+</div>
-        <div class="login-stat-lbl">Sessions</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Right form -->
-  <div class="login-right">
-    <div class="login-card">
-
-      <!-- Tabs -->
-      <div class="auth-tabs">
-        <button class="auth-tab active" id="tab-signin" onclick="switchAuthTab('signin')">Sign In</button>
-        <button class="auth-tab" id="tab-signup" onclick="switchAuthTab('signup')">Sign Up</button>
-      </div>
-
-      <!-- Sign In Panel -->
-      <div class="auth-panel active" id="panel-signin">
-        <div class="login-card-heading">Welcome back</div>
-        <div class="login-card-sub" style="margin-bottom:24px;">Sign in to access your study groups</div>
-        <div class="login-error" id="login-error"></div>
-        <label class="form-label">University Email</label>
-        <input class="form-input" id="login-email" type="email" placeholder="you@berkeley.edu" />
-        <label class="form-label">Password</label>
-        <input class="form-input" id="login-password" type="password" placeholder="••••••••••" style="margin-bottom:0"/>
-        <div style="height:22px;"></div>
-        <button class="btn-primary full" id="login-btn">Sign In →</button>
-        <div class="auth-switch">No account? <a onclick="switchAuthTab('signup')">Create one</a></div>
-      </div>
-
-      <!-- Sign Up Panel -->
-      <div class="auth-panel" id="panel-signup">
-        <div class="login-card-heading">Create account</div>
-        <div class="login-card-sub" style="margin-bottom:24px;">Join WeLearn and find your study group</div>
-        <div class="login-error" id="signup-error"></div>
-        <label class="form-label">Full Name</label>
-        <input class="form-input" id="signup-name" type="text" placeholder="Jane Doe" />
-        <label class="form-label">University Email</label>
-        <input class="form-input" id="signup-email" type="email" placeholder="you@berkeley.edu" />
-        <label class="form-label">Password</label>
-        <input class="form-input" id="signup-password" type="password" placeholder="At least 6 characters" style="margin-bottom:0"/>
-        <div style="height:22px;"></div>
-        <button class="btn-primary full" id="signup-btn">Create Account →</button>
-        <div class="auth-switch">Already have an account? <a onclick="switchAuthTab('signin')">Sign in</a></div>
-      </div>
-
-      <div class="login-footer-note">Demo only — no credentials are stored</div>
-    </div>
-  </div>
-
-</div>
 
 <!-- ========== APP PAGE ========== -->
 <div id="app-page" class="hidden">
@@ -1041,7 +697,7 @@
 // =====================================================================
 // DATA
 // =====================================================================
-const CATALOG_TITLES = {"CS 61A":"Structure & Interpretation of Computer Programs","CS 61B":"Data Structures","CS 61C":"Great Ideas in Computer Architecture","CS 70":"Discrete Mathematics & Probability Theory","CS 161":"Computer Security","CS 162":"Operating Systems","CS 170":"Efficient Algorithms & Intractable Problems","CS 186":"Introduction to Database Systems","CS 188":"Introduction to AI","CS 189":"Introduction to ML","EECS 16A":"Designing Information Devices I","EECS 16B":"Designing Information Devices II","MATH 1A":"Calculus","MATH 1B":"Calculus","MATH 53":"Multivariable Calculus","MATH 54":"Linear Algebra & Diff. Equations","MATH 55":"Discrete Mathematics","STAT 134":"Concepts of Probability","DATA 8":"Foundations of Data Science","DATA 100":"Principles of Data Science","PHYSICS 7A":"Physics for Scientists & Engineers","PHYSICS 7B":"Physics for Scientists & Engineers","CHEM 1A":"General Chemistry","ECON 1":"Introduction to Economics","ECON 100A":"Microeconomic Theory","HIST 7A":"US History to Civil War","HISTORY 7B":"US History Since Civil War"};
+const CATALOG_TITLES = {"CS 61A":"Structure & Interpretation of Computer Programs","CS 61B":"Data Structures","CS 61C":"Great Ideas in Computer Architecture","CS 70":"Discrete Mathematics & Probability Theory","CS 161":"Computer Security","CS 162":"Operating Systems","CS 170":"Efficient Algorithms & Intractable Problems","CS 186":"Introduction to Database Systems","CS 188":"Introduction to AI","CS 189":"Introduction to ML","EECS 16A":"Designing Information Devices I","EECS 16B":"Designing Information Devices II","MATH 1A":"Calculus","MATH 1B":"Calculus","MATH 53":"Multivariable Calculus","MATH 54":"Linear Algebra & Diff. Equations","MATH 55":"Discrete Mathematics","STAT 134":"Concepts of Probability","DATA 8":"Foundations of Data Science","DATA 100":"Principles of Data Science","PHYSICS 7A":"Physics for Scientists & Engineers","PHYSICS 7B":"Physics for Scientists & Engineers","CHEM 1A":"General Chemistry","ECON 1":"Introduction to Economics","ECON 100A":"Microeconomic Theory","HIST 7A":"US History to Civil War","HISTORY 7B":"US History Since Civil War","POLSCI 1":"Introduction to Political Science","POLSCI C135":"Politics of the Developing World","POLSCI C155":"Ethnic Politics in America"};
 const COURSE_COLORS = ["#4F8EF7","#F76B4F","#4FCF8E","#CF4FBF","#F7C94F","#5B8EFF","#FF6B6B","#A78BFA","#34D399","#FB923C"];
 const _savedAccount = JSON.parse(localStorage.getItem('studylink_account') || '{}');
 const _savedClasses = (_savedAccount.classes || JSON.parse(localStorage.getItem('studylink_classes') || '[]'));
@@ -1087,106 +743,11 @@ function activeRequests(courseId) {
 // =====================================================================
 // LOGIN
 // =====================================================================
-// =====================================================================
-// AUTH TAB SWITCHER
-// =====================================================================
-function switchAuthTab(tab) {
-  document.getElementById("tab-signin").classList.toggle("active", tab === "signin");
-  document.getElementById("tab-signup").classList.toggle("active", tab === "signup");
-  document.getElementById("panel-signin").classList.toggle("active", tab === "signin");
-  document.getElementById("panel-signup").classList.toggle("active", tab === "signup");
-}
 
-// =====================================================================
-// SIGN IN
-// =====================================================================
-document.getElementById("login-btn").addEventListener("click", doLogin);
-document.getElementById("login-password").addEventListener("keydown", e => { if(e.key==="Enter") doLogin(); });
-document.getElementById("login-email").addEventListener("keydown", e => { if(e.key==="Enter") doLogin(); });
 
-function doLogin() {
-  const email    = document.getElementById("login-email").value.trim();
-  const password = document.getElementById("login-password").value;
-  const errEl    = document.getElementById("login-error");
 
-  if (!email || !password) {
-    errEl.style.display = "block"; errEl.textContent = "Please enter your email and password."; return;
-  }
-  if (!email.includes("@")) {
-    errEl.style.display = "block"; errEl.textContent = "Please enter a valid university email."; return;
-  }
-  // Check if account exists in localStorage
-  const stored = JSON.parse(localStorage.getItem('welearn_account') || 'null');
-  if (stored && stored.email === email && stored.password === password) {
-    errEl.style.display = "none";
-    const btn = document.getElementById("login-btn");
-    btn.textContent = "Signing in…"; btn.disabled = true;
-    setTimeout(() => {
-      currentUser = { name: stored.name, email: stored.email, initials: initials(stored.name), major: stored.major || '', year: stored.year || '' };
-      btn.textContent = "Sign In →"; btn.disabled = false;
-      showApp();
-    }, 800);
-    return;
-  }
-  // Fallback: accept any valid email (demo mode)
-  if (stored && stored.email !== email) {
-    errEl.style.display = "block"; errEl.textContent = "No account found with that email."; return;
-  }
-  errEl.style.display = "none";
-  const btn = document.getElementById("login-btn");
-  btn.textContent = "Signing in…"; btn.disabled = true;
-  setTimeout(() => {
-    const raw  = email.split("@")[0];
-    const name = raw.charAt(0).toUpperCase() + raw.slice(1);
-    currentUser = { name, email, initials: initials(name) };
-    btn.textContent = "Sign In →"; btn.disabled = false;
-    showApp();
-  }, 800);
-}
-
-// =====================================================================
-// SIGN UP
-// =====================================================================
-document.getElementById("signup-btn").addEventListener("click", doSignup);
-document.getElementById("signup-password").addEventListener("keydown", e => { if(e.key==="Enter") doSignup(); });
-
-function doSignup() {
-  const name     = document.getElementById("signup-name").value.trim();
-  const email    = document.getElementById("signup-email").value.trim();
-  const password = document.getElementById("signup-password").value;
-  const errEl    = document.getElementById("signup-error");
-
-  if (!name) {
-    errEl.style.display = "block"; errEl.textContent = "Please enter your full name."; return;
-  }
-  if (!email || !email.includes("@")) {
-    errEl.style.display = "block"; errEl.textContent = "Please enter a valid university email."; return;
-  }
-  if (password.length < 6) {
-    errEl.style.display = "block"; errEl.textContent = "Password must be at least 6 characters."; return;
-  }
-  errEl.style.display = "none";
-  const btn = document.getElementById("signup-btn");
-  btn.textContent = "Connecting to bCourses…"; btn.disabled = true;
-
-  setTimeout(() => {
-    // Save partial account — will be completed after bCourses setup
-    const account = { name, email, password, major: '', year: '', classes: [] };
-    localStorage.setItem('welearn_account', JSON.stringify(account));
-    // Tell studylink.html who this is and to come back here when done
-    localStorage.setItem('studylink_new_signup', JSON.stringify({ name, email }));
-    localStorage.setItem('studylink_return_to', 'WeLearn.html');
-    // Clear any old profile data so setup runs fresh
-    localStorage.removeItem('studylink_account');
-    localStorage.removeItem('studylink_classes');
-    btn.textContent = "Create Account →"; btn.disabled = false;
-    // Redirect to StudyLink for bCourses auth + profile setup
-    window.location.href = 'studylink.html';
-  }, 600);
-}
 
 function showApp() {
-  document.getElementById("login-page").classList.add("hidden");
   const app = document.getElementById("app-page");
   app.classList.remove("hidden");
 
@@ -1477,18 +1038,10 @@ document.getElementById("dd-delete").addEventListener("click", () => {
   window.location.href = 'studylink.html';
 });
 document.getElementById("dd-logout").addEventListener("click", () => {
-  localStorage.removeItem('studylink_account');
-  localStorage.removeItem('studylink_classes');
-  localStorage.removeItem('welearn_account');
   if (timerInterval) clearInterval(timerInterval);
-  currentUser = null;
-  document.getElementById("app-page").classList.add("hidden");
-  document.getElementById("login-page").classList.remove("hidden");
-  document.getElementById("login-email").value    = "";
-  document.getElementById("login-password").value = "";
-  document.getElementById("login-btn").textContent = "Sign In →";
-  document.getElementById("login-btn").disabled = false;
-  document.getElementById("profile-dropdown").classList.add("hidden");
+  ['studylink_account','studylink_classes','welearn_account',
+   'studylink_new_signup','studylink_return_to'].forEach(k => localStorage.removeItem(k));
+  window.location.href = 'studylink.html';
 });
 
 // =====================================================================
@@ -1519,15 +1072,13 @@ renderNotifications();
   const slAcct = _savedAccount.user || null;
 
   if (wlAcct && wlAcct.name) {
-    // Returning WeLearn user
     currentUser = { name: wlAcct.name, email: wlAcct.email, initials: initials(wlAcct.name), major: wlAcct.major || '', year: wlAcct.year || '' };
     showApp();
   } else if (slAcct && slAcct.name) {
-    // Coming from StudyLink profile setup
     currentUser = { name: slAcct.name, email: slAcct.name.toLowerCase().replace(/ /g,'') + '@berkeley.edu', initials: initials(slAcct.name), major: slAcct.major || '', year: slAcct.year || '' };
     showApp();
   } else {
-    document.getElementById("login-page").classList.remove("hidden");
+    window.location.href = 'studylink.html';
   }
 })();
 </script>
