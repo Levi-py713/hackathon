@@ -2,1085 +2,814 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>WeLearn</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>StudyLink — UC Berkeley</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet" />
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; scroll-behavior: smooth; overflow-y: auto; }
 
-  :root {
-    --bg: #0D0F14;
-    --surface: #13161E;
-    --surface2: #1A1E28;
-    --surface3: #20253300;
-    --border: rgba(255,255,255,0.07);
-    --accent: #5B8EFF;
-    --accent2: #FF6B6B;
-    --text: #E8EAF0;
-    --text2: #7B82A0;
-    --success: #4FCF8E;
-    --warn: #F7C94F;
-    --font-display: 'Syne', sans-serif;
-    --font-body: 'DM Sans', sans-serif;
-  }
+:root {
+  --bg:      #0D0F14;
+  --surface: #13161E;
+  --surface2:#1A1E28;
+  --border:  rgba(255,255,255,0.07);
+  --accent:  #5B8EFF;
+  --accent2: #FF6B6B;
+  --text:    #E8EAF0;
+  --text2:   #7B82A0;
+  --success: #4FCF8E;
+}
 
-  html, body {
-    height: 100%;
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--font-body);
-    font-size: 14px;
-    line-height: 1.5;
-    overflow: hidden;
-  }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
+h1,h2,h3,h4 { font-family: 'Syne', sans-serif; }
+button { font-family: 'Syne', sans-serif; cursor: pointer; border: none; }
+input, textarea { font-family: 'DM Sans', sans-serif; }
 
-  /* ===== UTILITIES ===== */
-  .hidden { display: none !important; }
-  .flex { display: flex; }
-  .flex-col { display: flex; flex-direction: column; }
-  .items-center { align-items: center; }
-  .justify-between { justify-content: space-between; }
-  .gap-8 { gap: 8px; }
-  .gap-12 { gap: 12px; }
-  .gap-16 { gap: 16px; }
-  .flex-1 { flex: 1; }
-  .relative { position: relative; }
+.screen { display: none; min-height: 100vh; }
+.screen.active { display: flex; flex-direction: column; }
 
-  /* ===== SCROLLBAR ===== */
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+/* ══ LANDING (split panel login) ══ */
+#landing {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+  flex-direction: unset;
+}
+@media (max-width: 780px) {
+  #landing {
+    grid-template-columns: 1fr;
+    grid-template-rows: 100vh auto;
+  }
+  .sl-left {
+    display: flex !important;
+    min-height: 100vh;
+  }
+  .sl-right {
+    min-height: 100vh;
+  }
+}
 
-  /* ===== ANIMATIONS ===== */
-  @keyframes slideUp {
-    from { opacity: 0; transform: translateY(28px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-8px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes modalIn {
-    from { opacity: 0; transform: scale(0.94) translateY(12px); }
-    to   { opacity: 1; transform: scale(1) translateY(0); }
-  }
-  @keyframes fadeOverlay {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-  }
-  @keyframes pulse {
-    0%,100% { opacity: 1; }
-    50% { opacity: 0.5; }
-  }
-  @keyframes cardIn {
-    from { opacity: 0; transform: translateY(16px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+/* Left hero */
+.sl-left {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  justify-content: flex-start; gap: 48px;
+  padding: 52px; position: relative; overflow: hidden;
+}
+.sl-left-grid {
+  position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(91,142,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(91,142,255,0.04) 1px, transparent 1px);
+  background-size: 40px 40px; pointer-events: none;
+}
+.sl-glow {
+  position: absolute; width: 500px; height: 500px; border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(91,142,255,0.11) 0%, transparent 65%);
+  bottom: -140px; right: -140px; pointer-events: none;
+}
+.sl-glow2 {
+  position: absolute; width: 280px; height: 280px; border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(79,207,142,0.07) 0%, transparent 65%);
+  top: -60px; left: -60px; pointer-events: none;
+}
+.sl-brand { position: relative; z-index: 1; display: flex; align-items: center; gap: 10px; }
+.sl-brand-icon {
+  width: 36px; height: 36px; background: var(--accent); border-radius: 10px;
+  display: flex; align-items: center; justify-content: center; font-size: 17px;
+}
+.sl-brand-name { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; letter-spacing: -0.3px; color: var(--text); }
+.sl-brand-name span { color: var(--accent); }
+.sl-hero { position: relative; z-index: 1; }
+.sl-eyebrow {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: rgba(91,142,255,0.09); border: 1px solid rgba(91,142,255,0.18);
+  border-radius: 20px; padding: 4px 12px; font-size: 11px; font-weight: 600;
+  color: var(--accent); margin-bottom: 22px; letter-spacing: 0.04em; text-transform: uppercase;
+}
+.sl-eyebrow-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: blink 2s infinite; }
+.sl-headline {
+  font-family: 'Syne', sans-serif; font-size: clamp(28px, 3.2vw, 42px);
+  font-weight: 800; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 18px; color: var(--text);
+}
+.sl-headline em { font-style: normal; color: var(--accent); }
+.sl-subline { font-size: 14px; color: var(--text2); line-height: 1.65; max-width: 38ch; }
+.sl-stats {
+  position: relative; z-index: 1; display: flex; gap: 28px;
+  padding-top: 28px; border-top: 1px solid var(--border);
+}
+.sl-stat-num { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: var(--text); letter-spacing: -0.04em; }
+.sl-stat-lbl { font-size: 11px; color: var(--text2); margin-top: 2px; }
 
-  /* ===== APP SHELL ===== */
-  #app-page {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    overflow: hidden;
-  }
+/* Right form panel */
+.sl-right {
+  display: flex; align-items: center; justify-content: center;
+  padding: 48px 40px; background: var(--bg); position: relative;
+}
+.sl-right::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 50% at 50% 40%, rgba(91,142,255,0.05), transparent 70%);
+  pointer-events: none;
+}
+.sl-card {
+  position: relative; z-index: 1; width: 100%; max-width: 380px;
+  animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both;
+}
 
-  /* ===== TOPBAR ===== */
-  .topbar {
-    height: 62px;
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    padding: 0 22px;
-    gap: 14px;
-    position: relative;
-    z-index: 100;
-    flex-shrink: 0;
-  }
-  .topbar-logo {
-    font-family: var(--font-display);
-    font-size: 20px;
-    font-weight: 800;
-    letter-spacing: -0.3px;
-    user-select: none;
-  }
-  .topbar-logo span { color: var(--accent); }
-  .chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    background: rgba(79,207,142,0.09);
-    border: 1px solid rgba(79,207,142,0.18);
-    border-radius: 20px;
-    padding: 3px 10px;
-    font-size: 11px;
-    color: var(--success);
-    font-weight: 600;
-  }
-  .chip-dot { width: 5px; height: 5px; background: var(--success); border-radius: 50%; }
-  .topbar-spacer { flex: 1; }
-  .icon-btn {
-    width: 38px; height: 38px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-    font-size: 17px;
-    transition: border-color 0.2s;
-    position: relative;
-    user-select: none;
-    flex-shrink: 0;
-  }
-  .icon-btn:hover { border-color: rgba(91,142,255,0.4); }
-  .notif-dot {
-    position: absolute;
-    top: 7px; right: 7px;
-    width: 8px; height: 8px;
-    background: var(--accent2);
-    border-radius: 50%;
-    border: 2px solid var(--surface);
-  }
-  .avatar-btn {
-    width: 38px; height: 38px;
-    background: linear-gradient(135deg, var(--accent) 0%, #7B6EFF 100%);
-    border: 2px solid transparent;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-    font-family: var(--font-display);
-    font-size: 13px;
-    font-weight: 700;
-    transition: border-color 0.2s, transform 0.15s;
-    color: #fff;
-    position: relative;
-    user-select: none;
-    flex-shrink: 0;
-  }
-  .avatar-btn:hover { border-color: rgba(91,142,255,0.5); transform: scale(1.05); }
+/* Auth tabs */
+.auth-tabs { display: none; }
+.auth-tab { display: none; }
+.auth-panel { display: none; }
+.auth-panel.active { display: block; }
 
-  /* ===== DROPDOWN ===== */
-  .dropdown {
-    position: absolute;
-    top: calc(100% + 10px);
-    right: 0;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    overflow: hidden;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.55);
-    animation: fadeIn 0.15s ease both;
-    z-index: 300;
-    min-width: 200px;
-  }
-  .dropdown-header {
-    padding: 14px 16px;
-    border-bottom: 1px solid var(--border);
-  }
-  .dropdown-name { font-family: var(--font-display); font-weight: 700; font-size: 14px; }
-  .dropdown-email { font-size: 11px; color: var(--text2); margin-top: 2px; }
-  .dropdown-item {
-    width: 100%; padding: 11px 16px;
-    font-size: 13px; cursor: pointer;
-    display: flex; align-items: center; gap: 10px;
-    transition: background 0.15s;
-    color: var(--text);
-    background: none; border: none;
-    font-family: var(--font-body);
-    text-align: left;
-  }
-  .dropdown-item:hover { background: var(--surface2); }
-  .dropdown-item.danger { color: var(--accent2); }
+.sl-heading { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; letter-spacing: -0.04em; margin-bottom: 6px; color: var(--text); }
+.sl-subhead { font-size: 13px; color: var(--text2); margin-bottom: 24px; }
 
-  /* ===== NOTIFICATION PANEL ===== */
-  .notif-panel {
-    position: absolute;
-    top: calc(100% + 10px);
-    right: 0;
-    width: 310px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.55);
-    animation: fadeIn 0.15s ease both;
-    z-index: 300;
-    overflow: hidden;
-  }
-  .notif-header {
-    padding: 14px 16px 12px;
-    border-bottom: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  .notif-header-title { font-family: var(--font-display); font-weight: 700; font-size: 14px; }
-  .notif-toggle-row {
-    display: flex; align-items: center; gap: 8px;
-    font-size: 11px; color: var(--text2);
-  }
-  .toggle-track {
-    width: 32px; height: 18px;
-    background: var(--surface2);
-    border-radius: 9px;
-    position: relative;
-    cursor: pointer;
-    border: 1px solid var(--border);
-    transition: background 0.2s, border-color 0.2s;
-    flex-shrink: 0;
-  }
-  .toggle-track.on { background: var(--accent); border-color: var(--accent); }
-  .toggle-knob {
-    position: absolute;
-    top: 2px; left: 2px;
-    width: 12px; height: 12px;
-    background: #fff;
-    border-radius: 50%;
-    transition: transform 0.2s;
-    pointer-events: none;
-  }
-  .toggle-track.on .toggle-knob { transform: translateX(14px); }
-  .notif-list { max-height: 260px; overflow-y: auto; }
-  .notif-item {
-    padding: 11px 16px;
-    border-bottom: 1px solid var(--border);
-    font-size: 12px;
-    line-height: 1.55;
-  }
-  .notif-item:last-child { border-bottom: none; }
-  .notif-course { color: var(--accent); font-weight: 600; }
-  .notif-meta { color: var(--text2); font-size: 10px; margin-top: 2px; }
-  .notif-empty { padding: 28px 16px; text-align: center; color: var(--text2); font-size: 13px; }
+/* Fields */
+.sl-label {
+  display: block; font-size: 10px; font-weight: 700; letter-spacing: 0.09em;
+  text-transform: uppercase; color: var(--text2); margin-bottom: 7px;
+}
+.sl-input {
+  width: 100%; background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; padding: 12px 15px; font-family: 'DM Sans', sans-serif;
+  font-size: 14px; color: var(--text); outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s; margin-bottom: 16px;
+}
+.sl-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(91,142,255,0.12); }
+.sl-input::placeholder { color: var(--text2); opacity: 0.6; }
+.sl-btn {
+  width: 100%; padding: 13px; border-radius: 10px; background: var(--accent);
+  color: #fff; font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700;
+  cursor: pointer; border: none; transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+  box-shadow: 0 4px 18px rgba(91,142,255,0.3); display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.sl-btn:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 6px 24px rgba(91,142,255,0.4); }
+.sl-btn:active { transform: translateY(0); }
+.sl-btn:disabled { opacity: 0.5; cursor: default; transform: none; }
+.sl-error {
+  background: rgba(255,107,107,0.1); border: 1px solid rgba(255,107,107,0.2);
+  color: var(--accent2); border-radius: 8px; padding: 10px 14px;
+  font-size: 12px; margin-bottom: 14px; display: none;
+}
+.auth-switch { text-align: center; font-size: 12px; color: var(--text2); margin-top: 16px; }
+.auth-switch a { color: var(--accent); font-weight: 600; cursor: pointer; }
+.auth-switch a:hover { text-decoration: underline; }
+.sl-note { text-align: center; font-size: 11px; color: var(--text2); margin-top: 20px; opacity: 0.5; }
 
-  /* ===== LAYOUT ===== */
-  .content-area {
-    display: flex;
-    flex: 1;
-    overflow: hidden;
-  }
+/* CalNet screen */
+#calcentral { background: var(--bg); align-items: center; justify-content: center; }
+.calnet-wrap {
+  width: 100%; max-width: 420px; padding: 40px 24px;
+  animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both;
+}
+.calnet-back {
+  display: inline-flex; align-items: center; gap: 6px; background: none; border: none;
+  color: var(--accent); font-size: 13px; font-weight: 600; cursor: pointer;
+  margin-bottom: 28px; padding: 0; transition: opacity 0.15s;
+}
+.calnet-back:hover { opacity: 0.75; }
+.calnet-heading { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; letter-spacing: -0.04em; margin-bottom: 6px; color: var(--text); }
+.calnet-sub { font-size: 13px; color: var(--text2); margin-bottom: 24px; }
+.calnet-notice {
+  display: flex; align-items: flex-start; gap: 10px;
+  background: rgba(91,142,255,0.07); border: 1px solid rgba(91,142,255,0.15);
+  border-radius: 10px; padding: 12px 14px; font-size: 12px; color: var(--text2);
+  margin-bottom: 22px; line-height: 1.5;
+}
+.calnet-notice strong { color: var(--text); }
+.err-msg { color: var(--accent2); font-size: 12px; margin-bottom: 14px; display: none; }
 
-  /* ===== SIDEBAR ===== */
-  .sidebar {
-    width: 234px;
-    background: var(--surface);
-    border-right: 1px solid var(--border);
-    display: flex;
-    flex-direction: column;
-    padding: 18px 10px;
-    gap: 2px;
-    overflow-y: auto;
-    flex-shrink: 0;
-  }
-  .sidebar-label {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text2);
-    padding: 6px 8px 8px;
-  }
-  .course-item {
-    display: flex;
-    align-items: center;
-    gap: 11px;
-    padding: 10px 9px;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background 0.15s;
-    background: none; border: none;
-    width: 100%; text-align: left;
-    color: var(--text);
-    font-family: var(--font-body);
-  }
-  .course-item:hover { background: var(--surface2); }
-  .course-item.active { background: rgba(91,142,255,0.11); }
-  .course-dot {
-    width: 10px; height: 10px;
-    border-radius: 3px;
-    flex-shrink: 0;
-  }
-  .course-info { flex: 1; min-width: 0; }
-  .course-code {
-    font-family: var(--font-display);
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.03em;
-  }
-  .course-name {
-    font-size: 11px;
-    color: var(--text2);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .course-count {
-    font-size: 11px; color: var(--text2);
-    background: var(--surface2);
-    border-radius: 20px;
-    padding: 2px 7px;
-    font-weight: 500;
-    flex-shrink: 0;
-  }
+/* ══ PROFILE SETUP ══ */
+#profilesetup {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+  flex-direction: unset;
+  background: var(--bg);
+}
+/* Left info panel */
+.setup-left {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  justify-content: space-between;
+  padding: 40px 44px; position: relative; overflow: hidden;
+}
+.setup-left-grid {
+  position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(91,142,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(91,142,255,0.04) 1px, transparent 1px);
+  background-size: 40px 40px; pointer-events: none;
+}
+.setup-left-glow {
+  position: absolute; width: 400px; height: 400px; border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(91,142,255,0.1) 0%, transparent 65%);
+  bottom: -100px; right: -100px; pointer-events: none;
+}
+.setup-left-top { position: relative; z-index: 1; }
+.setup-left-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 40px; }
+.setup-left-brand-icon { width: 32px; height: 32px; background: var(--accent); border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+.setup-left-brand-name { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 800; color: var(--text); }
+.setup-left-brand-name span { color: var(--accent); }
+.setup-step-label { color: var(--accent); font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; font-family: 'Syne', sans-serif; }
+.setup-headline { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 12px; color: var(--text); }
+.setup-headline em { font-style: normal; color: var(--accent); }
+.setup-desc { font-size: 13px; color: var(--text2); line-height: 1.65; max-width: 34ch; }
+.setup-left-bottom { position: relative; z-index: 1; padding-top: 24px; border-top: 1px solid var(--border); }
+.setup-classes-preview { display: flex; flex-wrap: wrap; gap: 6px; }
+.setup-preview-chip { background: rgba(91,142,255,0.08); border: 1px solid rgba(91,142,255,0.18); border-radius: 6px; padding: 4px 10px; font-size: 11px; color: var(--accent); font-weight: 700; font-family: 'Syne', sans-serif; }
+.setup-preview-label { font-size: 10px; color: var(--text2); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+/* Right form panel */
+.setup-right {
+  overflow-y: auto; padding: 40px 44px;
+  display: flex; flex-direction: column; justify-content: center;
+  background: var(--bg);
+}
+.setup-inner { width: 100%; max-width: 400px; margin: 0 auto; }
+.dark-field { margin-bottom: 16px; }
+.dark-field label { display: block; color: var(--text2); font-size: 10px; font-weight: 700; margin-bottom: 7px; letter-spacing: 0.09em; text-transform: uppercase; font-family: 'Syne', sans-serif; }
+.dark-field input, .dark-field textarea { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 11px 14px; color: var(--text); font-size: 14px; outline: none; transition: border 0.15s; }
+.dark-field input:focus, .dark-field textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(91,142,255,0.12); }
+.dark-field input::placeholder, .dark-field textarea::placeholder { color: var(--text2); opacity: 0.6; }
+.dark-field textarea { resize: none; }
+.year-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+.year-pill { padding: 8px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--text2); font-size: 12px; font-weight: 700; transition: all 0.15s; }
+.year-pill:hover { border-color: rgba(91,142,255,0.5); color: var(--accent); }
+.year-pill.selected { border-color: var(--accent); background: rgba(91,142,255,0.12); color: var(--accent); }
 
-  /* ===== MAIN PANEL ===== */
-  .main-panel {
-    flex: 1;
-    overflow-y: auto;
-    padding: 28px 30px;
-    background: var(--bg);
-  }
-  .welcome-banner {
-    background: linear-gradient(135deg, rgba(91,142,255,0.1), rgba(79,207,142,0.05));
-    border: 1px solid rgba(91,142,255,0.14);
-    border-radius: 16px;
-    padding: 22px 26px;
-    margin-bottom: 26px;
-    display: flex; align-items: center; gap: 18px;
-  }
-  .welcome-text { flex: 1; }
-  .welcome-hi {
-    font-family: var(--font-display);
-    font-size: 20px;
-    font-weight: 800;
-  }
-  .welcome-sub { font-size: 13px; color: var(--text2); margin-top: 3px; }
-  .welcome-emoji { font-size: 38px; }
+/* Class search */
+.class-search-wrap { position: relative; }
+.class-search-input { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px 12px 40px; color: var(--text); font-size: 14px; outline: none; transition: border 0.15s; font-family: 'DM Sans', sans-serif; }
+.class-search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(91,142,255,0.12); }
+.class-search-input::placeholder { color: var(--text2); opacity: 0.6; }
+.search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text2); font-size: 15px; pointer-events: none; }
+.class-dropdown { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; margin-top: 6px; overflow: hidden; display: none; max-height: 220px; overflow-y: auto; }
+.class-dropdown.open { display: block; }
+.class-option { padding: 10px 14px; cursor: pointer; font-size: 13px; display: flex; justify-content: space-between; align-items: center; transition: background 0.1s; border-bottom: 1px solid var(--border); color: var(--text); }
+.class-option:last-child { border-bottom: none; }
+.class-option:hover { background: rgba(91,142,255,0.08); }
+.opt-code { font-weight: 700; font-family: 'Syne', sans-serif; color: var(--accent); }
+.opt-title { color: rgba(255,255,255,0.4); font-size: 11px; margin-top: 1px; }
+.opt-add { color: var(--accent); font-size: 18px; }
+.class-option.already { opacity: 0.4; cursor: default; }
+.added-classes { display: flex; flex-wrap: wrap; gap: 8px; min-height: 36px; margin-top: 12px; }
+.class-chip { display: inline-flex; align-items: center; gap: 6px; background: rgba(91,142,255,0.1); border: 1px solid rgba(91,142,255,0.25); border-radius: 8px; padding: 6px 10px; color: var(--accent); font-size: 12px; font-weight: 700; font-family: 'Syne', sans-serif; }
+.chip-x { background: none; border: none; color: rgba(91,142,255,0.5); font-size: 16px; line-height: 1; padding: 0; cursor: pointer; transition: color 0.15s; }
+.chip-x:hover { color: var(--accent); }
+.chip-empty { color: var(--text2); font-size: 13px; padding: 8px 0; }
 
-  .panel-header { margin-bottom: 24px; }
-  .panel-title-row {
-    display: flex; align-items: center; gap: 12px; margin-bottom: 4px;
-  }
-  .panel-color-dot { width: 14px; height: 14px; border-radius: 4px; flex-shrink: 0; }
-  .panel-title {
-    font-family: var(--font-display);
-    font-size: 24px;
-    font-weight: 800;
-    letter-spacing: -0.4px;
-  }
-  .panel-subtitle { font-size: 12px; color: var(--text2); margin-bottom: 16px; }
-  .panel-actions { display: flex; gap: 10px; }
+.toggle-row { display: flex; align-items: center; justify-content: space-between; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; margin-bottom: 28px; }
+.toggle-label { font-size: 14px; font-weight: 600; color: var(--text); font-family: 'Syne', sans-serif; }
+.toggle-sub { font-size: 12px; color: var(--text2); margin-top: 3px; }
+.toggle { width: 44px; height: 24px; border-radius: 12px; background: var(--surface2); position: relative; cursor: pointer; transition: background 0.2s; flex-shrink: 0; }
+.toggle.on { background: var(--accent); }
+.toggle-knob { position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; transition: left 0.2s; pointer-events: none; }
+.toggle.on .toggle-knob { left: 23px; }
+.btn-enter { width: 100%; padding: 14px; border-radius: 12px; background: rgba(91,142,255,0.12); color: rgba(91,142,255,0.4); font-size: 15px; font-weight: 700; transition: all 0.2s; box-shadow: none; }
+.btn-enter.ready { background: var(--accent); color: #fff; box-shadow: 0 4px 18px rgba(91,142,255,0.3); }
+.btn-enter.ready:hover { opacity: 0.9; transform: translateY(-1px); }
 
-  /* ===== CARDS GRID ===== */
-  .requests-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-    gap: 14px;
-  }
-  .request-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 18px;
-    position: relative;
-    overflow: hidden;
-    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
-    animation: cardIn 0.35s cubic-bezier(0.16,1,0.3,1) both;
-  }
-  .request-card:hover {
-    border-color: rgba(91,142,255,0.28);
-    transform: translateY(-2px);
-    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
-  }
-  .card-accent-bar {
-    position: absolute; top: 0; left: 0; right: 0; height: 3px;
-  }
-  .card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
-  .card-avatar {
-    width: 40px; height: 40px;
-    border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    font-family: var(--font-display);
-    font-size: 13px;
-    font-weight: 700;
-    color: #fff;
-    flex-shrink: 0;
-  }
-  .card-creator { font-weight: 600; font-size: 14px; }
-  .card-time { font-size: 11px; color: var(--text2); margin-top: 1px; }
-  .expired-tag {
-    display: inline-block;
-    background: rgba(255,107,107,0.1);
-    color: var(--accent2);
-    border: 1px solid rgba(255,107,107,0.18);
-    border-radius: 20px;
-    padding: 2px 8px;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    margin-left: auto;
-    flex-shrink: 0;
-  }
-  .card-details {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    margin-bottom: 14px;
-  }
-  .card-detail {
-    background: var(--surface2);
-    border-radius: 8px;
-    padding: 8px 10px;
-  }
-  .card-detail.full-width { grid-column: 1 / -1; }
-  .card-detail-label {
-    font-size: 9px;
-    color: var(--text2);
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
-    font-weight: 700;
-    margin-bottom: 2px;
-  }
-  .card-detail-val { font-size: 13px; font-weight: 500; }
 
-  .slots-wrap { margin-bottom: 4px; }
-  .slots-bar {
-    background: var(--surface2);
-    border-radius: 4px;
-    height: 6px;
-    overflow: hidden;
-    margin-bottom: 5px;
-  }
-  .slots-fill { height: 100%; border-radius: 4px; transition: width 0.4s ease; }
-  .slots-label { font-size: 11px; color: var(--text2); display: flex; justify-content: space-between; }
-
-  .expiry-wrap { margin-top: 10px; }
-  .expiry-bar {
-    background: var(--surface2);
-    border-radius: 4px;
-    height: 4px;
-    overflow: hidden;
-    margin-bottom: 4px;
-  }
-  .expiry-fill {
-    height: 100%;
-    border-radius: 4px;
-    background: linear-gradient(90deg, var(--success), var(--warn));
-    transition: width 1s linear;
-  }
-  .expiry-label { font-size: 10px; color: var(--text2); text-align: right; }
-
-  .join-btn {
-    width: 100%; margin-top: 12px;
-    padding: 10px;
-    background: rgba(91,142,255,0.09);
-    color: var(--accent);
-    border: 1px solid rgba(91,142,255,0.18);
-    border-radius: 8px;
-    font-family: var(--font-display);
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-  .join-btn:hover:not(:disabled) { background: rgba(91,142,255,0.18); }
-  .join-btn:disabled { opacity: 0.38; cursor: not-allowed; }
-
-  .empty-state {
-    text-align: center; padding: 70px 40px; color: var(--text2);
-  }
-  .empty-icon { font-size: 44px; margin-bottom: 14px; opacity: 0.45; }
-  .empty-title {
-    font-family: var(--font-display);
-    font-size: 18px; font-weight: 700;
-    color: var(--text); margin-bottom: 8px;
-  }
-
-  /* ===== MODAL ===== */
-  .modal-overlay {
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.72);
-    display: flex; align-items: center; justify-content: center;
-    z-index: 500;
-    animation: fadeOverlay 0.2s ease both;
-  }
-  .modal {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 30px;
-    width: 470px;
-    max-width: 95vw;
-    max-height: 90vh;
-    overflow-y: auto;
-    box-shadow: 0 40px 100px rgba(0,0,0,0.65);
-    animation: modalIn 0.25s cubic-bezier(0.16,1,0.3,1) both;
-  }
-  .modal-title {
-    font-family: var(--font-display);
-    font-size: 20px;
-    font-weight: 800;
-    margin-bottom: 22px;
-  }
-  .form-row { margin-bottom: 16px; }
-  .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
-  .form-hint {
-    background: rgba(91,142,255,0.07);
-    border: 1px solid rgba(91,142,255,0.12);
-    border-radius: 8px;
-    padding: 10px 13px;
-    font-size: 12px;
-    color: var(--text2);
-    margin-bottom: 8px;
-  }
-  .form-hint strong { color: var(--text); }
-  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 22px; }
-
-  /* ===== SETTINGS MODAL ===== */
-  .profile-header {
-    display: flex; align-items: center; gap: 16px; margin-bottom: 22px;
-  }
-  .profile-avatar-lg {
-    width: 62px; height: 62px;
-    border-radius: 18px;
-    background: linear-gradient(135deg, var(--accent), #7B6EFF);
-    display: flex; align-items: center; justify-content: center;
-    font-family: var(--font-display);
-    font-size: 22px; font-weight: 800;
-    color: #fff;
-    flex-shrink: 0;
-  }
-  .profile-name { font-family: var(--font-display); font-weight: 800; font-size: 18px; }
-  .profile-email { font-size: 12px; color: var(--text2); margin-top: 2px; }
-  .settings-field {
-    background: var(--surface2);
-    border-radius: 10px;
-    padding: 13px 14px;
-    margin-bottom: 10px;
-  }
-  .settings-field-label {
-    font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em;
-    color: var(--text2); font-weight: 700; margin-bottom: 4px;
-  }
-  .settings-field-val { font-size: 14px; font-weight: 500; }
+.spinner { width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; display: inline-block; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.35} }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:none} }
 </style>
 </head>
 <body>
 
+<!-- ════════ LANDING (split panel) ════════ -->
+<section id="landing" class="screen active">
 
-<!-- ========== APP PAGE ========== -->
-<div id="app-page" class="hidden">
+  <!-- Left hero -->
+  <div class="sl-left">
+    <div class="sl-left-grid"></div>
+    <div class="sl-glow"></div>
+    <div class="sl-glow2"></div>
+    <div class="sl-brand">
+      <div class="sl-brand-icon">🔗</div>
+      <div class="sl-brand-name">Study<span>Link</span></div>
+    </div>
+    <div class="sl-hero">
+      <div class="sl-eyebrow"><div class="sl-eyebrow-dot"></div>UC Berkeley · Spring 2026</div>
+      <div class="sl-headline">Connect with students<br>in your <em>exact</em> courses</div>
+      <div class="sl-subline">Sign in with CalNet, add your classes, and find study partners who are taking the same courses as you.</div>
+    </div>
+    <div class="sl-stats">
+      <div><div class="sl-stat-num">3,200+</div><div class="sl-stat-lbl">Students</div></div>
+      <div><div class="sl-stat-num">130+</div><div class="sl-stat-lbl">Courses</div></div>
+      <div><div class="sl-stat-num">900+</div><div class="sl-stat-lbl">Groups</div></div>
+    </div>
+  </div>
 
-  <!-- TOPBAR -->
-  <div class="topbar">
-    <div class="topbar-logo">We<span>Learn</span></div>
-    <div class="chip"><div class="chip-dot"></div>Spring 2026</div>
-    <div class="topbar-spacer"></div>
+  <!-- Right auth card -->
+  <div class="sl-right">
+    <div class="sl-card">
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-signin" onclick="switchAuthTab('signin')">Sign In</button>
+      </div>
 
-    <!-- Notification Bell -->
-    <div class="relative" id="notif-wrap">
-      <div class="icon-btn" id="notif-btn">🔔<div class="notif-dot" id="notif-dot"></div></div>
-      <div class="notif-panel hidden" id="notif-panel">
-        <div class="notif-header">
-          <div class="notif-header-title">Notifications</div>
-          <div class="notif-toggle-row">
-            <span id="notif-toggle-label">On</span>
-            <div class="toggle-track on" id="notif-toggle">
-              <div class="toggle-knob"></div>
-            </div>
-          </div>
+      <!-- Sign In -->
+      <div class="auth-panel active" id="panel-signin">
+        <div class="sl-heading">Welcome back</div>
+        <div class="sl-subhead">Sign in to access your study network</div>
+        <div class="sl-error" id="sl-signin-err"></div>
+        <label class="sl-label">CalNet ID</label>
+        <input class="sl-input" type="text" id="calnet-id" placeholder="e.g. 3034XXXXXX" />
+        <label class="sl-label">Passphrase</label>
+        <input class="sl-input" type="password" id="calnet-pass" placeholder="Enter your passphrase" style="margin-bottom:0" />
+        <div style="height:22px;"></div>
+        <button class="sl-btn" id="cal-btn" onclick="calLogin()">Authorize &amp; Continue →</button>
+        <div class="auth-switch">New to StudyLink? <a onclick="showCreatePanel()">Create an account</a></div>
+
+      </div>
+
+      <div class="sl-note">Demo only — no credentials are sent or stored</div>
+
+      <!-- Hidden create-account teaser panel -->
+      <div id="create-panel" style="display:none;margin-top:20px;padding-top:20px;border-top:1px solid var(--border);animation:fadeUp 0.35s ease;">
+        <div class="sl-heading" style="font-size:20px;margin-bottom:4px;">Create your account</div>
+        <div class="sl-subhead" style="margin-bottom:18px;">Connect bCourses to get started</div>
+        <button class="sl-btn" onclick="createAccount()" style="margin-bottom:10px;">Connect bCourses &amp; Set Up →</button>
+        <div class="auth-switch"><a onclick="hideCreatePanel()">← Back to sign in</a></div>
+      </div>
+
+    </div>
+  </div>
+
+</section>
+
+<!-- ════════ CAL CENTRAL ════════ -->
+<section id="calcentral" class="screen">
+  <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:24px;">
+    <div class="calnet-wrap">
+      <button class="calnet-back" onclick="showScreen('landing')">← Back</button>
+      <div class="calnet-heading">Connecting to bCourses</div>
+      <div class="calnet-sub">Authorizing read-only access to your Spring 2026 enrollment</div>
+      <div class="calnet-notice">🔒 <strong>StudyLink</strong> is requesting <strong>read-only</strong> access to fetch your enrolled courses. No credentials are stored.</div>
+      <div class="err-msg" id="cal-err">Please enter both fields.</div>
+      <button class="sl-btn" id="cal-scrape-btn" onclick="startScrape()" style="margin-top:8px;">Open bCourses Login →</button>
+      <div class="sl-note" style="margin-top:16px;">A browser window will open for you to log in to bCourses directly.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ PROFILE SETUP ════════ -->
+<section id="profilesetup" class="screen">
+
+  <!-- Left panel -->
+  <div class="setup-left">
+    <div class="setup-left-grid"></div>
+    <div class="setup-left-glow"></div>
+    <div class="setup-left-top">
+      <div class="setup-left-brand">
+        <div class="setup-left-brand-icon">🔗</div>
+        <div class="setup-left-brand-name">Study<span>Link</span></div>
+      </div>
+      <div class="setup-step-label">Step 2 of 2</div>
+      <div class="setup-headline">Almost there —<br>tell us about <em>you</em></div>
+      <div class="setup-desc">Fill in your profile so classmates can find you. Your bCourses classes are already loaded below.</div>
+    </div>
+    <div class="setup-left-bottom">
+      <div class="setup-preview-label">Classes from bCourses</div>
+      <div class="setup-classes-preview" id="setup-preview-chips"></div>
+    </div>
+  </div>
+
+  <!-- Right form panel -->
+  <div class="setup-right">
+    <div class="setup-inner">
+
+      <div class="dark-field">
+        <label>Display Name</label>
+        <input type="text" id="setup-name" placeholder="Jane Doe" oninput="checkReady()" />
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="dark-field">
+          <label>University ID</label>
+          <input type="text" id="setup-uid" placeholder="e.g. 3034XXXXXX" oninput="checkReady()" />
         </div>
-        <div class="notif-list" id="notif-list"></div>
-      </div>
-    </div>
-
-    <!-- Avatar / Profile -->
-    <div class="relative" id="profile-wrap">
-      <div class="avatar-btn" id="avatar-btn"><span id="avatar-initials">?</span></div>
-      <div class="dropdown hidden" id="profile-dropdown">
-        <div class="dropdown-header">
-          <div class="dropdown-name" id="dd-name">–</div>
-          <div class="dropdown-email" id="dd-email">–</div>
+        <div class="dark-field">
+          <label>Create Passphrase</label>
+          <input type="password" id="setup-pass" placeholder="Min. 6 characters" oninput="checkReady()" />
         </div>
-        <button class="dropdown-item" id="dd-settings">⚙️ Settings</button>
-        <button class="dropdown-item danger" id="dd-delete">🗑️ Delete Account</button>
-        <button class="dropdown-item danger" id="dd-logout">🚪 Log Out</button>
       </div>
-    </div>
-  </div>
-
-  <!-- BODY -->
-  <div class="content-area">
-
-    <!-- SIDEBAR -->
-    <div class="sidebar" id="sidebar">
-      <div class="sidebar-label">My Courses</div>
-      <!-- course items injected by JS -->
-    </div>
-
-    <!-- MAIN -->
-    <div class="main-panel" id="main-panel">
-      <!-- Welcome banner -->
-      <div class="welcome-banner">
-        <div class="welcome-text">
-          <div class="welcome-hi" id="welcome-hi">Welcome back 👋</div>
-          <div class="welcome-sub">Find or create a study group for your courses below</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="dark-field">
+          <label>Major</label>
+          <input type="text" id="setup-major" placeholder="EECS, CS…" />
         </div>
-        <div class="welcome-emoji">📚</div>
+        <div class="dark-field">
+          <label>Year</label>
+          <select id="setup-year-select" onchange="pickYearSelect(this.value)" style="width:100%;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-size:14px;outline:none;font-family:'DM Sans',sans-serif;appearance:none;cursor:pointer;">
+            <option value="">Select…</option>
+            <option value="Freshman">Freshman</option>
+            <option value="Sophomore">Sophomore</option>
+            <option value="Junior">Junior</option>
+            <option value="Senior">Senior</option>
+            <option value="Graduate">Graduate</option>
+          </select>
+        </div>
       </div>
 
-      <!-- Course section -->
-      <div id="course-section"></div>
-    </div>
+      <div class="dark-field">
+        <label>Add / Edit Classes</label>
+        <div class="class-search-wrap">
+          <span class="search-icon">⌕</span>
+          <input class="class-search-input" type="text" id="setup-search"
+            placeholder="Search e.g. CS 61B, MATH 54…"
+            autocomplete="off" oninput="renderSetupDrop()" onfocus="renderSetupDrop()" />
+        </div>
+        <div class="class-dropdown" id="setup-drop"></div>
+        <div class="added-classes" id="setup-chips">
+          <span class="chip-empty">No classes added yet</span>
+        </div>
+      </div>
 
-  </div>
-</div>
+      <div class="dark-field">
+        <label>Short Bio <span style="font-weight:400;text-transform:none;letter-spacing:0;opacity:0.4;">(optional)</span></label>
+        <textarea id="setup-bio" rows="2" placeholder="e.g. Looking for CS 61B group, free Mon/Wed evenings"></textarea>
+      </div>
 
-<!-- ========== CREATE MODAL ========== -->
-<div class="modal-overlay hidden" id="create-modal">
-  <div class="modal">
-    <div class="modal-title">Create Study Session</div>
-    <div class="form-row-2">
-      <div>
-        <label class="form-label">Max People</label>
-        <input class="form-input" id="c-slots" type="number" min="2" max="20" value="4" style="margin-bottom:0"/>
+      <div class="toggle-row" style="margin-bottom:16px;">
+        <div>
+          <div class="toggle-label">Available this week</div>
+          <div class="toggle-sub">Others can see you're open to meet</div>
+        </div>
+        <div class="toggle on" id="setup-avail" onclick="S.setupAvail=!S.setupAvail;this.classList.toggle('on',S.setupAvail)">
+          <div class="toggle-knob"></div>
+        </div>
       </div>
-      <div>
-        <label class="form-label">Duration (max 30 min)</label>
-        <input class="form-input" id="c-duration" type="number" min="5" max="30" value="20" style="margin-bottom:0"/>
-      </div>
-    </div>
-    <div class="form-row-2">
-      <div>
-        <label class="form-label">Date</label>
-        <input class="form-input" id="c-date" type="date" style="margin-bottom:0"/>
-      </div>
-      <div>
-        <label class="form-label">Time</label>
-        <input class="form-input" id="c-time" type="time" style="margin-bottom:0"/>
-      </div>
-    </div>
-    <div class="form-row">
-      <label class="form-label">Location</label>
-      <input class="form-input" id="c-location" type="text" placeholder="e.g. Library Room 204" style="margin-bottom:0"/>
-    </div>
-    <div class="form-hint" id="c-hint">⏱ Request will expire after <strong id="c-hint-dur">20</strong> minutes.</div>
-    <div class="modal-actions">
-      <button class="btn-ghost" id="create-cancel">Cancel</button>
-      <button class="btn-primary" id="create-submit">Post Request →</button>
-    </div>
-  </div>
-</div>
 
-<!-- ========== SETTINGS MODAL ========== -->
-<div class="modal-overlay hidden" id="settings-modal">
-  <div class="modal">
-    <div class="modal-title">Profile Settings</div>
-    <div class="profile-header">
-      <div class="profile-avatar-lg" id="settings-avatar">?</div>
-      <div>
-        <div class="profile-name" id="settings-name">–</div>
-        <div class="profile-email" id="settings-email">–</div>
-      </div>
-    </div>
-    <div class="settings-field">
-      <div class="settings-field-label">Institution</div>
-      <div class="settings-field-val">UC Berkeley</div>
-    </div>
-    <div class="settings-field">
-      <div class="settings-field-label">Major</div>
-      <div class="settings-field-val" id="settings-major">–</div>
-    </div>
-    <div class="settings-field">
-      <div class="settings-field-label">Year</div>
-      <div class="settings-field-val" id="settings-year">–</div>
-    </div>
-    <div class="settings-field">
-      <div class="settings-field-label">Enrolled Courses</div>
-      <div class="settings-field-val" id="settings-courses">–</div>
-    </div>
-    <div class="modal-actions">
-      <button class="btn-primary" id="settings-close">Done</button>
+      <button class="btn-enter" id="btn-enter" onclick="enterDash()">Enter StudyLink →</button>
+
     </div>
   </div>
-</div>
+
+</section>
+
 
 <script>
-// =====================================================================
-// DATA
-// =====================================================================
-const CATALOG_TITLES = {"CS 61A":"Structure & Interpretation of Computer Programs","CS 61B":"Data Structures","CS 61C":"Great Ideas in Computer Architecture","CS 70":"Discrete Mathematics & Probability Theory","CS 161":"Computer Security","CS 162":"Operating Systems","CS 170":"Efficient Algorithms & Intractable Problems","CS 186":"Introduction to Database Systems","CS 188":"Introduction to AI","CS 189":"Introduction to ML","EECS 16A":"Designing Information Devices I","EECS 16B":"Designing Information Devices II","MATH 1A":"Calculus","MATH 1B":"Calculus","MATH 53":"Multivariable Calculus","MATH 54":"Linear Algebra & Diff. Equations","MATH 55":"Discrete Mathematics","STAT 134":"Concepts of Probability","DATA 8":"Foundations of Data Science","DATA 100":"Principles of Data Science","PHYSICS 7A":"Physics for Scientists & Engineers","PHYSICS 7B":"Physics for Scientists & Engineers","CHEM 1A":"General Chemistry","ECON 1":"Introduction to Economics","ECON 100A":"Microeconomic Theory","HIST 7A":"US History to Civil War","HISTORY 7B":"US History Since Civil War","POLSCI 1":"Introduction to Political Science","POLSCI C135":"Politics of the Developing World","POLSCI C155":"Ethnic Politics in America"};
-const COURSE_COLORS = ["#4F8EF7","#F76B4F","#4FCF8E","#CF4FBF","#F7C94F","#5B8EFF","#FF6B6B","#A78BFA","#34D399","#FB923C"];
-const _savedAccount = JSON.parse(localStorage.getItem('studylink_account') || '{}');
-const _savedClasses = (_savedAccount.classes || JSON.parse(localStorage.getItem('studylink_classes') || '[]'));
-const COURSES = (_savedClasses.length ? _savedClasses : ["CS 301","MATH 241","PHYS 210","ENGL 201","ECON 102"]).map((code, i) => ({
-  id: i + 1, code,
-  name: CATALOG_TITLES[code] || code,
-  color: COURSE_COLORS[i % COURSE_COLORS.length],
-}));
-
-const REQUESTS = Object.fromEntries(COURSES.map(c => [c.id, []]));
-
-// =====================================================================
-// STATE
-// =====================================================================
-let currentUser    = null;
-let selectedCourse = COURSES[0];
-let notifEnabled   = true;
-let notifications  = [
-  { id:1, course:"CS 301",   text:"Jordan M. created a new study session", time:"5 min ago" },
-  { id:2, course:"MATH 241", text:"Alex T. posted a request for Calculus", time:"12 min ago" },
+// ═══════════════════════════════════════════
+//  COURSE CATALOG  — add more entries here
+// ═══════════════════════════════════════════
+const CATALOG = [
+  {code:"CS 61A",    title:"Structure & Interpretation of Computer Programs"},
+  {code:"CS 61B",    title:"Data Structures"},
+  {code:"CS 61C",    title:"Great Ideas in Computer Architecture"},
+  {code:"CS 70",     title:"Discrete Mathematics & Probability Theory"},
+  {code:"CS 161",    title:"Computer Security"},
+  {code:"CS 162",    title:"Operating Systems & System Programming"},
+  {code:"CS 164",    title:"Programming Languages & Compilers"},
+  {code:"CS 168",    title:"Introduction to the Internet"},
+  {code:"CS 170",    title:"Efficient Algorithms & Intractable Problems"},
+  {code:"CS 186",    title:"Introduction to Database Systems"},
+  {code:"CS 188",    title:"Introduction to Artificial Intelligence"},
+  {code:"CS 189",    title:"Introduction to Machine Learning"},
+  {code:"EECS 16A",  title:"Designing Information Devices & Systems I"},
+  {code:"EECS 16B",  title:"Designing Information Devices & Systems II"},
+  {code:"EECS 106A", title:"Introduction to Robotics"},
+  {code:"EECS 126",  title:"Probability & Random Processes"},
+  {code:"EECS 127",  title:"Optimization Models in Engineering"},
+  {code:"EECS 151",  title:"Introduction to Digital Design & ICs"},
+  {code:"MATH 1A",   title:"Calculus"},
+  {code:"MATH 1B",   title:"Calculus"},
+  {code:"MATH 53",   title:"Multivariable Calculus"},
+  {code:"MATH 54",   title:"Linear Algebra & Differential Equations"},
+  {code:"MATH 55",   title:"Discrete Mathematics"},
+  {code:"MATH 110",  title:"Abstract Linear Algebra"},
+  {code:"MATH 113",  title:"Introduction to Abstract Algebra"},
+  {code:"STAT 134",  title:"Concepts of Probability"},
+  {code:"STAT 140",  title:"Probability for Data Science"},
+  {code:"DATA 8",    title:"Foundations of Data Science"},
+  {code:"DATA 100",  title:"Principles & Techniques of Data Science"},
+  {code:"DATA 102",  title:"Data, Inference, and Decisions"},
+  {code:"PHYSICS 7A",title:"Physics for Scientists & Engineers"},
+  {code:"PHYSICS 7B",title:"Physics for Scientists & Engineers"},
+  {code:"CHEM 1A",   title:"General Chemistry"},
+  {code:"CHEM 3A",   title:"Chemical Structure & Reactivity"},
+  {code:"BIO 1A",    title:"General Biology"},
+  {code:"MCB 32",    title:"Introduction to Human Physiology"},
+  {code:"ECON 1",    title:"Introduction to Economics"},
+  {code:"ECON 2",    title:"Introduction to Economics — Macro"},
+  {code:"ECON 100A", title:"Microeconomic Theory"},
+  {code:"ENGL 1A",   title:"Reading & Composition"},
+  {code:"HIST 7A",   title:"The United States from Settlement to Civil War"},
+  {code:"POLS 1",    title:"Introduction to Political Theory"},
+  {code:"POLSCI 1",  title:"Introduction to Political Science"},
+  {code:"POLSCI C135", title:"Politics of the Developing World"},
+  {code:"POLSCI C155", title:"Ethnic Politics in America"},
+  {code:"PSYCH 1",   title:"General Psychology"},
 ];
 
-// =====================================================================
-// HELPERS
-// =====================================================================
-function getTimeLeft(req) {
-  return Math.max(0, req.expiresMs - (Date.now() - req.createdAt));
-}
-function fmtTimeLeft(ms) {
-  const s = Math.floor(ms / 1000);
-  return `${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`;
-}
-function fmtDate(d) {
-  return new Date(d+"T00:00").toLocaleDateString("en-US",{month:"short",day:"numeric"});
-}
-function initials(name) {
-  return name.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
-}
-function activeRequests(courseId) {
-  return (REQUESTS[courseId]||[]).filter(r => getTimeLeft(r) > 0);
-}
 
-// =====================================================================
-// LOGIN
-// =====================================================================
+// ═══════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════
+const S = {
+  user:        {name:"",major:"",year:"",bio:"",available:true},
+  classes:     [],
+  connected:   new Set(),
+  setupAvail:  true,
+  setupYear:   "",
+  uid:         "",
+  pass:        "",
+};
 
+// ═══════════════════════════════════════════
+//  ACCOUNT  — save / load / clear
+// ═══════════════════════════════════════════
+const ACCOUNT_KEY = 'studylink_account';
 
-
-
-function showApp() {
-  const app = document.getElementById("app-page");
-  app.classList.remove("hidden");
-
-  // populate topbar
-  document.getElementById("avatar-initials").textContent = currentUser.initials;
-  document.getElementById("dd-name").textContent         = currentUser.name;
-  document.getElementById("dd-email").textContent        = currentUser.email;
-  document.getElementById("settings-avatar").textContent = currentUser.initials;
-  document.getElementById("settings-name").textContent   = currentUser.name;
-  document.getElementById("settings-email").textContent  = currentUser.email;
-  if (document.getElementById("settings-major"))   document.getElementById("settings-major").textContent  = currentUser.major || 'Undeclared';
-  if (document.getElementById("settings-year"))    document.getElementById("settings-year").textContent   = currentUser.year  || '–';
-  if (document.getElementById("settings-courses")) document.getElementById("settings-courses").textContent = COURSES.length + ' course' + (COURSES.length !== 1 ? 's' : '') + ' this semester';
-  document.getElementById("welcome-hi").textContent      = `Welcome back, ${currentUser.name.split(" ")[0]} 👋`;
-
-  buildSidebar();
-  renderCourse();
-  startTimer();
+function saveAccount() {
+  localStorage.setItem(ACCOUNT_KEY, JSON.stringify({ user: S.user, classes: S.classes, uid: S.uid, pass: S.pass }));
+  localStorage.setItem('studylink_classes', JSON.stringify(S.classes));
 }
 
-// =====================================================================
-// SIDEBAR
-// =====================================================================
-function buildSidebar() {
-  const sb = document.getElementById("sidebar");
-  // remove old course items
-  sb.querySelectorAll(".course-item").forEach(el => el.remove());
-
-  COURSES.forEach(course => {
-    const btn = document.createElement("button");
-    btn.className = "course-item" + (course.id === selectedCourse.id ? " active" : "");
-    btn.dataset.id = course.id;
-    btn.innerHTML = `
-      <div class="course-dot" style="background:${course.color}"></div>
-      <div class="course-info">
-        <div class="course-code">${course.code}</div>
-        <div class="course-name">${course.name}</div>
-      </div>
-      <div class="course-count" id="count-${course.id}">${activeRequests(course.id).length}</div>`;
-    btn.addEventListener("click", () => {
-      selectedCourse = course;
-      sb.querySelectorAll(".course-item").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-      renderCourse();
+function loadAccount() {
+  try {
+    const raw = localStorage.getItem(ACCOUNT_KEY);
+    if (!raw) return false;
+    const account = JSON.parse(raw);
+    if (!account.user || !account.user.name) return false;
+    S.user    = account.user;
+    S.classes = account.classes || [];
+    S.uid     = account.uid  || '';
+    S.pass    = account.pass || '';
+    S.classes.forEach(code => {
+      if (!CATALOG.find(c => c.code === code))
+        CATALOG.push({ code, title: 'Imported from bCourses' });
     });
-    sb.appendChild(btn);
-  });
+    if (S.classes.length) S.activeCourse = S.classes[0];
+    return true;
+  } catch(e) { return false; }
 }
 
-function updateCounts() {
-  COURSES.forEach(c => {
-    const el = document.getElementById("count-"+c.id);
-    if (el) el.textContent = activeRequests(c.id).length;
-  });
+function signOut() {
+  localStorage.removeItem(ACCOUNT_KEY);
+  localStorage.removeItem('studylink_classes');
+  location.reload();
 }
 
-// =====================================================================
-// COURSE SECTION
-// =====================================================================
-function renderCourse() {
-  const sec = document.getElementById("course-section");
-  const reqs = activeRequests(selectedCourse.id);
-
-  let cards = "";
-  if (reqs.length === 0) {
-    cards = `<div class="empty-state">
-      <div class="empty-icon">🔍</div>
-      <div class="empty-title">No active sessions</div>
-      <div>Be the first to create a study session for ${selectedCourse.code}!</div>
-    </div>`;
-  } else {
-    cards = `<div class="requests-grid" id="cards-grid">${reqs.map(r => buildCard(r)).join("")}</div>`;
-  }
-
-  sec.innerHTML = `
-    <div class="panel-header">
-      <div class="panel-title-row">
-        <div class="panel-color-dot" style="background:${selectedCourse.color}"></div>
-        <div class="panel-title">${selectedCourse.code}</div>
-      </div>
-      <div class="panel-subtitle">${selectedCourse.name} — ${reqs.length} active request${reqs.length!==1?"s":""}</div>
-      <div class="panel-actions">
-        <button class="btn-primary" id="open-create">+ Create Study Session</button>
-      </div>
-    </div>
-    ${cards}`;
-
-  document.getElementById("open-create").addEventListener("click", openCreateModal);
-}
-
-function buildCard(req) {
-  const tl   = getTimeLeft(req);
-  const pct  = (tl / req.expiresMs) * 100;
-  const sPct = Math.min(100,(req.filled/req.slots)*100);
-  const full = req.filled >= req.slots;
-  const exp  = tl === 0;
-
-  return `
-  <div class="request-card" id="card-${req.id}">
-    <div class="card-accent-bar" style="background:${selectedCourse.color}"></div>
-    <div class="card-top">
-      <div class="card-avatar" style="background:${selectedCourse.color}">${req.avatar}</div>
-      <div>
-        <div class="card-creator">${req.creator}</div>
-        <div class="card-time">Posted a study request</div>
-      </div>
-      ${exp ? `<span class="expired-tag">Expired</span>` : ""}
-    </div>
-    <div class="card-details">
-      <div class="card-detail">
-        <div class="card-detail-label">📅 Date</div>
-        <div class="card-detail-val">${fmtDate(req.date)}</div>
-      </div>
-      <div class="card-detail">
-        <div class="card-detail-label">🕐 Time</div>
-        <div class="card-detail-val">${req.time}</div>
-      </div>
-      <div class="card-detail full-width">
-        <div class="card-detail-label">📍 Location</div>
-        <div class="card-detail-val">${req.location}</div>
-      </div>
-    </div>
-    <div class="slots-wrap">
-      <div class="slots-bar"><div class="slots-fill" style="width:${sPct}%;background:${full?"#FF6B6B":selectedCourse.color}"></div></div>
-      <div class="slots-label"><span>${req.filled} / ${req.slots} people</span><span>${full?"Full":`${req.slots-req.filled} spots left`}</span></div>
-    </div>
-    ${!exp ? `
-    <div class="expiry-wrap">
-      <div class="expiry-bar"><div class="expiry-fill" id="expbar-${req.id}" style="width:${pct}%"></div></div>
-      <div class="expiry-label" id="explbl-${req.id}">Expires in ${fmtTimeLeft(tl)}</div>
-    </div>` : ""}
-    <button class="join-btn" ${exp||full?"disabled":""}>
-      ${exp?"Expired":full?"Full":"Join Session"}
-    </button>
-  </div>`;
-}
-
-// =====================================================================
-// TIMER — updates expiry bars every second
-// =====================================================================
-let timerInterval = null;
-function startTimer() {
-  if (timerInterval) clearInterval(timerInterval);
-  timerInterval = setInterval(() => {
-    const allReqs = Object.values(REQUESTS).flat();
-    let needsRerender = false;
-
-    allReqs.forEach(req => {
-      const tl  = getTimeLeft(req);
-      const pct = (tl / req.expiresMs) * 100;
-
-      const bar = document.getElementById("expbar-"+req.id);
-      const lbl = document.getElementById("explbl-"+req.id);
-      if (bar) bar.style.width = pct + "%";
-      if (lbl) lbl.textContent = "Expires in " + fmtTimeLeft(tl);
-
-      if (tl === 0) needsRerender = true;
-    });
-
-    if (needsRerender) {
-      renderCourse();
-      updateCounts();
-    }
-  }, 1000);
-}
-
-// =====================================================================
-// CREATE MODAL
-// =====================================================================
-function openCreateModal() {
-  document.getElementById("create-modal").classList.remove("hidden");
-  // set today as default date
-  const today = new Date().toISOString().split("T")[0];
-  document.getElementById("c-date").value = today;
-}
-document.getElementById("create-cancel").addEventListener("click", () => {
-  document.getElementById("create-modal").classList.add("hidden");
-});
-document.getElementById("create-modal").addEventListener("click", e => {
-  if (e.target === e.currentTarget) e.currentTarget.classList.add("hidden");
-});
-document.getElementById("c-duration").addEventListener("input", function() {
-  document.getElementById("c-hint-dur").textContent = Math.min(30, parseInt(this.value)||20);
-});
-document.getElementById("create-submit").addEventListener("click", () => {
-  const slots    = parseInt(document.getElementById("c-slots").value)    || 4;
-  const duration = Math.min(30, parseInt(document.getElementById("c-duration").value) || 20);
-  const date     = document.getElementById("c-date").value;
-  const time     = document.getElementById("c-time").value;
-  const location = document.getElementById("c-location").value.trim();
-
-  if (!date || !time || !location) {
-    document.getElementById("c-location").focus();
-    return;
-  }
-
-  const req = {
-    id: Date.now(),
-    creator: currentUser.name,
-    avatar: currentUser.initials,
-    slots,
-    filled: 1,
-    date,
-    time,
-    location,
-    duration,
-    createdAt: Date.now(),
-    expiresMs: duration * 60000,
-  };
-
-  if (!REQUESTS[selectedCourse.id]) REQUESTS[selectedCourse.id] = [];
-  REQUESTS[selectedCourse.id].unshift(req);
-
-  if (notifEnabled) {
-    notifications.unshift({
-      id: Date.now(),
-      course: selectedCourse.code,
-      text: `You created a study session for ${selectedCourse.code}`,
-      time: "just now",
-    });
-    renderNotifications();
-  }
-
-  document.getElementById("create-modal").classList.add("hidden");
-  document.getElementById("c-location").value = "";
-  document.getElementById("c-time").value = "";
-
-  renderCourse();
-  updateCounts();
-});
-
-// =====================================================================
-// NOTIFICATIONS
-// =====================================================================
-document.getElementById("notif-btn").addEventListener("click", e => {
-  e.stopPropagation();
-  document.getElementById("notif-panel").classList.toggle("hidden");
-  document.getElementById("profile-dropdown").classList.add("hidden");
-});
-document.getElementById("notif-toggle").addEventListener("click", () => {
-  notifEnabled = !notifEnabled;
-  const track = document.getElementById("notif-toggle");
-  const label = document.getElementById("notif-toggle-label");
-  track.classList.toggle("on", notifEnabled);
-  label.textContent = notifEnabled ? "On" : "Off";
-  document.getElementById("notif-dot").style.display = notifEnabled ? "" : "none";
-  renderNotifications();
-});
-
-function renderNotifications() {
-  const list = document.getElementById("notif-list");
-  const dot  = document.getElementById("notif-dot");
-
-  if (!notifEnabled) {
-    list.innerHTML = `<div class="notif-empty">Notifications are turned off</div>`;
-    dot.style.display = "none";
-    return;
-  }
-  dot.style.display = notifications.length > 0 ? "" : "none";
-  if (notifications.length === 0) {
-    list.innerHTML = `<div class="notif-empty">No notifications yet</div>`;
-    return;
-  }
-  list.innerHTML = notifications.map(n => `
-    <div class="notif-item">
-      <span class="notif-course">${n.course}</span> — ${n.text}
-      <div class="notif-meta">${n.time}</div>
-    </div>`).join("");
-}
-
-// =====================================================================
-// PROFILE DROPDOWN
-// =====================================================================
-document.getElementById("avatar-btn").addEventListener("click", e => {
-  e.stopPropagation();
-  document.getElementById("profile-dropdown").classList.toggle("hidden");
-  document.getElementById("notif-panel").classList.add("hidden");
-});
-document.getElementById("dd-settings").addEventListener("click", () => {
-  document.getElementById("profile-dropdown").classList.add("hidden");
-  document.getElementById("settings-modal").classList.remove("hidden");
-});
-document.getElementById("dd-delete").addEventListener("click", () => {
-  document.getElementById("profile-dropdown").classList.add("hidden");
-  if (!confirm("Delete your account? This will remove all StudyLink and WeLearn data and cannot be undone.")) return;
+function deleteAccount() {
+  if (!confirm('Delete your StudyLink account? This cannot be undone.')) return;
   ['studylink_account','studylink_classes','welearn_account',
    'studylink_new_signup','studylink_return_to'].forEach(k => localStorage.removeItem(k));
-  window.location.href = 'studylink.html';
-});
-document.getElementById("dd-logout").addEventListener("click", () => {
-  if (timerInterval) clearInterval(timerInterval);
-  ['studylink_account','studylink_classes','welearn_account',
-   'studylink_new_signup','studylink_return_to'].forEach(k => localStorage.removeItem(k));
-  window.location.href = 'studylink.html';
-});
+  location.reload();
+}
 
-// =====================================================================
-// SETTINGS MODAL
-// =====================================================================
-document.getElementById("settings-close").addEventListener("click", () => {
-  document.getElementById("settings-modal").classList.add("hidden");
-});
-document.getElementById("settings-modal").addEventListener("click", e => {
-  if (e.target === e.currentTarget) e.currentTarget.classList.add("hidden");
-});
+// ═══════════════════════════════════════════
+//  SCREEN ROUTING
+// ═══════════════════════════════════════════
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
 
-// =====================================================================
-// CLOSE DROPDOWNS ON OUTSIDE CLICK
-// =====================================================================
-document.addEventListener("click", () => {
-  document.getElementById("profile-dropdown").classList.add("hidden");
-  document.getElementById("notif-panel").classList.add("hidden");
-});
-
-// =====================================================================
-// INIT NOTIFICATIONS
-// =====================================================================
-renderNotifications();
-// Auto-login: check WeLearn account first, then StudyLink account
-(function init() {
-  const wlAcct = JSON.parse(localStorage.getItem('welearn_account') || 'null');
-  const slAcct = _savedAccount.user || null;
-
-  if (wlAcct && wlAcct.name) {
-    currentUser = { name: wlAcct.name, email: wlAcct.email, initials: initials(wlAcct.name), major: wlAcct.major || '', year: wlAcct.year || '' };
-    showApp();
-  } else if (slAcct && slAcct.name) {
-    currentUser = { name: slAcct.name, email: slAcct.name.toLowerCase().replace(/ /g,'') + '@berkeley.edu', initials: initials(slAcct.name), major: slAcct.major || '', year: slAcct.year || '' };
-    showApp();
-  } else {
-    window.location.href = 'studylink.html';
-  }
+// Auto-scroll to sign-in card on load
+(function autoScroll() {
+  setTimeout(() => {
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  }, 900);
 })();
+
+// Auto-login returning user on page load
+(function checkReturningUser() {
+  // If WeLearn signup sent us here for bCourses setup, skip to that screen
+  const fromSignup = localStorage.getItem('studylink_new_signup');
+  if (fromSignup) {
+    localStorage.removeItem('studylink_new_signup');
+    // Pre-fill name from the signup data
+    try {
+      const signupData = JSON.parse(fromSignup);
+      if (signupData.name) {
+        document.getElementById('setup-name').value = signupData.name;
+        checkReady();
+      }
+    } catch(e) {}
+    showScreen('calcentral');
+    return;
+  }
+  if (loadAccount()) { window.location.href = 'WeLearn.html'; return; }
+})();
+
+// ═══════════════════════════════════════════
+//  AUTH TAB SWITCHER
+// ═══════════════════════════════════════════
+function switchAuthTab(tab) {
+  document.getElementById('panel-signin').classList.add('active');
+}
+
+function showCreatePanel() {
+  const panel = document.getElementById('create-panel');
+  panel.style.display = 'block';
+  setTimeout(() => {
+    panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 50);
+}
+
+function hideCreatePanel() {
+  document.getElementById('create-panel').style.display = 'none';
+}
+
+// ═══════════════════════════════════════════
+//  SIGN UP (new account → bCourses setup)
+// ═══════════════════════════════════════════
+function createAccount() {
+  showScreen('calcentral');
+  setTimeout(startScrape, 300);
+}
+
+// ═══════════════════════════════════════════
+//  SIGN IN → bCourses
+// ═══════════════════════════════════════════
+function calLogin() {
+  const id   = document.getElementById('calnet-id').value.trim();
+  const pass = document.getElementById('calnet-pass').value;
+  const err  = document.getElementById('sl-signin-err');
+  const btn  = document.getElementById('cal-btn');
+  err.style.display = 'none';
+  if (!id || !pass) { err.style.display='block'; err.textContent='Please enter both fields.'; return; }
+  const raw = localStorage.getItem(ACCOUNT_KEY);
+  if (!raw) {
+    err.style.display = 'block';
+    err.textContent = 'No account found. Use \"Create an account\" to get started.';
+    return;
+  }
+  const account = JSON.parse(raw);
+  // If account was created before uid/pass fields existed, prompt re-setup
+  if (!account.uid && !account.pass) {
+    err.style.display = 'block';
+    err.textContent = 'Account needs updating — please delete and create a new account.';
+    return;
+  }
+  if (account.uid !== id) {
+    err.style.display = 'block';
+    err.textContent = 'No account found for that University ID.';
+    return;
+  }
+  if (account.pass !== pass) {
+    err.style.display = 'block';
+    err.textContent = 'Wrong passphrase. Please try again.';
+    return;
+  }
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Signing in…';
+  if (loadAccount()) {
+    window.location.href = 'WeLearn.html';
+  } else {
+    err.style.display = 'block';
+    err.textContent = 'Could not load account. Please try again.';
+    btn.disabled = false;
+    btn.innerHTML = 'Authorize &amp; Continue →';
+  }
+}
+
+// ═══════════════════════════════════════════
+//  BCOURSES SCRAPE
+// ═══════════════════════════════════════════
+function startScrape() {
+  const btn = document.getElementById('cal-scrape-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Opening bCourses…';
+
+  function goToSetup(data) {
+    if (data) loadCoursesIntoState(data);
+    btn.disabled = false;
+    btn.innerHTML = 'Open bCourses Login →';
+    showScreen('profilesetup');
+    renderSetupChips();
+    // Scroll the right panel to top so the form is immediately visible
+    setTimeout(() => {
+      const right = document.querySelector('.setup-right');
+      if (right) right.scrollTop = 0;
+      document.getElementById('setup-name')?.focus();
+    }, 100);
+  }
+
+  fetch('http://127.0.0.1:5001/scrape', { method: 'POST' })
+    .then(r => r.json())
+    .then(data => {
+      if (data.error) throw new Error(data.error);
+      goToSetup(data);
+    })
+    .catch(() => {
+      fetch('user_classes.json')
+        .then(r => r.json())
+        .then(data => goToSetup(data))
+        .catch(() => goToSetup(null));
+    });
+}
+
+function loadCoursesIntoState(data) {
+  const catalogCodes = CATALOG.map(c => c.code);
+  S.classes = (data.classes || []).filter(code => catalogCodes.includes(code));
+  (data.classes || []).filter(code => !catalogCodes.includes(code)).forEach(code => {
+    CATALOG.push({ code, title: 'Imported from bCourses' });
+    S.classes.push(code);
+  });
+}
+
+// ═══════════════════════════════════════════
+//  SETUP — CLASS SEARCH
+// ═══════════════════════════════════════════
+function renderSetupDrop() {
+  const q  = document.getElementById('setup-search').value.toLowerCase();
+  const dd = document.getElementById('setup-drop');
+  if (!q) { dd.classList.remove('open'); return; }
+  const hits = CATALOG.filter(c =>
+    (c.code.toLowerCase().includes(q) || c.title.toLowerCase().includes(q)) &&
+    !S.classes.includes(c.code)
+  ).slice(0,7);
+  if (!hits.length) { dd.classList.remove('open'); return; }
+  dd.innerHTML = hits.map(c=>`
+    <div class="class-option" onclick="addClassSetup('${c.code}')">
+      <div><div class="opt-code">${c.code}</div><div class="opt-title">${c.title}</div></div>
+      <span class="opt-add">+</span>
+    </div>`).join('');
+  dd.classList.add('open');
+}
+
+function addClassSetup(code) {
+  if (S.classes.includes(code)) return;
+  S.classes.push(code);
+  document.getElementById('setup-search').value = '';
+  document.getElementById('setup-drop').classList.remove('open');
+  renderSetupChips();
+  checkReady();
+}
+
+function removeClassSetup(code) {
+  S.classes = S.classes.filter(c=>c!==code);
+  renderSetupChips();
+  checkReady();
+}
+
+function renderSetupChips() {
+  const wrap = document.getElementById('setup-chips');
+  if (S.classes.length === 0) {
+    wrap.innerHTML = '<span class="chip-empty">No classes added yet</span>';
+  } else {
+    wrap.innerHTML = S.classes.map(c=>`
+      <div class="class-chip">${c}
+        <button class="chip-x" onclick="removeClassSetup('${c}')">×</button>
+      </div>`).join('');
+  }
+  // Update left panel preview
+  const preview = document.getElementById('setup-preview-chips');
+  if (preview) {
+    preview.innerHTML = S.classes.length
+      ? S.classes.map(c=>`<span class="setup-preview-chip">${c}</span>`).join('')
+      : '<span style="color:var(--text2);font-size:12px;">No classes loaded yet</span>';
+  }
+}
+
+function pickYear(btn, y) {
+  document.querySelectorAll('.year-pill').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  S.setupYear = y;
+  checkReady();
+}
+
+function pickYearSelect(y) {
+  S.setupYear = y;
+  checkReady();
+}
+
+function checkReady() {
+  const name = document.getElementById('setup-name')?.value.trim();
+  const uid  = document.getElementById('setup-uid')?.value.trim();
+  const pass = document.getElementById('setup-pass')?.value;
+  const ready = !!(name && S.setupYear && uid && pass && pass.length >= 6);
+  document.getElementById('btn-enter').classList.toggle('ready', ready);
+}
+
+function enterDash() {
+  const name = document.getElementById('setup-name').value.trim();
+  const uid  = document.getElementById('setup-uid')?.value.trim();
+  const pass = document.getElementById('setup-pass')?.value;
+  if (!name || !S.setupYear || !uid || !pass || pass.length < 6) return;
+  S.uid  = uid;
+  S.pass = pass;
+  S.user = {
+    name,
+    major:     document.getElementById('setup-major').value.trim() || 'Undeclared',
+    year:      S.setupYear,
+    bio:       document.getElementById('setup-bio').value.trim(),
+    available: S.setupAvail,
+  };
+  if (S.classes.length && !S.activeCourse) S.activeCourse = S.classes[0];
+  saveAccount();
+  // If user came from WeLearn signup, go back there — otherwise stay on dashboard
+  const returnTo = localStorage.getItem('studylink_return_to');
+  if (returnTo) {
+    localStorage.removeItem('studylink_return_to');
+    window.location.href = returnTo;
+  } else {
+    window.location.href = 'WeLearn.html';
+  }
+}
+
 </script>
 </body>
 </html>
